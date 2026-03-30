@@ -1,14 +1,14 @@
 import type { FC } from 'react';
 import { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
-import { CATEGORIES, SERVICES, GALLERY_IMAGES, SECTIONS } from '../data/homeData';
+import { CATEGORIES, SERVICES, GALLERY_IMAGES } from '../data/homeData';
 
 // Modularized Components
 import HeroSection from '../components/home/HeroSection';
 import CategoriesSection from '../components/home/CategoriesSection';
 import ServicesSection from '../components/home/ServicesSection';
 import GallerySection from '../components/home/GallerySection';
-import SideNavigator from '../components/home/SideNavigator';
+
 import SoundToggle from '../components/home/SoundToggle';
 import FooterSection from '../components/home/FooterSection';
 
@@ -155,10 +155,6 @@ const Home: FC = () => {
       </main>
       <FooterSection />
       <SoundToggle isMuted={isMuted} setIsMuted={setIsMuted} />
-      <SideNavigator
-        sections={SECTIONS}
-        activeSection={activeSection}
-      />
     </div>
   );
 };

@@ -113,7 +113,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMut
                     >
                         <h1 className={`hero-title text-center drop-shadow-[0_0_50px_rgba(0,0,0,0.9)] leading-tight reveal-on-scroll ${heroIndex === 1 ? 'active' : ''}`}>
                             Producción técnica de élite <br className="hidden md:block" />
-                            <span className={`text-accent underline decoration-white/20 underline-offset-8 delay-200 ${heroIndex === 1 ? 'active' : ''}`}>para momentos irrepetibles</span>
+
                         </h1>
                     </div>
 

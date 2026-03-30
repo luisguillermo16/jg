@@ -6,18 +6,20 @@ const Navbar: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
+    let rafId: number;
+    const updateProgress = () => {
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = totalHeight > 0 ? scrollY / totalHeight : 0;
       setScrollProgress(progress);
+      rafId = requestAnimationFrame(updateProgress);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    rafId = requestAnimationFrame(updateProgress);
+    return () => cancelAnimationFrame(rafId);
   }, []);
 
   // Stroke Progress Math
-  const radius = 26;
+  const radius = 28;
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference - scrollProgress * circumference;
 
@@ -42,9 +44,11 @@ const Navbar: FC = () => {
           <div className="relative flex items-center justify-center w-12 h-12 md:w-16 md:h-16">
             {/* SVG Progress Circle */}
             <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 64 64">
-              <circle cx="32" cy="32" r={radius} className="fill-none stroke-white/10 stroke-[3]" />
-              <circle cx="32" cy="32" r={radius} className="fill-none stroke-accent stroke-[3] transition-all duration-200 ease-out"
-                style={{ strokeDasharray: circumference, strokeDashoffset: dashOffset, strokeLinecap: 'round', filter: 'drop-shadow(0 0 8px rgba(163, 255, 0, 0.4))' }}
+              <circle cx="32" cy="32" r={radius} className="fill-none stroke-white/10 stroke-[2.5]" />
+              <circle cx="32" cy="32" r={radius} className="fill-none stroke-accent stroke-[3] ease-out"
+                strokeDasharray={circumference}
+                strokeDashoffset={dashOffset}
+                style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 8px rgba(127, 255, 0, 0.4))' }}
               />
             </svg>
             <img src={logo} alt="JG Producciones" className="relative z-10 h-7 md:h-10 w-auto object-contain brightness-200 transition-all duration-500 hover:scale-110" />
@@ -60,7 +64,7 @@ const Navbar: FC = () => {
 
         {/* Mobile Toggle */}
         <div className="flex md:hidden flex-1 justify-end">
-          <button 
+          <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="w-12 h-12 flex flex-col items-center justify-center gap-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full z-[1100]"
           >
