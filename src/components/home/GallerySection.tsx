@@ -1,4 +1,9 @@
 import type { FC } from 'react';
+import { useState, useEffect } from 'react';
+import './GallerySection.css';
+
+
+
 
 interface GallerySectionProps {
   activeGal: number;
@@ -6,48 +11,105 @@ interface GallerySectionProps {
 }
 
 const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) => {
+  const [selectedImg, setSelectedImg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (selectedImg) {
+      document.body.classList.add('lightbox-active');
+    } else {
+      document.body.classList.remove('lightbox-active');
+    }
+    return () => document.body.classList.remove('lightbox-active');
+  }, [selectedImg]);
+
   return (
+
+
     <section id="galeria" className="relative h-[300vh] bg-black">
-      {/* Snap Points (Intro y Galería) */}
+      {/* Snap Points to manage the two stages (Intro vs Grid) */}
       <div className="absolute inset-0 pointer-events-none z-[50]">
         <div className="h-[150vh] w-full" style={{ scrollSnapAlign: 'start' }} />
         <div className="h-[150vh] w-full" style={{ scrollSnapAlign: 'start' }} />
       </div>
 
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-
-        {/* Intro Screen Pinned */}
-        <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ${activeGal === -1 ? 'opacity-100 scale-100' : 'opacity-0 scale-105 pointer-events-none'}`}>
-          <div className="absolute inset-0 bg-[#07090b]" />
-          <div className="absolute inset-0 opacity-30 mix-blend-screen" style={{ background: 'radial-gradient(circle at 10% 90%, #1a3d00, transparent 40%), radial-gradient(circle at 90% 10%, #0a1f00, transparent 40%)' }} />
+        
+        {/* Stage 1: Intro Screen (Full Page Title) */}
+        <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ease-out ${activeGal === -1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
+          <div className="absolute inset-0 bg-[#050607]" />
+          <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ background: 'radial-gradient(circle at 80% 80%, #1a3d00, transparent 50%), radial-gradient(circle at 20% 20%, #0d2200, transparent 50%)' }} />
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center">
-            <span className="text-accent uppercase tracking-[0.5em] text-sm font-bold block mb-10 reveal-on-scroll">Portafolio</span>
-            <h2 className="text-7xl md:text-[12rem] font-black text-white uppercase tracking-tighter leading-[0.8] mb-12 reveal-on-scroll delay-100">
+            <h2 className="text-6xl md:text-[9rem] font-black text-white uppercase tracking-tighter leading-[0.8] mb-12 reveal-on-scroll">
               Nuestro <br />
-              <span className="text-outline-white">Trabajo</span>
+              Trabajo
             </h2>
-            <div className="w-24 h-1.5 bg-accent/40 mx-auto mb-10 reveal-on-scroll delay-200" />
-            <p className="text-white/50 text-xl md:text-3xl max-w-4xl mx-auto font-playfair italic reveal-on-scroll delay-300">
-              Cada imagen cuenta una historia. Momentos únicos capturados con precisión técnica y sensibilidad artística.
+
+            <p className="text-white/60 text-xl md:text-3xl max-w-3xl mx-auto font-playfair italic reveal-on-scroll delay-200">
+              Capturamos la esencia de cada evento con el estilo y la precisión que nos caracteriza. Una curaduría visual de nuestras producciones más icónicas.
             </p>
           </div>
         </div>
 
-        {/* Gallery Content Reveal */}
-        <div className={`absolute inset-0 z-10 flex items-center justify-center p-6 md:p-20 transition-all duration-1000 ${activeGal === 0 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-20 scale-95 pointer-events-none'}`}>
+        {/* Stage 2: Gallery Grid Feed (Revealed after scrolling) */}
+        <div className={`absolute inset-0 z-10 flex items-start justify-center pt-[15vh] transition-all duration-1000 ease-out active-stage-2 ${activeGal === 0 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-20 scale-105 pointer-events-none'}`}>
           <div className="absolute inset-0 bg-black" />
-          <div className="w-full max-w-7xl h-[80vh] overflow-y-scroll no-scrollbar grid grid-cols-2 md:grid-cols-4 gap-4 rounded-3xl">
-            {galleryImages.map((src, i) => (
-              <div key={i} className="group relative overflow-hidden rounded-2xl aspect-[4/3] bg-white/5 reveal-on-scroll" style={{ transitionDelay: `${(i % 8) * 50}ms` }}>
-                <img src={src} alt={`Trabajo ${i + 1}`} loading="lazy" className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 filter grayscale group-hover:grayscale-0 brightness-75 group-hover:brightness-100" />
-                <div className="absolute inset-0 bg-gradient-to-t from-accent/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
-            ))}
+          
+          <div className="relative w-full max-w-[975px] h-[85vh] overflow-y-auto no-scrollbar px-0">
+
+            {/* 3-Column Premium Grid (Instagram Style) */}
+            <div className="instagram-gallery">
+              {galleryImages.map((src, i) => (
+                <div 
+                  key={i} 
+                  className="gallery-item"
+                  onClick={() => setSelectedImg(src)}
+                >
+                  <img 
+                    src={src} 
+                    alt={`Producción HG ${i + 1}`} 
+                    loading="lazy" 
+                  />
+                  {/* Overlay icon for "Multiple Posts" */}
+                  <div className="overlay-icon"></div>
+                </div>
+              ))}
+            </div>
+            {/* Scroll bottom spacer */}
           </div>
         </div>
       </div>
+
+      {/* Instagram-style Modal/Lightbox */}
+      {selectedImg && (
+        <div 
+          className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/95 transition-all duration-300 backdrop-blur-md"
+          onClick={() => setSelectedImg(null)}
+        >
+
+          {/* Close button */}
+          <button 
+            className="absolute top-6 right-6 text-white text-4xl hover:scale-110 transition-transform"
+            onClick={(e) => { e.stopPropagation(); setSelectedImg(null); }}
+          >
+            &times;
+          </button>
+
+          <div 
+            className="relative max-w-5xl w-full flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img 
+              src={selectedImg} 
+              alt="Enlarged visual" 
+              className="max-h-[85vh] max-w-full object-contain shadow-[0_0_100px_rgba(255,255,255,0.1)] rounded-sm"
+            />
+          </div>
+        </div>
+      )}
     </section>
+
   );
 };
+
 
 export default GallerySection;

@@ -1,64 +1,193 @@
-import { type FC, useState, useEffect } from 'react';
+import { type FC, useState, useEffect, memo } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
-const Navbar: FC = () => {
+interface NavbarProps {
+  activeSection?: string;
+}
+
+const NavLinks: FC<{ 
+  isHome: boolean; 
+  isNosotros: boolean; 
+  activeSection: string; 
+  scrollToSection: (e: React.MouseEvent<HTMLAnchorElement>, id: string) => void;
+  setIsMenuOpen: (open: boolean) => void;
+}> = memo(({ isHome, isNosotros, activeSection, scrollToSection, setIsMenuOpen }) => {
+  const isActive = (id: string) => {
+    if (!isHome) return false;
+    if (id === 'hero' && activeSection.startsWith('hero')) return true;
+    if (id === 'nosotros' && isNosotros) return true;
+    return activeSection === id;
+  };
+
+  return (
+    <>
+      <li key="home">
+        <a 
+          href="/" 
+          onClick={(e) => scrollToSection(e, 'hero')} 
+          className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${isActive('hero') ? 'text-accent bg-white/5 drop-shadow-[0_0_8px_rgba(184,227,81,0.2)]' : 'text-text hover:text-accent'} font-remixa`}
+        >
+          Home
+        </a>
+      </li>
+      <li key="servicios">
+        <a 
+          href="#servicios" 
+          onClick={(e) => scrollToSection(e, '#servicios')} 
+          className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${isActive('servicios') ? 'text-accent bg-white/5' : 'text-text hover:text-accent'} font-remixa`}
+        >
+          Servicios
+        </a>
+      </li>
+      <li key="contact">
+        <a 
+          href="#contact" 
+          onClick={(e) => scrollToSection(e, '#contact')} 
+          className={`mx-2 px-8 py-2.5 rounded-full text-sm font-bold transition-all duration-300 shadow-xl ${isActive('contact') ? 'bg-accent/80 scale-105' : 'bg-accent'} text-black hover:scale-105 hover:shadow-[0_0_20px_rgba(163,255,0,0.5)] font-remixa`}
+        >
+          Contactanos
+        </a>
+      </li>
+      <li key="galeria">
+        <a 
+          href="#galeria" 
+          onClick={(e) => scrollToSection(e, '#galeria')} 
+          className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${isActive('galeria') ? 'text-accent bg-white/5' : 'text-text hover:text-accent'} font-remixa`}
+        >
+          Galeria
+        </a>
+      </li>
+      <li key="nosotros">
+        <Link 
+          to="/nosotros" 
+          onClick={() => setIsMenuOpen(false)} 
+          className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${isNosotros ? 'text-accent bg-white/5 drop-shadow-[0_0_8px_rgba(184,227,81,0.2)]' : 'text-text hover:text-accent'} font-remixa`}
+        >
+          Nosotros
+        </Link>
+      </li>
+    </>
+  );
+});
+
+NavLinks.displayName = 'NavLinks';
+
+const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    let rafId: number;
-    const updateProgress = () => {
-      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = totalHeight > 0 ? scrollY / totalHeight : 0;
+    let ticking = false;
+    const container = document.querySelector('.home-container');
+    const scrollTarget = container || window;
+
+    const updateScrollProgress = () => {
+      let progress = 0;
+      if (container) {
+        const scrollY = container.scrollTop;
+        const totalHeight = container.scrollHeight - container.clientHeight;
+        progress = totalHeight > 0 ? scrollY / totalHeight : 0;
+      } else {
+        const scrollY = window.scrollY || document.documentElement.scrollTop;
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        progress = totalHeight > 0 ? scrollY / totalHeight : 0;
+      }
       setScrollProgress(progress);
-      rafId = requestAnimationFrame(updateProgress);
+      ticking = false;
     };
-    rafId = requestAnimationFrame(updateProgress);
-    return () => cancelAnimationFrame(rafId);
-  }, []);
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollProgress);
+        ticking = true;
+      }
+    };
+
+    scrollTarget.addEventListener('scroll', handleScroll, { passive: true });
+    // Initial check
+    updateScrollProgress();
+
+    return () => scrollTarget.removeEventListener('scroll', handleScroll);
+  }, [location.pathname]);
 
   // Stroke Progress Math
   const radius = 28;
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference - scrollProgress * circumference;
 
-  const NavLinks = () => (
-    <>
-      <li><a href="#" onClick={() => setIsMenuOpen(false)} className="px-6 py-2.5 rounded-full text-sm font-semibold text-text hover:text-accent transition-all duration-300 hover:drop-shadow-[0_0_8px_rgba(184,227,81,0.6)] font-remixa">Home</a></li>
-      <li><a href="#servicios" onClick={() => setIsMenuOpen(false)} className="px-6 py-2.5 rounded-full text-sm font-semibold text-text hover:text-accent transition-all duration-300 font-remixa">Servicios</a></li>
-      <li>
-        <a href="#contact" onClick={() => setIsMenuOpen(false)} className="mx-2 px-8 py-2.5 rounded-full text-sm font-bold bg-accent text-black transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(163,255,0,0.4)] font-remixa">
-          Contactanos
-        </a>
-      </li>
-      <li><a href="#galeria" onClick={() => setIsMenuOpen(false)} className="px-6 py-2.5 rounded-full text-sm font-semibold text-text hover:text-accent transition-all duration-300 font-remixa">Galeria</a></li>
-      <li><a href="#nosotros" onClick={() => setIsMenuOpen(false)} className="px-6 py-2.5 rounded-full text-sm font-semibold text-text hover:text-accent transition-all duration-300 font-remixa">Nosotros</a></li>
-    </>
-  );
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    setIsMenuOpen(false);
+    
+    // Normalize ID
+    const sectionId = id.startsWith('#') ? id.slice(1) : id;
+
+    if (location.pathname !== '/') {
+       // Navigate to home with hash
+       navigate(`/#${sectionId}`);
+       return;
+    }
+
+    const container = document.querySelector('.home-container');
+    if (!container) {
+      // Fallback if home-container is missing but we are on /
+      const element = document.getElementById(sectionId);
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    if (id === '#' || id === 'hero') {
+      container.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const containerRect = container.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+      const targetScroll = elementRect.top - containerRect.top + container.scrollTop;
+
+      container.scrollTo({ 
+        top: targetScroll, 
+        behavior: 'smooth' 
+      });
+    }
+  };
+
+  const isHome = location.pathname === '/';
+  const isNosotros = location.pathname === '/nosotros';
 
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-[1000] flex justify-between items-center px-6 md:px-20 py-6 md:py-8 bg-transparent transition-all duration-300">
         <div className="flex items-center gap-4 flex-1">
-          <div className="relative flex items-center justify-center w-12 h-12 md:w-16 md:h-16">
+          <Link to="/" className="relative flex items-center justify-center w-12 h-12 md:w-16 md:h-16" onClick={(e) => scrollToSection(e, 'hero')}>
             {/* SVG Progress Circle */}
             <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 64 64">
               <circle cx="32" cy="32" r={radius} className="fill-none stroke-white/10 stroke-[2.5]" />
-              <circle cx="32" cy="32" r={radius} className="fill-none stroke-accent stroke-[3] ease-out"
+              <circle cx="32" cy="32" r={radius} className="fill-none stroke-[#a3ff00] stroke-[3] ease-out transition-[stroke-dashoffset] duration-300"
                 strokeDasharray={circumference}
                 strokeDashoffset={dashOffset}
-                style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 8px rgba(127, 255, 0, 0.4))' }}
+                style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 12px rgba(163, 255, 0, 0.7))' }}
               />
             </svg>
             <img src={logo} alt="JG Producciones" className="relative z-10 h-7 md:h-10 w-auto object-contain brightness-200 transition-all duration-500 hover:scale-110" />
-          </div>
+          </Link>
         </div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex bg-white/5 backdrop-blur-xl p-1.5 rounded-full border border-white/5 shadow-[0_0_15px_rgba(184,227,81,0.05)]">
           <ul className="flex gap-1 m-0 p-0 list-none items-center">
-            <NavLinks />
+            <NavLinks 
+              isHome={isHome} 
+              isNosotros={isNosotros} 
+              activeSection={activeSection} 
+              scrollToSection={scrollToSection} 
+              setIsMenuOpen={setIsMenuOpen} 
+            />
           </ul>
         </div>
 
@@ -66,6 +195,7 @@ const Navbar: FC = () => {
         <div className="flex md:hidden flex-1 justify-end">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle Menu"
             className="w-12 h-12 flex flex-col items-center justify-center gap-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full z-[1100]"
           >
             <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
@@ -82,7 +212,13 @@ const Navbar: FC = () => {
         <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl" onClick={() => setIsMenuOpen(false)} />
         <div className={`absolute inset-x-0 top-0 pt-32 pb-12 px-8 bg-gradient-to-b from-[#0a1f00]/40 to-black border-b border-white/10 transition-all duration-500 transform ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
           <ul className="flex flex-col gap-6 m-0 p-0 list-none items-center">
-            <NavLinks />
+            <NavLinks 
+              isHome={isHome} 
+              isNosotros={isNosotros} 
+              activeSection={activeSection} 
+              scrollToSection={scrollToSection} 
+              setIsMenuOpen={setIsMenuOpen} 
+            />
           </ul>
         </div>
       </div>

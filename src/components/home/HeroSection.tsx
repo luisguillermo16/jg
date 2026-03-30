@@ -66,8 +66,8 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMut
                     isMuted={isMuted}
                     isVisible={isVisible}
                     playsInline
-                    style={{ transform: `scale(${videoScale})`, filter: `brightness(0.35) saturate(1.2) blur(${videoBlur}px)` }}
-                    className="absolute inset-0 w-full h-full object-cover opacity-60"
+                    style={{ transform: `scale(${videoScale})`, filter: `brightness(0.55) saturate(1.2) blur(${videoBlur}px)` }}
+                    className="absolute inset-0 w-full h-full object-cover opacity-100"
                 />
 
                 {/* Grain Overlay */}
@@ -87,9 +87,9 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMut
                         style={{ ...getProgressStyles(0.0, 0.3, 0.2), transition: 'none' }}
                         className="absolute inset-0 flex flex-col items-center justify-center gap-8"
                     >
-                        <div className={`flex flex-col items-center gap-0 reveal-on-scroll ${heroIndex === 0 ? 'active' : ''}`}>
-                            <img src={logo} alt="JG Producciones" className="h-32 md:h-52 w-auto brightness-200 drop-shadow-[0_0_80px_rgba(163,255,0,0.4)]" />
-                            <h2 className={`text-3xl md:text-7xl font-black text-white tracking-[0.02em] font-paloseco uppercase text-center -mt-4 md:-mt-10 text-outline-blue delay-200 ${heroIndex === 0 ? 'active' : ''}`}>
+                        <div className={`flex flex-col items-center gap-2 md:gap-4 reveal-on-scroll ${heroIndex === 0 ? 'active' : ''}`}>
+                            <img src={logo} alt="JG Producciones" className="h-40 md:h-[18rem] w-auto brightness-200 drop-shadow-[0_0_100px_rgba(163,255,0,0.5)]" />
+                            <h2 className={`text-4xl md:text-[8rem] font-black text-white tracking-[0.02em] font-paloseco uppercase text-center text-outline-blue delay-200 ${heroIndex === 0 ? 'active' : ''}`}>
                                 PRODUCCIONES
                             </h2>
                         </div>
@@ -112,7 +112,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMut
                         className="absolute inset-0 flex flex-col items-center justify-center px-4"
                     >
                         <h1 className={`hero-title text-center drop-shadow-[0_0_50px_rgba(0,0,0,0.9)] leading-tight reveal-on-scroll ${heroIndex === 1 ? 'active' : ''}`}>
-                            Producción técnica de élite <br className="hidden md:block" />
+                            Producción profesional premium para eventos sociales y corporativos <br className="hidden md:block" />
 
                         </h1>
                     </div>
@@ -128,7 +128,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMut
                             <p className={`text-center drop-shadow-2xl leading-relaxed text-2xl md:text-3xl font-remixa text-white/90 reveal-on-scroll delay-200 ${heroIndex === 2 ? 'active' : ''}`}>
                                 Fusionamos tecnología de vanguardia con pasión creativa. <br className="hidden md:block" />
                                 Sonido de alta fidelidad e iluminación inmersiva que transforman escenarios
-                                de <span className="text-white font-black underline decoration-accent/60">Cartagena para el mundo.</span>
+                                de Cartagena para el mundo.
                             </p>
                         </div>
                     </div>

@@ -3,22 +3,14 @@ import logo from '../../assets/logo.png';
 
 const FooterSection: FC = () => {
   return (
-    <footer id="nosotros" className="relative z-10 w-full bg-black py-24 px-6 border-t border-white/5" style={{ scrollSnapAlign: 'start' }}>
+    <footer className="relative z-10 w-full bg-black py-24 px-6 border-t border-white/5" style={{ scrollSnapAlign: 'start' }}>
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-20">
           {/* Brand Column */}
           <div className="flex flex-col items-center md:items-start">
             <img src={logo} alt="JG Producciones" className="h-20 w-auto mb-8 brightness-200" />
             <p className="text-white/40 text-center md:text-left font-sans leading-relaxed">
               Transformamos eventos ordinarios en experiencias cinematográficas extraordinarias. Producción técnica de vanguardia en el corazón de Cartagena.
-            </p>
-          </div>
-
-          {/* Quick Links / Nosotos Info */}
-          <div className="flex flex-col items-center">
-            <h4 className="text-accent font-bold uppercase tracking-widest mb-8 text-sm">Nosotros</h4>
-            <p className="text-white/60 text-center font-playfair italic text-lg px-2">
-              "Nuestra pasión es la precisión técnica y el arte visual. Cada evento es una oportunidad para crear algo eterno."
             </p>
           </div>
 

@@ -71,7 +71,7 @@ const VolumeVideo: React.FC<VolumeVideoProps> = ({
     playVideo();
   }, [isVisible, isMuted, fadeDuration]);
 
-  return <video ref={videoRef} {...props} />;
+  return <video ref={videoRef} muted={isMuted} {...props} />;
 };
 
 export default VolumeVideo;

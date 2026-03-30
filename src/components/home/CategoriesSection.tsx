@@ -57,7 +57,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
           <div className="cat-intro-content">
             <h2 className="cat-intro-title">
               Nuestras <br />
-              <span className="cat-intro-outline">Categorías</span>
+              Categorías
             </h2>
 
             <p className="cat-intro-desc">

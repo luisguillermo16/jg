@@ -1,5 +1,4 @@
-import type { FC } from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { type FC, useState, useEffect, useRef, memo } from 'react';
 import Navbar from '../components/Navbar';
 import { CATEGORIES, SERVICES, GALLERY_IMAGES } from '../data/homeData';
 
@@ -14,92 +13,133 @@ import FooterSection from '../components/home/FooterSection';
 
 import './Home.css';
 
+// Memoize sections to prevent unnecessary re-renders
+const MemoHero = memo(HeroSection);
+const MemoCategories = memo(CategoriesSection);
+const MemoServices = memo(ServicesSection);
+const MemoGallery = memo(GallerySection);
+
 const Home: FC = () => {
   const [heroProgress, setHeroProgress] = useState(0);
   const [heroIndex, setHeroIndex] = useState(0);
   const [catsProgress, setCatsProgress] = useState(0);
-  const [activeSection, setActiveSection] = useState('hero-section');
+  const [activeSection, setActiveSection] = useState('hero');
   const [activeSvc, setActiveSvc] = useState(-1);
   const [activeGal, setActiveGal] = useState(-1);
   const [isMuted, setIsMuted] = useState(true);
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const categoriesRef = useRef<HTMLDivElement>(null);
 
-  // LERP Tracking Refs - Hero
-  const rawHeroProgress = useRef(0);
+  // LERP Tracking Refs
   const smoothHeroProgress = useRef(0);
-
-  // LERP Tracking Refs - Categories
-  const rawCatsProgress = useRef(0);
   const smoothCatsProgress = useRef(0);
-
   const rafId = useRef<number>(0);
 
+  // Hash Navigation Handler
   useEffect(() => {
-    const LERP_FACTOR = 0.12; // Más rápido para mayor respuesta
+    const hash = window.location.hash;
+    if (hash && containerRef.current) {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        // Wait a bit for the page to settle
+        setTimeout(() => {
+          if (containerRef.current) {
+            const containerRect = containerRef.current.getBoundingClientRect();
+            const elementRect = element.getBoundingClientRect();
+            const targetScroll = elementRect.top - containerRect.top + containerRef.current.scrollTop;
+            containerRef.current.scrollTo({ top: targetScroll, behavior: 'smooth' });
+          }
+        }, 300);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const LERP_FACTOR = 0.12;
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
+    const windowHeight = window.innerHeight;
+    const container = containerRef.current;
+    if (!container) return;
+    
+    const SECTION_OFFSETS = {
+      hero: 0,
+      categories: windowHeight * 3,
+      servicios: windowHeight * 7,
+      galeria: windowHeight * 11.5,
+    };
+
     const tick = () => {
-      // 1. Hero Calculations
-      if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        const height = rect.height - window.innerHeight;
-        rawHeroProgress.current = Math.max(0, Math.min(1, -rect.top / height));
+      const currentScroll = container.scrollTop;
+      
+      // Update CSS Variables for smooth, non-React animations
+      const hProg = Math.max(0, Math.min(1, currentScroll / (windowHeight * 2)));
+      container.style.setProperty('--hero-progress', hProg.toFixed(4));
+      
+      const catsStart = windowHeight * 3;
+      const catsMax = windowHeight * 3;
+      const cProg = Math.max(0, Math.min(1, (currentScroll - catsStart) / catsMax));
+      container.style.setProperty('--cats-progress', cProg.toFixed(4));
+
+      // 1. Hero Index (Still use state for discrete change)
+      const hProgSmooth = lerp(smoothHeroProgress.current, hProg, LERP_FACTOR);
+      if (Math.abs(smoothHeroProgress.current - hProgSmooth) > 0.001) {
+        smoothHeroProgress.current = hProgSmooth;
+        setHeroProgress(smoothHeroProgress.current);
+        const newHeroIndex = Math.min(2, Math.floor(smoothHeroProgress.current * 3.1));
+        if (newHeroIndex !== heroIndex) setHeroIndex(newHeroIndex);
       }
-      smoothHeroProgress.current = lerp(smoothHeroProgress.current, rawHeroProgress.current, LERP_FACTOR);
-      setHeroProgress(smoothHeroProgress.current);
-      setHeroIndex(Math.min(2, Math.floor(smoothHeroProgress.current * 3)));
 
-      // 2. Categories Calculations (AÑADIDO LERP PARA PRECISIÓN)
-      if (categoriesRef.current) {
-        const rect = categoriesRef.current.getBoundingClientRect();
-        const height = rect.height - window.innerHeight;
-        rawCatsProgress.current = Math.max(0, Math.min(1, -rect.top / height));
+      // 2. Categories Progress (Still use state for discrete check if needed)
+      const cProgSmooth = lerp(smoothCatsProgress.current, cProg, LERP_FACTOR);
+      if (Math.abs(smoothCatsProgress.current - cProgSmooth) > 0.001) {
+        smoothCatsProgress.current = cProgSmooth;
+        setCatsProgress(smoothCatsProgress.current);
       }
-      smoothCatsProgress.current = lerp(smoothCatsProgress.current, rawCatsProgress.current, LERP_FACTOR);
-      setCatsProgress(smoothCatsProgress.current);
 
-      const catsEl = document.getElementById('categories');
-      const servsEl = document.getElementById('servicios');
-      const galEl = document.getElementById('galeria');
-
-      const windowHeight = window.innerHeight;
-      const currentScroll = window.scrollY;
-
-      if (currentScroll < (catsEl?.offsetTop || 9999) - windowHeight / 2) {
-        // Hero has 3 states
+      // 3. Section Updates (Throttled/Threshold based)
+      if (currentScroll < SECTION_OFFSETS.categories - windowHeight / 2) {
         if (currentScroll < windowHeight * 0.8) setActiveSection('hero');
         else if (currentScroll < windowHeight * 1.8) setActiveSection('hero-2');
         else setActiveSection('hero-3');
-      } else if (currentScroll < (servsEl?.offsetTop || 9999) - windowHeight / 2) {
-        // Categories has 4 states (Intro + 3 Cats)
-        const catsStart = catsEl?.offsetTop || 0;
-        const p = (currentScroll - catsStart) / windowHeight;
+      } else if (currentScroll < SECTION_OFFSETS.servicios - windowHeight / 2) {
+        const p = (currentScroll - SECTION_OFFSETS.categories) / windowHeight;
         if (p < 0.5) setActiveSection('categories-intro');
         else if (p < 1.5) setActiveSection('categories-1');
         else if (p < 2.5) setActiveSection('categories-2');
         else setActiveSection('categories-3');
-      } else if (currentScroll < (galEl?.offsetTop || 9999) - windowHeight / 2) {
+      } else if (currentScroll < SECTION_OFFSETS.galeria - windowHeight / 2) {
         setActiveSection('servicios');
-      } else {
+        const svcScroll = currentScroll - SECTION_OFFSETS.servicios;
+        const svcP = svcScroll / (windowHeight * 4.5); // Total height: 450vh
+        
+        // Revised logic: Title for the first ~25% of the section
+        if (svcP < 0.22) {
+          setActiveSvc(-1);
+        } else if (svcP < 0.48) {
+          setActiveSvc(0);
+        } else if (svcP < 0.74) {
+          setActiveSvc(1);
+        } else {
+          setActiveSvc(2);
+        }
+        
+      } else if (currentScroll < SECTION_OFFSETS.galeria + windowHeight * 4) {
         setActiveSection('galeria');
-      }
-
-      if (servsEl) {
-        const rect = servsEl.getBoundingClientRect();
-        const p = -rect.top / (rect.height - window.innerHeight);
-        if (rect.top > window.innerHeight || p < 0.05) setActiveSvc(-1);
-        else if (p < 0.35) setActiveSvc(0);
-        else if (p < 0.65) setActiveSvc(1);
-        else setActiveSvc(2);
-      }
-
-      if (galEl) {
-        const rect = galEl.getBoundingClientRect();
-        const p = -rect.top / (rect.height - window.innerHeight);
-        if (rect.top > window.innerHeight || p < 0.1) setActiveGal(-1);
-        else setActiveGal(0);
+        const galScroll = currentScroll - SECTION_OFFSETS.galeria;
+        const galP = galScroll / (windowHeight * 3); // Total height: 300vh
+        
+        // Revised logic: Show title for nearly half the section scroll
+        if (galP < 0.4) {
+          setActiveGal(-1);
+        } else {
+          setActiveGal(0);
+        }
+      } else {
+        setActiveSection('contact');
       }
 
       rafId.current = requestAnimationFrame(tick);
@@ -107,17 +147,15 @@ const Home: FC = () => {
 
     rafId.current = requestAnimationFrame(tick);
 
-    const observerOptions = { threshold: 0.5 };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('active');
-        } else {
-          // Optional: remove if you want animations to re-trigger
-          // entry.target.classList.remove('active');
+          observer.unobserve(entry.target);
         }
       });
-    }, observerOptions);
+    }, { threshold: 0.15 });
+
     document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
 
     return () => {
@@ -127,28 +165,29 @@ const Home: FC = () => {
   }, []);
 
   return (
-    <div className="home-container bg-black text-white selection:bg-accent selection:text-black">
-      <Navbar />
+    <div ref={containerRef} className="home-container bg-black text-white selection:bg-accent selection:text-black">
+      <Navbar activeSection={activeSection} />
+
       <main>
-        <HeroSection
+        <MemoHero
           heroRef={heroRef as any}
           progress={heroProgress}
           heroIndex={heroIndex}
           isMuted={isMuted}
           setIsMuted={setIsMuted}
-          isVisible={activeSection === 'hero-section'}
+          isVisible={activeSection.startsWith('hero')}
         />
-        <CategoriesSection
+        <MemoCategories
           categoriesRef={categoriesRef as any}
           categories={CATEGORIES}
           progress={catsProgress}
           isMuted={isMuted}
         />
-        <ServicesSection
+        <MemoServices
           services={SERVICES}
           activeSvc={activeSvc}
         />
-        <GallerySection
+        <MemoGallery
           activeGal={activeGal}
           galleryImages={GALLERY_IMAGES}
         />

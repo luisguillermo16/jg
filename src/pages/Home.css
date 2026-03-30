@@ -819,7 +819,7 @@
 /* ── Category title ── */
 .cat-title {
   font-family: 'Paloseco', sans-serif;
-  font-size: clamp(3.2rem, 9vw, 7.5rem);
+  font-size: clamp(2.8rem, 7vw, 6rem);
   font-weight: 900;
   color: #ffffff;
   text-transform: uppercase;
@@ -902,7 +902,7 @@
 
 .cat-intro-title {
   font-family: 'Paloseco', sans-serif;
-  font-size: clamp(4rem, 12vw, 11rem);
+  font-size: clamp(3.5rem, 10vw, 9rem);
   font-weight: 900;
   color: #ffffff;
   text-transform: uppercase;
