@@ -116,12 +116,12 @@ const Home: FC = () => {
         const svcScroll = currentScroll - SECTION_OFFSETS.servicios;
         const svcP = svcScroll / (windowHeight * 4.5); // Total height: 450vh
         
-        // Revised logic: Title for the first ~25% of the section
-        if (svcP < 0.22) {
+        // Revised logic: Standardized 25% increments for the 4 states
+        if (svcP < 0.25) {
           setActiveSvc(-1);
-        } else if (svcP < 0.48) {
+        } else if (svcP < 0.50) {
           setActiveSvc(0);
-        } else if (svcP < 0.74) {
+        } else if (svcP < 0.75) {
           setActiveSvc(1);
         } else {
           setActiveSvc(2);
@@ -132,8 +132,8 @@ const Home: FC = () => {
         const galScroll = currentScroll - SECTION_OFFSETS.galeria;
         const galP = galScroll / (windowHeight * 3); // Total height: 300vh
         
-        // Revised logic: Show title for nearly half the section scroll
-        if (galP < 0.4) {
+        // Revised logic: Consistent transition for gallery title
+        if (galP < 0.3) {
           setActiveGal(-1);
         } else {
           setActiveGal(0);

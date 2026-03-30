@@ -87,14 +87,14 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMut
                         style={{ ...getProgressStyles(0.0, 0.3, 0.2), transition: 'none' }}
                         className="absolute inset-0 flex flex-col items-center justify-center gap-8"
                     >
-                        <div className={`flex flex-col items-center gap-2 md:gap-4 reveal-on-scroll ${heroIndex === 0 ? 'active' : ''}`}>
+                        <div className="flex flex-col items-center gap-2 md:gap-4">
                             <img src={logo} alt="JG Producciones" className="h-40 md:h-[18rem] w-auto brightness-200 drop-shadow-[0_0_100px_rgba(163,255,0,0.5)]" />
-                            <h2 className={`text-4xl md:text-[8rem] font-black text-white tracking-[0.02em] font-paloseco uppercase text-center text-outline-blue delay-200 ${heroIndex === 0 ? 'active' : ''}`}>
+                            <h2 className="text-4xl md:text-[8rem] font-black text-white tracking-[0.02em] font-paloseco uppercase text-center">
                                 PRODUCCIONES
                             </h2>
                         </div>
 
-                        <div className={`flex flex-col items-center gap-12 mt-8 reveal-on-scroll delay-400 ${heroIndex === 0 ? 'active' : ''}`}>
+                        <div className="flex flex-col items-center gap-12 mt-8">
                             <button
                                 onClick={() => setIsMuted(false)}
                                 className="group relative px-12 py-4 bg-accent text-black font-black uppercase tracking-widest rounded-full hover:scale-110 transition-all duration-500 shadow-[0_15px_45px_rgba(163,255,0,0.5)] font-remixa overflow-hidden text-sm"
@@ -111,9 +111,8 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMut
                         style={{ ...getProgressStyles(0.5, 0.3, 0.2), transition: 'none' }}
                         className="absolute inset-0 flex flex-col items-center justify-center px-4"
                     >
-                        <h1 className={`hero-title text-center drop-shadow-[0_0_50px_rgba(0,0,0,0.9)] leading-tight reveal-on-scroll ${heroIndex === 1 ? 'active' : ''}`}>
+                        <h1 className="hero-title text-center drop-shadow-[0_0_50px_rgba(0,0,0,0.9)] leading-tight">
                             Producción profesional premium para eventos sociales y corporativos <br className="hidden md:block" />
-
                         </h1>
                     </div>
 
@@ -124,8 +123,8 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMut
                         className="absolute inset-0 flex flex-col items-center justify-center px-4"
                     >
                         <div className="max-w-4xl flex flex-col items-center">
-                            <span className={`text-accent uppercase tracking-[0.6em] text-xs font-bold mb-8 reveal-on-scroll ${heroIndex === 2 ? 'active' : ''}`}>Nuestra Esencia</span>
-                            <p className={`text-center drop-shadow-2xl leading-relaxed text-2xl md:text-3xl font-remixa text-white/90 reveal-on-scroll delay-200 ${heroIndex === 2 ? 'active' : ''}`}>
+                            <span className="text-accent uppercase tracking-[0.6em] text-xs font-bold mb-8">Nuestra Esencia</span>
+                            <p className="text-center drop-shadow-2xl leading-relaxed text-2xl md:text-3xl font-remixa text-white/90">
                                 Fusionamos tecnología de vanguardia con pasión creativa. <br className="hidden md:block" />
                                 Sonido de alta fidelidad e iluminación inmersiva que transforman escenarios
                                 de Cartagena para el mundo.

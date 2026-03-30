@@ -25,16 +25,16 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, activeSvc }) => {
       <div className="sticky top-0 h-screen w-full overflow-hidden">
 
         {/* Intro Screen - Servicios Pinned */}
-        <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ${activeSvc === -1 ? 'opacity-100 scale-100' : 'opacity-0 scale-105 pointer-events-none'}`}>
+        <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-700 ${activeSvc === -1 ? 'opacity-100 scale-100' : 'opacity-0 scale-110 pointer-events-none'}`}>
           <div className="absolute inset-0 bg-[#050607]" />
           <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ background: 'radial-gradient(circle at 80% 80%, #1a3d00, transparent 50%), radial-gradient(circle at 20% 20%, #0d2200, transparent 50%)' }} />
           <div className="relative z-10 w-full max-w-7xl mx-auto text-center">
-            <h2 className="text-6xl md:text-[9rem] font-black text-white uppercase tracking-tighter leading-[0.8] mb-12">
+            <h2 className="text-5xl md:text-[9rem] font-black text-white uppercase tracking-tight md:tracking-tighter leading-tight md:leading-[0.8] mb-8 md:mb-12">
               Nuestros <br />
               Servicios
             </h2>
 
-            <p className="text-white/60 text-xl md:text-3xl max-w-3xl mx-auto font-playfair italic">
+            <p className="text-white/60 text-lg md:text-3xl max-w-2xl mx-auto font-playfair italic px-4">
               Infraestructura técnica de nivel internacional adaptada a la escala de tu visión.
             </p>
           </div>
@@ -48,7 +48,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, activeSvc }) => {
           return (
             <div
               key={step}
-              className={`absolute inset-0 z-10 p-6 md:p-24 transition-[opacity,transform] duration-1000 flex flex-col items-center justify-center ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20 pointer-events-none'}`}
+              className={`absolute inset-0 z-10 p-6 md:p-24 transition-[opacity,transform] duration-700 flex flex-col items-center justify-center ${isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-20 scale-95 pointer-events-none'}`}
             >
               <div className="absolute inset-0 bg-[#07090b]" />
               <div className="absolute inset-0 opacity-20" style={{ background: `radial-gradient(circle at ${step * 40}% 50%, #1a3d00, transparent 70%)` }} />
