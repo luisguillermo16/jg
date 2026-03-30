@@ -33,18 +33,18 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
       </div>
 
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        
+
         {/* Stage 1: Intro Screen (Full Page Title) */}
         <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ease-out ${activeGal === -1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
           <div className="absolute inset-0 bg-[#050607]" />
           <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ background: 'radial-gradient(circle at 80% 80%, #1a3d00, transparent 50%), radial-gradient(circle at 20% 20%, #0d2200, transparent 50%)' }} />
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center">
-            <h2 className="text-6xl md:text-[9rem] font-black text-white uppercase tracking-tighter leading-[0.8] mb-12 reveal-on-scroll">
-              Nuestro <br />
-              Trabajo
+            <h2 className="text-6xl md:text-[9rem] font-black text-white uppercase tracking-tighter leading-[0.8] mb-12">
+              Nuestra <br />
+              Galeria
             </h2>
 
-            <p className="text-white/60 text-xl md:text-3xl max-w-3xl mx-auto font-playfair italic reveal-on-scroll delay-200">
+            <p className="text-white/60 text-xl md:text-3xl max-w-3xl mx-auto font-playfair italic">
               Capturamos la esencia de cada evento con el estilo y la precisión que nos caracteriza. Una curaduría visual de nuestras producciones más icónicas.
             </p>
           </div>
@@ -53,21 +53,21 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
         {/* Stage 2: Gallery Grid Feed (Revealed after scrolling) */}
         <div className={`absolute inset-0 z-10 flex items-start justify-center pt-[15vh] transition-all duration-1000 ease-out active-stage-2 ${activeGal === 0 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-20 scale-105 pointer-events-none'}`}>
           <div className="absolute inset-0 bg-black" />
-          
+
           <div className="relative w-full max-w-[975px] h-[85vh] overflow-y-auto no-scrollbar px-0">
 
             {/* 3-Column Premium Grid (Instagram Style) */}
             <div className="instagram-gallery">
               {galleryImages.map((src, i) => (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   className="gallery-item"
                   onClick={() => setSelectedImg(src)}
                 >
-                  <img 
-                    src={src} 
-                    alt={`Producción HG ${i + 1}`} 
-                    loading="lazy" 
+                  <img
+                    src={src}
+                    alt={`Producción HG ${i + 1}`}
+                    loading="lazy"
                   />
                   {/* Overlay icon for "Multiple Posts" */}
                   <div className="overlay-icon"></div>
@@ -81,26 +81,26 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
 
       {/* Instagram-style Modal/Lightbox */}
       {selectedImg && (
-        <div 
+        <div
           className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/95 transition-all duration-300 backdrop-blur-md"
           onClick={() => setSelectedImg(null)}
         >
 
           {/* Close button */}
-          <button 
+          <button
             className="absolute top-6 right-6 text-white text-4xl hover:scale-110 transition-transform"
             onClick={(e) => { e.stopPropagation(); setSelectedImg(null); }}
           >
             &times;
           </button>
 
-          <div 
+          <div
             className="relative max-w-5xl w-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <img 
-              src={selectedImg} 
-              alt="Enlarged visual" 
+            <img
+              src={selectedImg}
+              alt="Enlarged visual"
               className="max-h-[85vh] max-w-full object-contain shadow-[0_0_100px_rgba(255,255,255,0.1)] rounded-sm"
             />
           </div>
