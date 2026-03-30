@@ -1,0 +1,91 @@
+/* src/App.css */
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer {
+  padding: 40px 60px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+/* Reset or adjust some global styles if needed */
+#root {
+  width: 100% !important;
+  max-width: 100% !important;
+  border-inline: none !important;
+  margin: 0 !important;
+  text-align: left !important;
+}
+
+/* ── Entrance & Motion System ── */
+
+@keyframes textReveal {
+  0% {
+    filter: blur(12px);
+    transform: translateY(40px) scale(0.96);
+    opacity: 0;
+    letter-spacing: 0.1em;
+  }
+  100% {
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    letter-spacing: -0.05em;
+  }
+}
+
+@keyframes fadeInScale {
+  0% { 
+    transform: scale(1.08); 
+    opacity: 0; 
+    filter: blur(10px) brightness(1.5);
+  }
+  100% { 
+    transform: scale(1); 
+    opacity: 1; 
+    filter: blur(0) brightness(1);
+  }
+}
+
+@keyframes zoomInEffect {
+  from { transform: scale(1.12); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-reveal {
+  animation: textReveal 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity, filter, letter-spacing;
+}
+
+.animate-fade-scale {
+  animation: fadeInScale 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity, filter;
+}
+
+.animate-zoom-bg {
+  animation: zoomInEffect 3.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.animate-delay-1 { animation-delay: 0.25s; }
+.animate-delay-2 { animation-delay: 0.45s; }
+.animate-delay-3 { animation-delay: 0.65s; }
+
+/* Scroll Indicator Animation */
+@keyframes scrollLine {
+  0% { transform: translateY(-100%); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+.animate-scroll-line {
+  animation: scrollLine 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
