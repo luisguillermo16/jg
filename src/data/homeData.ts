@@ -1,6 +1,7 @@
 import bodaVideo from '../assets/boda.mp4';
-import socialVideo from '../assets/Orquestas.mp4';
-import corporativoVideo from '../assets/corporativo2.mp4';
+import socialVideo from '../assets/social.mp4';
+import corporativoVideo from '../assets/corporativo.mp4';
+
 import serviceAudio from '../assets/service_audio.png';
 import serviceLighting from '../assets/service_lighting.png';
 import serviceLed from '../assets/service_led.png';

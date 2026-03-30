@@ -1,92 +1,142 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import VolumeVideo from '../VolumeVideo';
 import logo from '../../assets/logo.png';
 import heroVideo from '../../assets/hero.mp4';
 
 interface HeroSectionProps {
-  heroRef: React.RefObject<HTMLDivElement>;
-  heroIndex: number;
-  isMuted: boolean;
-  setIsMuted: (val: boolean) => void;
-  isVisible: boolean;
+    heroRef: React.RefObject<HTMLDivElement | null>;
+    progress: number;
+    heroIndex: number;
+    isMuted: boolean;
+    setIsMuted: (val: boolean) => void;
+    isVisible: boolean;
 }
 
-const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex, isMuted, setIsMuted, isVisible }) => {
-  return (
-    <section id="hero-section" ref={heroRef} className="relative w-full h-[400vh]">
-      {/* ── Background Video Layer (Sticky) ── */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
-        <VolumeVideo
-          src={heroVideo}
-          autoPlay
-          loop
-          isMuted={isMuted}
-          isVisible={isVisible}
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-50 brightness-[0.5] saturate-[1.2] animate-zoom-bg animate-fade-scale"
-        />
+const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMuted, setIsMuted, isVisible }) => {
 
-        {/* Grain & Effects Overlay */}
-        <div className="absolute inset-0 z-10 opacity-60 pointer-events-none select-none">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,0,0,0.8)_100%)]" />
-        </div>
+    // Helper to calculate opacity and transform based on progress and target point
+    const getProgressStyles = (target: number, range: number = 0.3, hold: number = 0.3) => {
+        // This logic creates a "plateau" where opacity is 1
+        const distance = Math.abs(progress - target);
+        const halfHold = hold / 2;
 
-        {/* Screen Content Layers */}
-        <div className="relative z-20 w-full h-full flex flex-col items-center justify-center px-6 md:px-12 max-w-5xl mx-auto">
+        let opacity = 0;
+        if (distance <= halfHold) {
+            opacity = 1;
+        } else {
+            opacity = Math.max(0, 1 - ((distance - halfHold) / range));
+        }
 
-          {/* 1. Main Title Screen */}
-          <div
-            style={{ transitionDuration: '800ms', willChange: 'opacity, transform, filter' }}
-            className={`absolute inset-0 flex flex-col items-center justify-center transition-all cubic-bezier(0.16, 1, 0.3, 1) ${heroIndex === 0 ? 'opacity-100 scale-100 blur-0 translate-y-0' : 'opacity-0 scale-95 blur-md -translate-y-8 pointer-events-none'}`}
-          >
-            <h1 className="hero-title text-center animate-reveal opacity-0">
-              Producción técnica que transforma eventos <br className="hidden md:block" />
-              <span className="text-white animate-reveal animate-delay-1 opacity-0">en experiencias inolvidables</span>
-            </h1>
-          </div>
+        const scale = 0.9 + (opacity * 0.1);
+        const blur = (1 - opacity) * 15;
+        const translateY = (target - progress) * 180; // Adjusted for 300vh parallax
 
-          {/* 2. Detailed Description Screen */}
-          <div
-            style={{ transitionDuration: '800ms', willChange: 'opacity, transform, filter' }}
-            className={`absolute inset-0 flex flex-col items-center justify-center transition-all cubic-bezier(0.16, 1, 0.3, 1) ${heroIndex === 1 ? 'opacity-100 scale-100 blur-0 translate-y-0' : 'opacity-0 scale-105 blur-md translate-y-8 pointer-events-none'}`}
-          >
-            <div className="w-16 h-[2px] bg-accent/60 mb-8" />
-            <p className="hero-description text-center px-4 drop-shadow-xl animate-fade-in">
-              En JG Producciones llevamos tu evento al siguiente nivel con sonido profesional, iluminación impactante, tarimas seguras y pantallas LED de alta definición. Especialistas en bodas, eventos sociales y corporativos en Cartagena.
-            </p>
-          </div>
+        return {
+            opacity,
+            transform: `scale(${scale}) translateY(${translateY}px)`,
+            filter: `blur(${blur}px)`,
+            pointerEvents: (opacity > 0.5 ? 'auto' : 'none') as any,
+        };
+    };
 
-          {/* 3. Logo & CTAs Screen */}
-          <div
-            style={{ transitionDuration: '800ms', willChange: 'opacity, transform, filter' }}
-            className={`absolute inset-0 flex flex-col items-center justify-center gap-8 transition-all cubic-bezier(0.16, 1, 0.3, 1) ${heroIndex === 2 ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-105 blur-md pointer-events-none'}`}
-          >
-            <div className="flex flex-col items-center gap-0">
-              <img src={logo} alt="JG Producciones" className="h-40 md:h-64 w-auto brightness-200 drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]" />
-              <h2 className="text-4xl md:text-8xl font-black text-white tracking-[0.02em] font-paloseco uppercase text-center -mt-6 md:-mt-12">
-                PRODUCCIONES
-              </h2>
+    // Video Zoom logic: Starts at 1.05 and goes to 1.15
+    const videoScale = 1 + (progress * 0.12);
+    const videoBlur = progress * 4;
+
+    return (
+        <section id="hero-section" ref={heroRef} className="relative w-full h-[300vh] bg-black">
+            <div className="absolute inset-0 pointer-events-none z-[100]">
+                <div id="hero" className="h-screen w-full" style={{ scrollSnapAlign: 'start' }} />
+                <div id="hero-2" className="h-screen w-full" style={{ scrollSnapAlign: 'start' }} />
+                <div id="hero-3" className="h-screen w-full" style={{ scrollSnapAlign: 'start' }} />
             </div>
-            <div className="flex flex-col items-center gap-12 mt-8">
-              <button
-                onClick={() => setIsMuted(false)}
-                className="px-16 py-5 bg-accent text-black font-black uppercase tracking-widest rounded-full hover:scale-105 transition-all duration-300 shadow-[0_10px_40px_rgba(163,255,0,0.3)] font-remixa"
-              >
-                Contactar
-              </button>
-              <div className="flex flex-col items-center gap-3 opacity-60">
-                <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-white/80 font-remixa">hacia abajo para descubrir</span>
-                <div className="w-[1px] h-12 bg-gradient-to-b from-white/0 via-white to-white/0 relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-full bg-white animate-scroll-line" />
+
+            {/* Scroll-down prompt */}
+            <div className={`scroll-prompt flex flex-col items-center gap-2 transition-opacity duration-500 ${heroIndex === 0 ? 'opacity-50' : 'opacity-0'}`}>
+                <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/40">Explorar experiencias</span>
+                <div className="w-[1px] h-12 bg-gradient-to-b from-accent to-transparent" />
+            </div>
+
+            {/* ── Background Video Layer (Sticky - FIJO) ── */}
+            <div className="sticky top-0 h-screen w-full overflow-hidden bg-black flex items-center justify-center">
+                <VolumeVideo
+                    src={heroVideo}
+                    autoPlay
+                    loop
+                    isMuted={isMuted}
+                    isVisible={isVisible}
+                    playsInline
+                    style={{ transform: `scale(${videoScale})`, filter: `brightness(0.35) saturate(1.2) blur(${videoBlur}px)` }}
+                    className="absolute inset-0 w-full h-full object-cover opacity-60"
+                />
+
+                {/* Grain Overlay */}
+                <div className="absolute inset-0 z-10 opacity-30 pointer-events-none select-none">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_10%,rgba(0,0,0,0.9)_100%)]" />
                 </div>
-              </div>
-            </div>
-          </div>
 
-        </div>
-      </div>
-    </section>
-  );
+                {/* Screen Content Layers */}
+                <div
+                    data-active-index={heroIndex}
+                    className="relative z-20 w-full h-full flex flex-col items-center justify-center px-6 md:px-12 max-w-5xl mx-auto pt-20"
+                >
+
+                    {/* 1. Logo & CTAs Screen (Scene 1: Progress 0.0) */}
+                    <div
+                        key="hg-scene-1"
+                        style={{ ...getProgressStyles(0.0, 0.3, 0.2), transition: 'none' }}
+                        className="absolute inset-0 flex flex-col items-center justify-center gap-8"
+                    >
+                        <div className={`flex flex-col items-center gap-0 reveal-on-scroll ${heroIndex === 0 ? 'active' : ''}`}>
+                            <img src={logo} alt="JG Producciones" className="h-32 md:h-52 w-auto brightness-200 drop-shadow-[0_0_80px_rgba(163,255,0,0.4)]" />
+                            <h2 className={`text-3xl md:text-7xl font-black text-white tracking-[0.02em] font-paloseco uppercase text-center -mt-4 md:-mt-10 text-outline-blue delay-200 ${heroIndex === 0 ? 'active' : ''}`}>
+                                PRODUCCIONES
+                            </h2>
+                        </div>
+
+                        <div className={`flex flex-col items-center gap-12 mt-8 reveal-on-scroll delay-400 ${heroIndex === 0 ? 'active' : ''}`}>
+                            <button
+                                onClick={() => setIsMuted(false)}
+                                className="group relative px-12 py-4 bg-accent text-black font-black uppercase tracking-widest rounded-full hover:scale-110 transition-all duration-500 shadow-[0_15px_45px_rgba(163,255,0,0.5)] font-remixa overflow-hidden text-sm"
+                            >
+                                <span className="relative z-10">Explorar</span>
+                                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* 2. Main Title Screen (Scene 2: Progress 0.5) */}
+                    <div
+                        key="hg-scene-2"
+                        style={{ ...getProgressStyles(0.5, 0.3, 0.2), transition: 'none' }}
+                        className="absolute inset-0 flex flex-col items-center justify-center px-4"
+                    >
+                        <h1 className={`hero-title text-center drop-shadow-[0_0_50px_rgba(0,0,0,0.9)] leading-tight reveal-on-scroll ${heroIndex === 1 ? 'active' : ''}`}>
+                            Producción técnica de élite <br className="hidden md:block" />
+                            <span className={`text-accent underline decoration-white/20 underline-offset-8 delay-200 ${heroIndex === 1 ? 'active' : ''}`}>para momentos irrepetibles</span>
+                        </h1>
+                    </div>
+
+                    {/* 3. Detailed Description Screen (Scene 3: Progress 1.0) */}
+                    <div
+                        key="hg-scene-3"
+                        style={{ ...getProgressStyles(1.0, 0.3, 0.2), transition: 'none' }}
+                        className="absolute inset-0 flex flex-col items-center justify-center px-4"
+                    >
+                        <div className="max-w-4xl flex flex-col items-center">
+                            <span className={`text-accent uppercase tracking-[0.6em] text-xs font-bold mb-8 reveal-on-scroll ${heroIndex === 2 ? 'active' : ''}`}>Nuestra Esencia</span>
+                            <p className={`text-center drop-shadow-2xl leading-relaxed text-2xl md:text-3xl font-remixa text-white/90 reveal-on-scroll delay-200 ${heroIndex === 2 ? 'active' : ''}`}>
+                                Fusionamos tecnología de vanguardia con pasión creativa. <br className="hidden md:block" />
+                                Sonido de alta fidelidad e iluminación inmersiva que transforman escenarios
+                                de <span className="text-white font-black underline decoration-accent/60">Cartagena para el mundo.</span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    );
 };
 
 export default HeroSection;

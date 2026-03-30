@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import logo from '../../assets/logo.png';
 
 const FooterSection: FC = () => {
   return (
-    <footer id="nosotros" className="relative z-10 w-full bg-black py-24 px-6 border-t border-white/5">
+    <footer id="nosotros" className="relative z-10 w-full bg-black py-24 px-6 border-t border-white/5" style={{ scrollSnapAlign: 'start' }}>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-20">
           {/* Brand Column */}

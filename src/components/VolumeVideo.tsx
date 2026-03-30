@@ -18,44 +18,53 @@ const VolumeVideo: React.FC<VolumeVideoProps> = ({
     const video = videoRef.current;
     if (!video) return;
 
-    if (isMuted || !isVisible) {
-      video.muted = true;
-      // Fade volume out before fully muting for smoothness
+    if (!isVisible) {
+      // Silenciamos INSTANTÁNEAMENTE para evitar mezcla de audio
       video.volume = 0;
+      video.muted = true;
+      video.pause();
       return;
     }
 
-    // Attempt to play if not already playing (browsers may pause hidden videos)
     const playVideo = async () => {
       try {
-        if (video.paused) await video.play();
-        video.muted = false;
-        
-        // Smooth volume transition
-        let start: number | null = null;
-        const initialVolume = video.volume;
-        const targetVolume = 1;
-        
-        if (initialVolume === targetVolume) return;
+        // Configuramos volumen inicial al entrar
+        if (isMuted) {
+          video.muted = true;
+          video.volume = 0;
+        } else {
+          video.muted = false;
+          // Subida rápida de volumen para mayor nitidez sonora
+          video.volume = 0;
+        }
 
-        let animationFrameId: number;
-        const animate = (time: number) => {
-          if (!start) start = time;
-          const progress = (time - start) / fadeDuration;
-          
-          if (progress < 1) {
-            video.volume = initialVolume + (targetVolume - initialVolume) * progress;
-            animationFrameId = requestAnimationFrame(animate);
-          } else {
-            video.volume = targetVolume;
+        if (video.paused) {
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+             await playPromise;
           }
-        };
-
-        animationFrameId = requestAnimationFrame(animate);
-        return () => cancelAnimationFrame(animationFrameId);
+        }
+        
+        if (!isMuted) {
+          let start: number | null = null;
+          const targetVolume = 1;
+          const initialVolume = video.volume;
+          
+          const animate = (time: number) => {
+            if (!start) start = time;
+            const elapsed = time - start;
+            const progress = Math.min(1, elapsed / fadeDuration);
+            
+            video.volume = initialVolume + (targetVolume - initialVolume) * progress;
+            
+            if (progress < 1 && !video.muted && isVisible) {
+              requestAnimationFrame(animate);
+            }
+          };
+          requestAnimationFrame(animate);
+        }
       } catch (err) {
-        console.warn("Video play interrupted or blocked:", err);
-        video.muted = true; // Fallback to muted if play fails
+        console.warn("Video playback issue:", err);
       }
     };
 

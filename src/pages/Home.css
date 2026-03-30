@@ -22,14 +22,18 @@
 /* src/pages/Home.css */
 
 .home-container {
-  overflow-x: hidden;
   background-color: var(--bg);
-  /* Deep blue-tinted black from root */
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  z-index: 1;
+  scroll-snap-type: y mandatory;
+  scroll-snap-stop: always;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  height: 100vh;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.home-container::-webkit-scrollbar {
+  display: none;
 }
 
 /* Film Grain Texture */
@@ -101,7 +105,6 @@
   width: 100%;
   min-height: 100vh;
   position: relative;
-  overflow: hidden;
 }
 
 /* Super Intense Ultra-Neon Glow behind the content */
@@ -170,6 +173,10 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.home-container main {
+  display: contents;
 }
 
 .highlight-underline {
@@ -581,26 +588,93 @@
   }
 }
 
-/* Scroll Reveal Animations */
+/* Scroll Reveal Animations - Ultimate Premium (v4) */
 .reveal-on-scroll {
   opacity: 0;
-  transform: translateY(60px);
-  filter: blur(10px);
-  transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform, filter;
+  transform: translateY(30px);
+  transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1), transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
 
-.reveal-active {
+.reveal-on-scroll.active {
   opacity: 1 !important;
   transform: translateY(0) !important;
-  filter: blur(0) !important;
 }
 
-.delay-100 { transition-delay: 100ms; }
-.delay-200 { transition-delay: 200ms; }
-.delay-300 { transition-delay: 300ms; }
-.delay-400 { transition-delay: 400ms; }
-.delay-500 { transition-delay: 500ms; }
+/* Precise Staggered delays: 0.2s increments as requested */
+.delay-100 {
+  transition-delay: 100ms;
+}
+
+.delay-200 {
+  transition-delay: 200ms;
+}
+
+.delay-300 {
+  transition-delay: 300ms;
+}
+
+.delay-400 {
+  transition-delay: 400ms;
+}
+
+.delay-500 {
+  transition-delay: 500ms;
+}
+
+.delay-600 {
+  transition-delay: 600ms;
+}
+
+/* Background darkness reinforcement (Reduced Blur) */
+.bg-overlay-dark {
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.85) 100%);
+  z-index: 1;
+}
+
+.ken-burns {
+  animation: kenBurnsAnimation 20s ease-in-out infinite alternate !important;
+}
+
+@keyframes kenBurnsAnimation {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.15);
+  }
+}
+
+/* Mouse Scroll Indicator */
+.scroll-prompt {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.5;
+  animation: bounce 2s infinite;
+  z-index: 100;
+}
+
+@keyframes bounce {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  40% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
 
 /* Text Outline Effect */
 .text-outline-white {

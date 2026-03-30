@@ -1,4 +1,5 @@
-import { FC, useState, useEffect, useRef } from 'react';
+import type { FC } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import { CATEGORIES, SERVICES, GALLERY_IMAGES, SECTIONS } from '../data/homeData';
 
@@ -14,9 +15,10 @@ import FooterSection from '../components/home/FooterSection';
 import './Home.css';
 
 const Home: FC = () => {
-  const [heroIndex, setHeroIndex] = useState(2);
-  const [activeSection, setActiveSection] = useState('hero');
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [heroProgress, setHeroProgress] = useState(0);
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [catsProgress, setCatsProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState('hero-section');
   const [activeSvc, setActiveSvc] = useState(-1);
   const [activeGal, setActiveGal] = useState(-1);
   const [isMuted, setIsMuted] = useState(true);
@@ -24,117 +26,139 @@ const Home: FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const categoriesRef = useRef<HTMLDivElement>(null);
 
+  // LERP Tracking Refs - Hero
+  const rawHeroProgress = useRef(0);
+  const smoothHeroProgress = useRef(0);
+
+  // LERP Tracking Refs - Categories
+  const rawCatsProgress = useRef(0);
+  const smoothCatsProgress = useRef(0);
+
+  const rafId = useRef<number>(0);
+
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPos = window.scrollY + window.innerHeight / 3;
+    const LERP_FACTOR = 0.12; // Más rápido para mayor respuesta
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-      const hero = document.getElementById('hero-section');
-      const cats = document.getElementById('categories');
-      const servs = document.getElementById('servicios');
-      const gal = document.getElementById('galeria');
-
-      if (hero && scrollPos < cats!.offsetTop) setActiveSection('hero');
-      else if (cats && scrollPos < servs!.offsetTop) setActiveSection('categories');
-      else if (servs && scrollPos < gal!.offsetTop) setActiveSection('servicios');
-      else if (gal) setActiveSection('galeria');
-
-      // Hero Sticky Progression Logic
+    const tick = () => {
+      // 1. Hero Calculations
       if (heroRef.current) {
-        const heroRect = heroRef.current.getBoundingClientRect();
-        const heroProgress = -heroRect.top / (heroRect.height - window.innerHeight);
-        if (heroProgress < 0.3) setHeroIndex(2);
-        else if (heroProgress < 0.65) setHeroIndex(0);
-        else setHeroIndex(1);
+        const rect = heroRef.current.getBoundingClientRect();
+        const height = rect.height - window.innerHeight;
+        rawHeroProgress.current = Math.max(0, Math.min(1, -rect.top / height));
       }
+      smoothHeroProgress.current = lerp(smoothHeroProgress.current, rawHeroProgress.current, LERP_FACTOR);
+      setHeroProgress(smoothHeroProgress.current);
+      setHeroIndex(Math.min(2, Math.floor(smoothHeroProgress.current * 3)));
 
-      // Categories Scrollytelling logic
+      // 2. Categories Calculations (AÑADIDO LERP PARA PRECISIÓN)
       if (categoriesRef.current) {
         const rect = categoriesRef.current.getBoundingClientRect();
-        const scrollProgress = -rect.top / (rect.height - window.innerHeight);
-        if (rect.top > window.innerHeight || scrollProgress < 0.05) setActiveIndex(-1);
-        else if (scrollProgress < 0.35) setActiveIndex(0);
-        else if (scrollProgress < 0.65) setActiveIndex(1);
-        else setActiveIndex(2);
+        const height = rect.height - window.innerHeight;
+        rawCatsProgress.current = Math.max(0, Math.min(1, -rect.top / height));
+      }
+      smoothCatsProgress.current = lerp(smoothCatsProgress.current, rawCatsProgress.current, LERP_FACTOR);
+      setCatsProgress(smoothCatsProgress.current);
+
+      const catsEl = document.getElementById('categories');
+      const servsEl = document.getElementById('servicios');
+      const galEl = document.getElementById('galeria');
+
+      const windowHeight = window.innerHeight;
+      const currentScroll = window.scrollY;
+
+      if (currentScroll < (catsEl?.offsetTop || 9999) - windowHeight / 2) {
+        // Hero has 3 states
+        if (currentScroll < windowHeight * 0.8) setActiveSection('hero');
+        else if (currentScroll < windowHeight * 1.8) setActiveSection('hero-2');
+        else setActiveSection('hero-3');
+      } else if (currentScroll < (servsEl?.offsetTop || 9999) - windowHeight / 2) {
+        // Categories has 4 states (Intro + 3 Cats)
+        const catsStart = catsEl?.offsetTop || 0;
+        const p = (currentScroll - catsStart) / windowHeight;
+        if (p < 0.5) setActiveSection('categories-intro');
+        else if (p < 1.5) setActiveSection('categories-1');
+        else if (p < 2.5) setActiveSection('categories-2');
+        else setActiveSection('categories-3');
+      } else if (currentScroll < (galEl?.offsetTop || 9999) - windowHeight / 2) {
+        setActiveSection('servicios');
+      } else {
+        setActiveSection('galeria');
       }
 
-      // Services Scrollytelling logic
-      const servsEl = document.getElementById('servicios');
       if (servsEl) {
         const rect = servsEl.getBoundingClientRect();
-        const scrollProgress = -rect.top / (rect.height - window.innerHeight);
-        if (rect.top > window.innerHeight || scrollProgress < 0.05) setActiveSvc(-1);
-        else if (scrollProgress < 0.35) setActiveSvc(0);
-        else if (scrollProgress < 0.65) setActiveSvc(1);
+        const p = -rect.top / (rect.height - window.innerHeight);
+        if (rect.top > window.innerHeight || p < 0.05) setActiveSvc(-1);
+        else if (p < 0.35) setActiveSvc(0);
+        else if (p < 0.65) setActiveSvc(1);
         else setActiveSvc(2);
       }
 
-      // Gallery Scrollytelling logic
-      const galEl = document.getElementById('galeria');
       if (galEl) {
         const rect = galEl.getBoundingClientRect();
-        const scrollProgress = -rect.top / (rect.height - window.innerHeight);
-        if (rect.top > window.innerHeight || scrollProgress < 0.1) setActiveGal(-1);
+        const p = -rect.top / (rect.height - window.innerHeight);
+        if (rect.top > window.innerHeight || p < 0.1) setActiveGal(-1);
         else setActiveGal(0);
       }
+
+      rafId.current = requestAnimationFrame(tick);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    
-    // Reveal Observer for scroll entrance animations (optional if using Scrollytelling only)
-    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    rafId.current = requestAnimationFrame(tick);
+
+    const observerOptions = { threshold: 0.5 };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('reveal-active');
+          entry.target.classList.add('active');
+        } else {
+          // Optional: remove if you want animations to re-trigger
+          // entry.target.classList.remove('active');
         }
       });
     }, observerOptions);
-
     document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(rafId.current);
       observer.disconnect();
     };
   }, []);
 
   return (
-    <div className="bg-black text-white selection:bg-accent selection:text-black overflow-x-hidden">
+    <div className="home-container bg-black text-white selection:bg-accent selection:text-black">
       <Navbar />
-
-      {/* Full Scrollytelling Core Flow */}
       <main>
-        <HeroSection 
-          heroRef={heroRef} 
-          heroIndex={heroIndex} 
-          isMuted={isMuted} 
-          setIsMuted={setIsMuted} 
-          isVisible={activeSection === 'hero'}
+        <HeroSection
+          heroRef={heroRef as any}
+          progress={heroProgress}
+          heroIndex={heroIndex}
+          isMuted={isMuted}
+          setIsMuted={setIsMuted}
+          isVisible={activeSection === 'hero-section'}
         />
-
-        <CategoriesSection 
-          categoriesRef={categoriesRef} 
-          categories={CATEGORIES} 
-          activeIndex={activeIndex} 
-          isMuted={isMuted} 
+        <CategoriesSection
+          categoriesRef={categoriesRef as any}
+          categories={CATEGORIES}
+          progress={catsProgress}
+          isMuted={isMuted}
         />
-
-        <ServicesSection 
-          services={SERVICES} 
-          activeSvc={activeSvc} 
+        <ServicesSection
+          services={SERVICES}
+          activeSvc={activeSvc}
         />
-
-        <GallerySection 
-          activeGal={activeGal} 
-          galleryImages={GALLERY_IMAGES} 
+        <GallerySection
+          activeGal={activeGal}
+          galleryImages={GALLERY_IMAGES}
         />
       </main>
-
       <FooterSection />
-
-      {/* Floating UI elements */}
       <SoundToggle isMuted={isMuted} setIsMuted={setIsMuted} />
-      <SideNavigator sections={SECTIONS} activeSection={activeSection} />
+      <SideNavigator
+        sections={SECTIONS}
+        activeSection={activeSection}
+      />
     </div>
   );
 };
