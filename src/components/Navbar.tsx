@@ -1,6 +1,7 @@
 import { type FC, useState, useEffect, memo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.png';
+import logo from '../assets/brand/logo.png';
+import ContactModal from './ContactModal';
 
 interface NavbarProps {
   activeSection?: string;
@@ -12,7 +13,8 @@ const NavLinks: FC<{
   activeSection: string; 
   scrollToSection: (e: React.MouseEvent<HTMLAnchorElement>, id: string) => void;
   setIsMenuOpen: (open: boolean) => void;
-}> = memo(({ isHome, isNosotros, activeSection, scrollToSection, setIsMenuOpen }) => {
+  onContactClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+}> = memo(({ isHome, isNosotros, activeSection, scrollToSection, setIsMenuOpen, onContactClick }) => {
   const isActive = (id: string) => {
     if (!isHome) return false;
     if (id === 'hero' && activeSection.startsWith('hero')) return true;
@@ -26,7 +28,7 @@ const NavLinks: FC<{
         <a 
           href="/" 
           onClick={(e) => scrollToSection(e, 'hero')} 
-          className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${isActive('hero') ? 'text-accent bg-white/5 drop-shadow-[0_0_8px_rgba(184,227,81,0.2)]' : 'text-text hover:text-accent'} font-remixa`}
+          className={`px-4 py-2 text-sm font-semibold transition-all duration-300 ${isActive('hero') ? 'text-accent' : 'text-text hover:text-accent'} font-remixa`}
         >
           Home
         </a>
@@ -35,7 +37,7 @@ const NavLinks: FC<{
         <a 
           href="#servicios" 
           onClick={(e) => scrollToSection(e, '#servicios')} 
-          className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${isActive('servicios') ? 'text-accent bg-white/5' : 'text-text hover:text-accent'} font-remixa`}
+          className={`px-4 py-2 text-sm font-semibold transition-all duration-300 ${isActive('servicios') ? 'text-accent' : 'text-text hover:text-accent'} font-remixa`}
         >
           Servicios
         </a>
@@ -43,7 +45,7 @@ const NavLinks: FC<{
       <li key="contact">
         <a 
           href="#contact" 
-          onClick={(e) => scrollToSection(e, '#contact')} 
+          onClick={onContactClick} 
           className={`mx-2 px-8 py-2.5 rounded-full text-sm font-bold transition-all duration-300 shadow-xl ${isActive('contact') ? 'bg-accent/80 scale-105' : 'bg-accent'} text-black hover:scale-105 hover:shadow-[0_0_20px_rgba(163,255,0,0.5)] font-remixa`}
         >
           Contactanos
@@ -53,7 +55,7 @@ const NavLinks: FC<{
         <a 
           href="#galeria" 
           onClick={(e) => scrollToSection(e, '#galeria')} 
-          className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${isActive('galeria') ? 'text-accent bg-white/5' : 'text-text hover:text-accent'} font-remixa`}
+          className={`px-4 py-2 text-sm font-semibold transition-all duration-300 ${isActive('galeria') ? 'text-accent' : 'text-text hover:text-accent'} font-remixa`}
         >
           Galeria
         </a>
@@ -62,7 +64,7 @@ const NavLinks: FC<{
         <Link 
           to="/nosotros" 
           onClick={() => setIsMenuOpen(false)} 
-          className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${isNosotros ? 'text-accent bg-white/5 drop-shadow-[0_0_8px_rgba(184,227,81,0.2)]' : 'text-text hover:text-accent'} font-remixa`}
+          className={`px-4 py-2 text-sm font-semibold transition-all duration-300 ${isNosotros ? 'text-accent' : 'text-text hover:text-accent'} font-remixa`}
         >
           Nosotros
         </Link>
@@ -78,6 +80,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
   const navigate = useNavigate();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   useEffect(() => {
     let ticking = false;
@@ -157,6 +160,18 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
     }
   };
 
+  useEffect(() => {
+    const handleOpenModal = () => setIsContactModalOpen(true);
+    window.addEventListener('open-contact-modal', handleOpenModal);
+    return () => window.removeEventListener('open-contact-modal', handleOpenModal);
+  }, []);
+
+  const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setIsContactModalOpen(true);
+    setIsMenuOpen(false);
+  };
+
   const isHome = location.pathname === '/';
   const isNosotros = location.pathname === '/nosotros';
 
@@ -179,7 +194,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex bg-white/5 backdrop-blur-xl p-1.5 rounded-full border border-white/5 shadow-[0_0_15px_rgba(184,227,81,0.05)]">
+        <div className="hidden md:flex p-1.5 items-center">
           <ul className="flex gap-1 m-0 p-0 list-none items-center">
             <NavLinks 
               isHome={isHome} 
@@ -187,6 +202,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
               activeSection={activeSection} 
               scrollToSection={scrollToSection} 
               setIsMenuOpen={setIsMenuOpen} 
+              onContactClick={handleContactClick}
             />
           </ul>
         </div>
@@ -218,12 +234,16 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
               activeSection={activeSection} 
               scrollToSection={scrollToSection} 
               setIsMenuOpen={setIsMenuOpen} 
+              onContactClick={handleContactClick}
             />
           </ul>
         </div>
       </div>
+
+      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
     </>
   );
 };
 
 export default Navbar;
+

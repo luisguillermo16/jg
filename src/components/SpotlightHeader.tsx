@@ -1,6 +1,7 @@
 import { type FC } from 'react';
-import logo from '../assets/logo.png';
+import logo from '../assets/brand/logo.png';
 import SpotlightsNav from './SpotlightsNav';
+import { openContactModal } from '../utils/modal';
 
 const SpotlightHeader: FC = () => {
     return (
@@ -33,24 +34,22 @@ const SpotlightHeader: FC = () => {
                 >
                     Servicios
                 </a>
-                <a 
-                    href="https://wa.me/yournumber" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
+                <button 
+                    onClick={openContactModal}
                     className="ml-4 px-8 py-2.5 bg-accent text-black font-black uppercase text-xs tracking-widest rounded-full hover:scale-105 transition-all duration-300 shadow-[0_5px_20px_rgba(163,255,0,0.3)] font-remixa"
                 >
                     Contactar
-                </a>
+                </button>
             </div>
             
             {/* Mobile Contact Button */}
             <div className="md:hidden">
-                <a 
-                    href="https://wa.me/yournumber" 
+                <button 
+                    onClick={openContactModal}
                     className="px-5 py-2 bg-accent text-black font-black uppercase text-[10px] tracking-widest rounded-full font-remixa"
                 >
                     WhatsApp
-                </a>
+                </button>
             </div>
         </SpotlightsNav>
     );

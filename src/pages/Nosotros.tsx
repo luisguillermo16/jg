@@ -24,7 +24,7 @@ const Nosotros: FC = () => {
     <div className="relative bg-black text-white selection:bg-accent selection:text-black min-h-screen">
       <Navbar />
 
-      <main className="bg-black min-h-[80vh] flex items-center justify-center relative overflow-hidden">
+      <main className="bg-black min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-32 md:pt-40">
         {/* Subtle Background Glow */}
         <div className="absolute inset-0 z-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#A3FF00]/5 blur-[150px] rounded-full pointer-events-none scale-150 opacity-40"></div>

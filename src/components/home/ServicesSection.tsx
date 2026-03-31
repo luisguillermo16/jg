@@ -13,28 +13,28 @@ interface ServicesSectionProps {
 
 const ServicesSection: FC<ServicesSectionProps> = ({ services, activeSvc }) => {
   return (
-    <section id="servicios" className="relative h-[450vh] bg-black">
-      {/* Snap Points para los 4 estados de servicios */}
+    <section id="servicios" className="relative h-[600vh] bg-black">
+      {/* Snap Points for the 4 service states, precisely timed with scroll logic */}
       <div className="absolute inset-0 pointer-events-none z-[50]">
-        <div className="h-[112.5vh] w-full" style={{ scrollSnapAlign: 'start' }} />
-        <div className="h-[112.5vh] w-full" style={{ scrollSnapAlign: 'start' }} />
-        <div className="h-[112.5vh] w-full" style={{ scrollSnapAlign: 'start' }} />
-        <div className="h-[112.5vh] w-full" style={{ scrollSnapAlign: 'start' }} />
+        <div className="h-[150vh] w-full" style={{ scrollSnapAlign: 'start' }} />
+        <div className="h-[126vh] w-full" style={{ scrollSnapAlign: 'start' }} />
+        <div className="h-[132vh] w-full" style={{ scrollSnapAlign: 'start' }} />
+        <div className="h-[192vh] w-full" style={{ scrollSnapAlign: 'start' }} />
       </div>
 
       <div className="sticky top-0 h-screen w-full overflow-hidden">
 
         {/* Intro Screen - Servicios Pinned */}
-        <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-700 ${activeSvc === -1 ? 'opacity-100 scale-100' : 'opacity-0 scale-110 pointer-events-none'}`}>
+        <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ${activeSvc === -1 ? 'opacity-100 scale-100 z-50' : 'opacity-0 scale-105 z-0 pointer-events-none'}`}>
           <div className="absolute inset-0 bg-[#050607]" />
           <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ background: 'radial-gradient(circle at 80% 80%, #1a3d00, transparent 50%), radial-gradient(circle at 20% 20%, #0d2200, transparent 50%)' }} />
           <div className="relative z-10 w-full max-w-7xl mx-auto text-center">
-            <h2 className="text-5xl md:text-[9rem] font-black text-white uppercase tracking-tight md:tracking-tighter leading-tight md:leading-[0.8] mb-8 md:mb-12">
+            <h2 className="text-[clamp(3.25rem,12vw,9rem)] font-black text-white uppercase tracking-tight md:tracking-tighter leading-[0.9] md:leading-[0.8] mb-6 md:mb-12 px-2">
               Nuestros <br />
               Servicios
             </h2>
 
-            <p className="text-white/60 text-lg md:text-3xl max-w-2xl mx-auto font-playfair italic px-4">
+            <p className="text-white/60 text-base md:text-3xl max-w-2xl mx-auto font-playfair italic px-4 leading-snug">
               Infraestructura técnica de nivel internacional adaptada a la escala de tu visión.
             </p>
           </div>
@@ -57,7 +57,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, activeSvc }) => {
                 {items.map((svc, idx) => (
                   <div
                     key={`${step}-${idx}`}
-                    className="group relative aspect-[3.8/4] rounded-[2rem] bg-[#111111] overflow-hidden transform-gpu will-change-transform isolation-isolate perspective-1000 backface-hidden transition-all duration-700 hover:shadow-[0_40px_100px_rgba(0,0,0,0.8)]"
+                    className="group relative aspect-[3.8/4] rounded-[0.5rem] bg-[#111111] overflow-hidden transform-gpu will-change-transform isolation-isolate perspective-1000 backface-hidden transition-all duration-700 hover:shadow-[0_40px_100px_rgba(0,0,0,0.8)]"
                   >
                     <div className="absolute inset-0 w-full h-full overflow-hidden">
                       <img

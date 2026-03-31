@@ -1,22 +1,22 @@
-import bodaVideo from '../assets/boda.mp4';
-import socialVideo from '../assets/social.mp4';
-import corporativoVideo from '../assets/corporativo.mp4';
+import bodaVideo from '../assets/home/vids/boda.mp4';
+import socialVideo from '../assets/home/vids/social.mp4';
+import corporativoVideo from '../assets/home/vids/corporativo.mp4';
 
-import serviceAudio from '../assets/service_audio.png';
-import serviceLighting from '../assets/service_lighting.png';
-import serviceLed from '../assets/service_led.png';
-import gal1 from '../assets/galeria/MRW01846.jpg';
-import gal2 from '../assets/galeria/MRW03505.jpg';
-import gal3 from '../assets/galeria/MRW03575.jpg';
-import gal4 from '../assets/galeria/MRW04373.jpg';
-import gal5 from '../assets/galeria/MRW08896.jpg';
-import gal6 from '../assets/galeria/MRW09177.jpg';
-import gal7 from '../assets/galeria/MRW09244.jpg';
-import gal8 from '../assets/galeria/MRW09445.jpg';
-import gal9 from '../assets/galeria/MRW09447.jpg';
-import gal10 from '../assets/galeria/MRW09474.jpg';
-import gal11 from '../assets/galeria/MRW09758.jpg';
-import gal12 from '../assets/galeria/MRW09772.jpg';
+import serviceAudio from '../assets/home/icons/service_audio.png';
+import serviceLighting from '../assets/home/icons/service_lighting.png';
+import serviceLed from '../assets/home/icons/service_led.png';
+import gal1 from '../assets/gallery/MRW01846.jpg';
+import gal2 from '../assets/gallery/MRW03505.jpg';
+import gal3 from '../assets/gallery/MRW03575.jpg';
+import gal4 from '../assets/gallery/MRW04373.jpg';
+import gal5 from '../assets/gallery/MRW08896.jpg';
+import gal6 from '../assets/gallery/MRW09177.jpg';
+import gal7 from '../assets/gallery/MRW09244.jpg';
+import gal8 from '../assets/gallery/MRW09445.jpg';
+import gal9 from '../assets/gallery/MRW09447.jpg';
+import gal10 from '../assets/gallery/MRW09474.jpg';
+import gal11 from '../assets/gallery/MRW09758.jpg';
+import gal12 from '../assets/gallery/MRW09772.jpg';
 
 export const CATEGORIES = [
   {

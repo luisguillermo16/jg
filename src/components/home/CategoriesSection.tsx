@@ -1,5 +1,6 @@
 import { type FC } from 'react';
 import VolumeVideo from '../VolumeVideo';
+import { openContactModal } from '../../utils/modal';
 
 interface Category {
   id: string;
@@ -146,7 +147,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                     transform: isActive ? 'translateY(0)' : 'translateY(20px)',
                   }}
                 >
-                  <button className="cat-btn">
+                  <button onClick={openContactModal} className="cat-btn">
                     <span>Contactar</span>
                     <div className="cat-btn-shine" />
                   </button>

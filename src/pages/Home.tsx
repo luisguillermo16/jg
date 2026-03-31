@@ -18,6 +18,10 @@ const MemoHero = memo(HeroSection);
 const MemoCategories = memo(CategoriesSection);
 const MemoServices = memo(ServicesSection);
 const MemoGallery = memo(GallerySection);
+// Force manual scroll restoration at the module level to prevent browser jumps
+if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual';
+}
 
 const Home: FC = () => {
   const [heroIndex, setHeroIndex] = useState(0);
@@ -35,24 +39,42 @@ const Home: FC = () => {
   const smoothCatsProgress = useRef(0);
   const rafId = useRef<number>(0);
 
-  // Hash Navigation Handler
+  // Advanced Scroll Reset logic
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // 1. Force the container to the top immediately
+    container.scrollTo(0, 0);
+    
+    // 2. Temporarily disable scroll-snap to prevent the browser from snapping back to a previous section
+    const originalSnap = getComputedStyle(container).scrollSnapType;
+    container.style.scrollSnapType = 'none';
+
     const hash = window.location.hash;
-    if (hash && containerRef.current) {
+    
+    if (hash) {
       const id = hash.replace('#', '');
       const element = document.getElementById(id);
       if (element) {
-        // Wait a bit for the page to settle
+        // Wait for styles/layout to settle before scrolling to a hash
         setTimeout(() => {
-          if (containerRef.current) {
-            const containerRect = containerRef.current.getBoundingClientRect();
+          if (container) {
+            const containerRect = container.getBoundingClientRect();
             const elementRect = element.getBoundingClientRect();
-            const targetScroll = elementRect.top - containerRect.top + containerRef.current.scrollTop;
-            containerRef.current.scrollTo({ top: targetScroll, behavior: 'smooth' });
+            const targetScroll = elementRect.top - containerRect.top + container.scrollTop;
+            container.scrollTo({ top: targetScroll, behavior: 'smooth' });
           }
-        }, 300);
+        }, 500);
       }
     }
+
+    // 3. Re-enable scroll-snap after a short delay
+    const timer = setTimeout(() => {
+      if (container) container.style.scrollSnapType = originalSnap || 'y mandatory';
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -67,7 +89,7 @@ const Home: FC = () => {
       hero: 0,
       categories: windowHeight * 3,
       servicios: windowHeight * 7,
-      galeria: windowHeight * 11.5,
+      galeria: windowHeight * 13,
     };
 
     const tick = () => {
@@ -107,14 +129,14 @@ const Home: FC = () => {
       } else if (currentScroll < SECTION_OFFSETS.galeria - windowHeight / 2) {
         setActiveSection('servicios');
         const svcScroll = currentScroll - SECTION_OFFSETS.servicios;
-        const svcP = svcScroll / (windowHeight * 4.5); // Total height: 450vh
+        const svcP = svcScroll / (windowHeight * 6); // Total height: 600vh
         
-        // Revised logic: Standardized 25% increments for the 4 states
+        // Balanced thresholds to give each step plenty of room, especially the last one (Pare)
         if (svcP < 0.25) {
           setActiveSvc(-1);
-        } else if (svcP < 0.50) {
+        } else if (svcP < 0.46) {
           setActiveSvc(0);
-        } else if (svcP < 0.75) {
+        } else if (svcP < 0.68) {
           setActiveSvc(1);
         } else {
           setActiveSvc(2);
@@ -123,10 +145,10 @@ const Home: FC = () => {
       } else if (currentScroll < SECTION_OFFSETS.galeria + windowHeight * 4) {
         setActiveSection('galeria');
         const galScroll = currentScroll - SECTION_OFFSETS.galeria;
-        const galP = galScroll / (windowHeight * 3); // Total height: 300vh
+        const galP = galScroll / (windowHeight * 4); // Total height: 400vh
         
-        // Revised logic: Consistent transition for gallery title
-        if (galP < 0.3) {
+        // Balanced intro transition
+        if (galP < 0.5) {
           setActiveGal(-1);
         } else {
           setActiveGal(0);

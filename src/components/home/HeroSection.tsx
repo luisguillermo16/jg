@@ -1,8 +1,8 @@
 import React, { type FC } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import VolumeVideo from '../VolumeVideo';
-import logo from '../../assets/logo.png';
-import heroVideo from '../../assets/hero.mp4';
+import logo from '../../assets/brand/logo.png';
+import heroVideo from '../../assets/home/vids/hero.mp4';
 
 interface HeroSectionProps {
     heroRef: React.RefObject<HTMLDivElement | null>;

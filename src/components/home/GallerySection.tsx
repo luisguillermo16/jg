@@ -25,26 +25,26 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
   return (
 
 
-    <section id="galeria" className="relative h-[300vh] bg-black">
+    <section id="galeria" className="relative h-[400vh] bg-black">
       {/* Snap Points to manage the two stages (Intro vs Grid) */}
       <div className="absolute inset-0 pointer-events-none z-[50]">
-        <div className="h-[150vh] w-full" style={{ scrollSnapAlign: 'start' }} />
-        <div className="h-[150vh] w-full" style={{ scrollSnapAlign: 'start' }} />
+        <div className="h-[200vh] w-full" style={{ scrollSnapAlign: 'start' }} />
+        <div className="h-[200vh] w-full" style={{ scrollSnapAlign: 'start' }} />
       </div>
 
       <div className="sticky top-0 h-screen w-full overflow-hidden">
 
         {/* Stage 1: Intro Screen (Full Page Title) */}
-        <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ease-out ${activeGal === -1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
+        <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ease-out ${activeGal === -1 ? 'opacity-100 scale-100 z-50' : 'opacity-0 scale-95 z-0 pointer-events-none'}`}>
           <div className="absolute inset-0 bg-[#050607]" />
           <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ background: 'radial-gradient(circle at 80% 80%, #1a3d00, transparent 50%), radial-gradient(circle at 20% 20%, #0d2200, transparent 50%)' }} />
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center">
-            <h2 className="text-6xl md:text-[9rem] font-black text-white uppercase tracking-tighter leading-[0.8] mb-12">
+            <h2 className="text-[clamp(3.25rem,12vw,9rem)] font-black text-white uppercase tracking-tighter leading-[0.9] md:leading-[0.8] mb-6 md:mb-12 px-2">
               Nuestra <br />
               Galeria
             </h2>
 
-            <p className="text-white/60 text-xl md:text-3xl max-w-3xl mx-auto font-playfair italic">
+            <p className="text-white/60 text-base md:text-3xl max-w-3xl mx-auto font-playfair italic px-4 leading-snug">
               Capturamos la esencia de cada evento con el estilo y la precisión que nos caracteriza. Una curaduría visual de nuestras producciones más icónicas.
             </p>
           </div>
