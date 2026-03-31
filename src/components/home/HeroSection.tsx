@@ -1,47 +1,63 @@
-import type { FC } from 'react';
+import React, { type FC } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import VolumeVideo from '../VolumeVideo';
 import logo from '../../assets/logo.png';
 import heroVideo from '../../assets/hero.mp4';
 
 interface HeroSectionProps {
     heroRef: React.RefObject<HTMLDivElement | null>;
-    progress: number;
+    containerRef: React.RefObject<HTMLDivElement | null>;
     heroIndex: number;
     isMuted: boolean;
     setIsMuted: (val: boolean) => void;
     isVisible: boolean;
 }
 
-const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMuted, setIsMuted, isVisible }) => {
+const HeroSection: FC<HeroSectionProps> = ({ heroRef, containerRef, heroIndex, isMuted, setIsMuted, isVisible }) => {
+    // Custom hook to get framer-motion scroll progress
+    const { scrollYProgress } = useScroll({
+        target: heroRef,
+        container: containerRef,
+        offset: ["start start", "end end"]
+    });
 
-    // Helper to calculate opacity and transform based on progress and target point
-    const getProgressStyles = (target: number, range: number = 0.3, hold: number = 0.3) => {
-        // This logic creates a "plateau" where opacity is 1
-        const distance = Math.abs(progress - target);
-        const halfHold = hold / 2;
+    // Use spring for much smoother, fluid motion (avoids jerky scroll updates)
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 70,
+        damping: 25,
+        restDelta: 0.001
+    });
 
-        let opacity = 0;
-        if (distance <= halfHold) {
-            opacity = 1;
-        } else {
-            opacity = Math.max(0, 1 - ((distance - halfHold) / range));
-        }
+    // Scene 1: Logo & CTA (Visible around 0 to 0.2)
+    const scene1Opacity = useTransform(smoothProgress, [0, 0.1, 0.25], [1, 1, 0]);
+    const scene1Scale = useTransform(smoothProgress, [0, 0.25], [1, 0.95]);
+    const scene1Y = useTransform(smoothProgress, [0, 0.25], [0, -50]);
 
-        const scale = 0.9 + (opacity * 0.1);
-        const blur = (1 - opacity) * 15;
-        const translateY = (target - progress) * 180; // Adjusted for 300vh parallax
+    // Scene 2: Main Title (Visible around 0.35 to 0.65)
+    const scene2Opacity = useTransform(smoothProgress, [0.25, 0.4, 0.6, 0.75], [0, 1, 1, 0]);
+    const scene2Scale = useTransform(smoothProgress, [0.25, 0.5, 0.75], [0.95, 1, 0.95]);
+    const scene2Y = useTransform(smoothProgress, [0.25, 0.5, 0.75], [50, 0, -50]);
 
-        return {
-            opacity,
-            transform: `scale(${scale}) translateY(${translateY}px)`,
-            filter: `blur(${blur}px)`,
-            pointerEvents: (opacity > 0.5 ? 'auto' : 'none') as any,
-        };
-    };
+    // Scene 3: Description (Visible around 0.75 to 1.0)
+    const scene3Opacity = useTransform(smoothProgress, [0.75, 0.9, 1.0], [0, 1, 1]);
+    const scene3Scale = useTransform(smoothProgress, [0.75, 0.9, 1.0], [0.95, 1, 1]);
+    const scene3Y = useTransform(smoothProgress, [0.75, 1.0], [50, 0]);
 
-    // Video Zoom logic: Starts at 1.05 and goes to 1.15
-    const videoScale = 1 + (progress * 0.12);
-    const videoBlur = progress * 4;
+    // Video Effects
+    const videoScale = useTransform(smoothProgress, [0, 1], [1, 1.15]);
+    const videoBlurValue = useTransform(smoothProgress, [0, 1], [0, 8]);
+    const videoBrightnessValue = useTransform(smoothProgress, [0, 0.5, 1], [0.55, 0.45, 0.35]);
+
+    // Transform video effects into CSS strings
+    const videoFilter = useTransform(
+        [videoBlurValue, videoBrightnessValue],
+        ([blur, brightness]) => `brightness(${brightness}) saturate(1.2) blur(${blur}px)`
+    );
+
+    // Helper to control pointer events based on opacity
+    const scene1PointerEvents = useTransform(scene1Opacity, (v) => v > 0.1 ? 'auto' : 'none');
+    const scene2PointerEvents = useTransform(scene2Opacity, (v) => v > 0.1 ? 'auto' : 'none');
+    const scene3PointerEvents = useTransform(scene3Opacity, (v) => v > 0.1 ? 'auto' : 'none');
 
     return (
         <section id="hero-section" ref={heroRef} className="relative w-full h-[300vh] bg-black">
@@ -59,16 +75,20 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMut
 
             {/* ── Background Video Layer (Sticky - FIJO) ── */}
             <div className="sticky top-0 h-screen w-full overflow-hidden bg-black flex items-center justify-center">
-                <VolumeVideo
-                    src={heroVideo}
-                    autoPlay
-                    loop
-                    isMuted={isMuted}
-                    isVisible={isVisible}
-                    playsInline
-                    style={{ transform: `scale(${videoScale})`, filter: `brightness(0.55) saturate(1.2) blur(${videoBlur}px)` }}
-                    className="absolute inset-0 w-full h-full object-cover opacity-100"
-                />
+                <motion.div 
+                    style={{ scale: videoScale, filter: videoFilter }}
+                    className="absolute inset-0 w-full h-full"
+                >
+                    <VolumeVideo
+                        src={heroVideo}
+                        autoPlay
+                        loop
+                        isMuted={isMuted}
+                        isVisible={isVisible}
+                        playsInline
+                        className="w-full h-full object-cover opacity-100"
+                    />
+                </motion.div>
 
                 {/* Grain Overlay */}
                 <div className="absolute inset-0 z-10 opacity-30 pointer-events-none select-none">
@@ -81,17 +101,33 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMut
                     className="relative z-20 w-full h-full flex flex-col items-center justify-center px-6 md:px-12 max-w-5xl mx-auto pt-20"
                 >
 
-                    {/* 1. Logo & CTAs Screen (Scene 1: Progress 0.0) */}
-                    <div
-                        key="hg-scene-1"
-                        style={{ ...getProgressStyles(0.0, 0.3, 0.2), transition: 'none' }}
-                        className="absolute inset-0 flex flex-col items-center justify-center gap-8"
+                    {/* 1. Logo & CTAs Screen (Scene 1) */}
+                    <motion.div
+                        style={{ 
+                            opacity: scene1Opacity, 
+                            y: scene1Y, 
+                            scale: scene1Scale,
+                            pointerEvents: scene1PointerEvents as any
+                        }}
+                        className="absolute inset-0 flex flex-col items-center justify-center gap-8 will-change-transform"
                     >
                         <div className="flex flex-col items-center gap-2 md:gap-4">
-                            <img src={logo} alt="JG Producciones" className="h-40 md:h-[18rem] w-auto brightness-200 drop-shadow-[0_0_100px_rgba(163,255,0,0.5)]" />
-                            <h2 className="text-4xl md:text-[8rem] font-black text-white tracking-[0.02em] font-paloseco uppercase text-center">
+                            <motion.img 
+                                src={logo} 
+                                alt="JG Producciones" 
+                                className="h-40 md:h-[18rem] w-auto brightness-200 drop-shadow-[0_0_100px_rgba(163,255,0,0.5)]" 
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 1.5, ease: "easeOut" }}
+                            />
+                            <motion.h2 
+                                className="text-4xl md:text-[8rem] font-black text-white tracking-[0.02em] font-paloseco uppercase text-center"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 1, delay: 0.5 }}
+                            >
                                 PRODUCCIONES
-                            </h2>
+                            </motion.h2>
                         </div>
 
                         <div className="flex flex-col items-center gap-12 mt-8">
@@ -103,34 +139,47 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, progress, heroIndex, isMut
                                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                             </button>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    {/* 2. Main Title Screen (Scene 2: Progress 0.5) */}
-                    <div
-                        key="hg-scene-2"
-                        style={{ ...getProgressStyles(0.5, 0.3, 0.2), transition: 'none' }}
-                        className="absolute inset-0 flex flex-col items-center justify-center px-4"
+                    {/* 2. Main Title Screen (Scene 2) */}
+                    <motion.div
+                        style={{ 
+                            opacity: scene2Opacity, 
+                            y: scene2Y, 
+                            scale: scene2Scale,
+                            pointerEvents: scene2PointerEvents as any
+                        }}
+                        className="absolute inset-0 flex flex-col items-center justify-center px-4 will-change-transform"
                     >
                         <h1 className="hero-title text-center drop-shadow-[0_0_50px_rgba(0,0,0,0.9)] leading-tight">
                             Producción profesional premium para eventos sociales y corporativos <br className="hidden md:block" />
                         </h1>
-                    </div>
+                    </motion.div>
 
-                    {/* 3. Detailed Description Screen (Scene 3: Progress 1.0) */}
-                    <div
-                        key="hg-scene-3"
-                        style={{ ...getProgressStyles(1.0, 0.3, 0.2), transition: 'none' }}
-                        className="absolute inset-0 flex flex-col items-center justify-center px-4"
+                    {/* 3. Detailed Description Screen (Scene 3) */}
+                    <motion.div
+                        style={{ 
+                            opacity: scene3Opacity, 
+                            y: scene3Y, 
+                            scale: scene3Scale,
+                            pointerEvents: scene3PointerEvents as any
+                        }}
+                        className="absolute inset-0 flex flex-col items-center justify-center px-4 will-change-transform"
                     >
                         <div className="max-w-4xl flex flex-col items-center">
-                            <span className="text-accent uppercase tracking-[0.6em] text-xs font-bold mb-8">Nuestra Esencia</span>
+                            <motion.span 
+                                style={{ opacity: scene3Opacity }}
+                                className="text-accent uppercase tracking-[0.6em] text-xs font-bold mb-8"
+                            >
+                                Nuestra Esencia
+                            </motion.span>
                             <p className="text-center drop-shadow-2xl leading-relaxed text-2xl md:text-3xl font-remixa text-white/90">
                                 Fusionamos tecnología de vanguardia con pasión creativa. <br className="hidden md:block" />
                                 Sonido de alta fidelidad e iluminación inmersiva que transforman escenarios
                                 de Cartagena para el mundo.
                             </p>
                         </div>
-                    </div>
+                    </motion.div>
 
                 </div>
             </div>

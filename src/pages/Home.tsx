@@ -20,7 +20,6 @@ const MemoServices = memo(ServicesSection);
 const MemoGallery = memo(GallerySection);
 
 const Home: FC = () => {
-  const [heroProgress, setHeroProgress] = useState(0);
   const [heroIndex, setHeroIndex] = useState(0);
   const [catsProgress, setCatsProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('hero');
@@ -33,7 +32,6 @@ const Home: FC = () => {
   const categoriesRef = useRef<HTMLDivElement>(null);
 
   // LERP Tracking Refs
-  const smoothHeroProgress = useRef(0);
   const smoothCatsProgress = useRef(0);
   const rafId = useRef<number>(0);
 
@@ -84,14 +82,9 @@ const Home: FC = () => {
       const cProg = Math.max(0, Math.min(1, (currentScroll - catsStart) / catsMax));
       container.style.setProperty('--cats-progress', cProg.toFixed(4));
 
-      // 1. Hero Index (Still use state for discrete change)
-      const hProgSmooth = lerp(smoothHeroProgress.current, hProg, LERP_FACTOR);
-      if (Math.abs(smoothHeroProgress.current - hProgSmooth) > 0.001) {
-        smoothHeroProgress.current = hProgSmooth;
-        setHeroProgress(smoothHeroProgress.current);
-        const newHeroIndex = Math.min(2, Math.floor(smoothHeroProgress.current * 3.1));
-        if (newHeroIndex !== heroIndex) setHeroIndex(newHeroIndex);
-      }
+      // 1. Hero Index Calculation
+      const currentHeroIndex = Math.min(2, Math.floor(hProg * 3.1));
+      if (currentHeroIndex !== heroIndex) setHeroIndex(currentHeroIndex);
 
       // 2. Categories Progress (Still use state for discrete check if needed)
       const cProgSmooth = lerp(smoothCatsProgress.current, cProg, LERP_FACTOR);
@@ -171,7 +164,7 @@ const Home: FC = () => {
       <main>
         <MemoHero
           heroRef={heroRef as any}
-          progress={heroProgress}
+          containerRef={containerRef}
           heroIndex={heroIndex}
           isMuted={isMuted}
           setIsMuted={setIsMuted}
