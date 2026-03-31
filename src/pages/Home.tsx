@@ -179,6 +179,15 @@ const Home: FC = () => {
     };
   }, []);
 
+  // Auto-mute logic and SoundToggle visibility condition
+  const isVideoSection = activeSection.startsWith('hero') || activeSection.startsWith('categories');
+
+  useEffect(() => {
+    if (!isVideoSection && !isMuted) {
+      setIsMuted(true);
+    }
+  }, [isVideoSection, isMuted]);
+
   return (
     <div ref={containerRef} className="home-container bg-black text-white selection:bg-accent selection:text-black">
       <Navbar activeSection={activeSection} />
@@ -208,7 +217,7 @@ const Home: FC = () => {
         />
       </main>
       <FooterSection />
-      <SoundToggle isMuted={isMuted} setIsMuted={setIsMuted} />
+      <SoundToggle isMuted={isMuted} setIsMuted={setIsMuted} isVisible={isVideoSection} />
     </div>
   );
 };
