@@ -131,12 +131,12 @@ const Home: FC = () => {
         const svcScroll = currentScroll - SECTION_OFFSETS.servicios;
         const svcP = svcScroll / (windowHeight * 6); // Total height: 600vh
         
-        // Balanced thresholds to give each step plenty of room, especially the last one (Pare)
-        if (svcP < 0.25) {
+        // Balanced thresholds with a slight 'buffer' before snap points
+        if (svcP < 0.22) {
           setActiveSvc(-1);
-        } else if (svcP < 0.46) {
+        } else if (svcP < 0.43) {
           setActiveSvc(0);
-        } else if (svcP < 0.68) {
+        } else if (svcP < 0.64) {
           setActiveSvc(1);
         } else {
           setActiveSvc(2);
