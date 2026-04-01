@@ -590,11 +590,11 @@
   }
 }
 
-/* Scroll Reveal Animations - Ultimate Premium (v4) */
+/* Scroll Reveal Animations - Ultimate Premium (v4) - Fluidified */
 .reveal-on-scroll {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1), transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(40px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 

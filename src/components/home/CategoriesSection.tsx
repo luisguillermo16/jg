@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import { motion } from 'framer-motion';
 import VolumeVideo from '../VolumeVideo';
 import { openContactModal } from '../../utils/modal';
 
@@ -56,10 +57,16 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
             style={{ background: 'radial-gradient(ellipse 100% 100% at 50% 100%, #1a3d00 0%, #050e00 60%, transparent 100%)', opacity: 0.7 }}
           />
           <div className="cat-intro-content">
-            <h2 className="cat-intro-title">
+            <motion.h2 
+              key="cats-intro-title"
+              initial={{ opacity: 0, y: 40 }}
+              animate={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              className="cat-intro-title"
+            >
               Nuestras <br />
               Categorías
-            </h2>
+            </motion.h2>
 
             <p className="cat-intro-desc">
               Especialistas en transformar la visión de cada cliente en una producción técnica sin precedentes.

@@ -1,65 +1,130 @@
 import { type FC, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import FooterSection from '../components/home/FooterSection';
-import './Home.css';
+import galleryImg from '../assets/gallery/MRW01846.jpg';
 
 const Nosotros: FC = () => {
   useEffect(() => {
+    // Force view on top and prevent scroll for single-screen experience
     window.scrollTo(0, 0);
-
-    const observerOptions = { threshold: 0.2 };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
   }, []);
 
+
+  const benefits = [
+    {
+      title: "Excelencia Técnica",
+      desc: "Audio y video de última generación para una fidelidad absoluta.",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+      )
+    },
+    {
+      title: "Soluciones Inmersivas",
+      desc: "Iluminación robótica y efectos visuales de alto impacto.",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 8v4l3 3" />
+        </svg>
+      )
+    },
+    {
+      title: "Compromiso Premium",
+      desc: "Atención personalizada desde la pre-producción hasta el éxito total.",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+      )
+    },
+    {
+      title: "Innovación Constante",
+      desc: "Adaptamos tendencias globales para ofrecer experiencias únicas.",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+      )
+    }
+  ];
+
   return (
-    <div className="relative bg-black text-white selection:bg-accent selection:text-black min-h-screen">
+    <div className="relative text-white selection:bg-accent selection:text-black h-screen overflow-hidden font-sans">
       <Navbar />
 
-      <main className="bg-black min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-32 md:pt-40">
-        {/* Subtle Background Glow */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#A3FF00]/5 blur-[150px] rounded-full pointer-events-none scale-150 opacity-40"></div>
-        </div>
+      {/* ── Background: Matching Categories (Predeterminado) ── */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-black" />
+        <div 
+          className="absolute inset-0 opacity-70"
+          style={{ 
+            background: 'radial-gradient(ellipse 100% 100% at 50% 100%, #1a3d00 0%, #050e00 60%, transparent 100%)' 
+          }}
+        />
+      </div>
 
-        <div className="relative z-10 text-center px-6 reveal-on-scroll active">
-          <span className="text-[#A3FF00] font-black uppercase tracking-[1em] text-[10px] md:text-xs mb-12 block">
-            Experiencia en Evolución
-          </span>
+      <main className="relative z-10 h-full flex items-center justify-center px-6 md:px-12 lg:px-20 pt-8 lg:pt-12">
+        <div className="max-w-[1400px] w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
           
-          <h1 className="text-white text-4xl md:text-[6rem] font-black uppercase tracking-tighter leading-[0.8] mb-12 font-paloseco">
-            NOSOTROS <br /> <span className="text-outline-blue">PRÓXIMAMENTE</span>
-          </h1>
-          
-          <div className="h-0.5 w-24 bg-[#A3FF00] mx-auto mb-12 opacity-80"></div>
-          
-          <p className="text-white/40 text-lg md:text-xl max-w-xl mx-auto font-light tracking-tight font-sans italic">
-            Estamos redefiniendo nuestro legado visual. <br className="hidden md:block" />
-            Vuelve pronto para conocer al equipo detrás de la magia técnica.
-          </p>
-
-          <div className="mt-16 flex justify-center gap-4">
-            <div className="w-2 h-2 rounded-full bg-[#A3FF00] animate-pulse"></div>
-            <div className="w-2 h-2 rounded-full bg-[#A3FF00] animate-pulse delay-75"></div>
-            <div className="w-2 h-2 rounded-full bg-[#A3FF00] animate-pulse delay-150"></div>
+          {/* Columna Izquierda: Título y descripción */}
+          <div className="lg:col-span-4 flex flex-col gap-3 md:gap-6">
+            <div className="space-y-3">
+              <span className="text-accent text-[9px] md:text-xs font-black tracking-[0.4em] uppercase block">
+                — Filosofía —
+              </span>
+              <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black leading-none tracking-tighter text-white uppercase">
+                Dominando <br /> <span>la Escena</span>
+              </h1>
+            </div>
+            
+            <p className="text-white/60 text-sm md:text-base leading-relaxed font-light max-w-[300px]">
+              En JG Producciones, fusionamos tecnología y arte para crear hitos inolvidables en cada escenario.
+            </p>
           </div>
-        </div>
 
-        {/* Decorative Background Text */}
-        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-white/[0.02] text-[20vw] font-black font-paloseco select-none pointer-events-none whitespace-nowrap">
-          JG PRODUCCIONES
+          {/* Columna Central: Imagen (SIN EFECTOS) */}
+          <div className="lg:col-span-4 flex items-start justify-center py-2">
+            <div className="relative w-full aspect-[4/5] max-h-[55vh] md:max-h-[60vh] overflow-hidden">
+              <img 
+                src={galleryImg} 
+                alt="Event JG Producciones" 
+                className="w-full h-full object-cover" 
+              />
+            </div>
+          </div>
+
+          {/* Columna Derecha: Beneficios en Cards Transparentes (Glassmorphism) */}
+          <div className="lg:col-span-4 flex flex-col gap-4 lg:gap-5">
+            {benefits.map((benefit, index) => (
+              <div 
+                key={index} 
+                className="relative p-4 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-xl"
+              >
+                <div className="flex gap-4 relative z-10">
+                  <div className="w-10 h-10 md:w-11 md:h-11 shrink-0 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-accent shadow-inner">
+                    <div className="scale-90">{benefit.icon}</div>
+                  </div>
+                  <div className="flex flex-col justify-center gap-0.5">
+                    <h3 className="text-sm md:text-base font-bold text-white">
+                      {benefit.title}
+                    </h3>
+                    <p className="text-white/40 text-[10px] md:text-xs leading-tight max-w-[240px]">
+                      {benefit.desc}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+
+
+
         </div>
       </main>
-
-      <FooterSection />
     </div>
   );
 };

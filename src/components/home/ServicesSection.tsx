@@ -1,4 +1,5 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
+import { motion } from 'framer-motion';
 
 interface Service {
   title: string;
@@ -29,10 +30,16 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, activeSvc }) => {
           <div className="absolute inset-0 bg-[#050607]" />
           <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ background: 'radial-gradient(circle at 80% 80%, #1a3d00, transparent 50%), radial-gradient(circle at 20% 20%, #0d2200, transparent 50%)' }} />
           <div className="relative z-10 w-full max-w-7xl mx-auto text-center">
-            <h2 className="text-[clamp(3.25rem,12vw,9rem)] font-black text-white uppercase tracking-tight md:tracking-tighter leading-[0.9] md:leading-[0.8] mb-6 md:mb-12 px-2">
+            <motion.h2 
+              key="services-title"
+              initial={{ opacity: 0, y: 40 }}
+              animate={activeSvc === -1 ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              className="text-[clamp(3.25rem,12vw,9rem)] font-black text-white uppercase tracking-tight md:tracking-tighter leading-[0.9] md:leading-[0.8] mb-6 md:mb-12 px-2"
+            >
               Nuestros <br />
               Servicios
-            </h2>
+            </motion.h2>
 
             <p className="text-white/60 text-base md:text-3xl max-w-2xl mx-auto font-playfair italic px-4 leading-snug">
               Infraestructura técnica de nivel internacional adaptada a la escala de tu visión.
