@@ -177,7 +177,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-[1000] flex justify-between items-center px-6 md:px-20 py-6 md:py-8 bg-transparent transition-all duration-300">
+      <nav className={`fixed top-0 left-0 right-0 z-[1000] flex justify-between items-center px-6 md:px-20 py-6 md:py-8 transition-all duration-500 bg-transparent`}>
         <div className="flex items-center gap-4 flex-1">
           <Link to="/" className="relative flex items-center justify-center w-12 h-12 md:w-16 md:h-16" onClick={(e) => scrollToSection(e, 'hero')}>
             {/* SVG Progress Circle */}
@@ -193,8 +193,8 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
           </Link>
         </div>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex p-1.5 items-center">
+        {/* Desktop Menu - Floating Pill Style */}
+        <div className={`hidden md:flex items-center transition-all duration-700 px-2 py-2 ${scrollProgress > 0.02 ? 'bg-black/50 backdrop-blur-2xl rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.5)]' : 'bg-transparent'}`}>
           <ul className="flex gap-1 m-0 p-0 list-none items-center">
             <NavLinks 
               isHome={isHome} 

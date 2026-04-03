@@ -26,9 +26,9 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
   progress,
   isMuted,
 }) => {
-  // 4 screens (Intro + 3 cats) over a 400vh scroll range.
-  // progress 0→1 maps to screens 0→3 via round(progress * 3)
-  const activeIndex = Math.min(3, Math.round(progress * 3));
+  // 4 screens (Intro + 3 cats) over a 500vh scroll range.
+  // Using floor with 4 screens ensures even distribution (125vh each).
+  const activeIndex = Math.min(3, Math.floor(progress * 3.99));
   const activeCatIndex = activeIndex - 1; // -1 = intro, 0-2 = categories
 
 

@@ -46,13 +46,13 @@ const Home: FC = () => {
 
     // 1. Force the container to the top immediately
     container.scrollTo(0, 0);
-    
+
     // 2. Temporarily disable scroll-snap to prevent the browser from snapping back to a previous section
     const originalSnap = getComputedStyle(container).scrollSnapType;
     container.style.scrollSnapType = 'none';
 
     const hash = window.location.hash;
-    
+
     if (hash) {
       const id = hash.replace('#', '');
       const element = document.getElementById(id);
@@ -84,23 +84,23 @@ const Home: FC = () => {
     const windowHeight = window.innerHeight;
     const container = containerRef.current;
     if (!container) return;
-    
+
     const SECTION_OFFSETS = {
       hero: 0,
       categories: windowHeight * 3,
-      servicios: windowHeight * 7,
-      galeria: windowHeight * 13,
+      servicios: windowHeight * 8, // Categories now has 500vh
+      galeria: windowHeight * 9.1, // Servicios is now ~100vh + small buffer
     };
 
     const tick = () => {
       const currentScroll = container.scrollTop;
-      
+
       // Update CSS Variables for smooth, non-React animations
       const hProg = Math.max(0, Math.min(1, currentScroll / (windowHeight * 2)));
       container.style.setProperty('--hero-progress', hProg.toFixed(4));
-      
+
       const catsStart = windowHeight * 3;
-      const catsMax = windowHeight * 3;
+      const catsMax = windowHeight * 5;
       const cProg = Math.max(0, Math.min(1, (currentScroll - catsStart) / catsMax));
       container.style.setProperty('--cats-progress', cProg.toFixed(4));
 
@@ -108,45 +108,32 @@ const Home: FC = () => {
       const currentHeroIndex = Math.min(2, Math.floor(hProg * 3.1));
       if (currentHeroIndex !== heroIndex) setHeroIndex(currentHeroIndex);
 
-      // 2. Categories Progress (Still use state for discrete check if needed)
+      // 2. Categories Progress
       const cProgSmooth = lerp(smoothCatsProgress.current, cProg, LERP_FACTOR);
       if (Math.abs(smoothCatsProgress.current - cProgSmooth) > 0.001) {
         smoothCatsProgress.current = cProgSmooth;
         setCatsProgress(smoothCatsProgress.current);
       }
 
-      // 3. Section Updates (Throttled/Threshold based)
+      // 3. Section Updates
       if (currentScroll < SECTION_OFFSETS.categories - windowHeight / 2) {
         if (currentScroll < windowHeight * 0.8) setActiveSection('hero');
         else if (currentScroll < windowHeight * 1.8) setActiveSection('hero-2');
         else setActiveSection('hero-3');
       } else if (currentScroll < SECTION_OFFSETS.servicios - windowHeight / 2) {
         const p = (currentScroll - SECTION_OFFSETS.categories) / windowHeight;
-        if (p < 0.5) setActiveSection('categories-intro');
-        else if (p < 1.5) setActiveSection('categories-1');
-        else if (p < 2.5) setActiveSection('categories-2');
+        if (p < 1.0) setActiveSection('categories-intro');
+        else if (p < 2.25) setActiveSection('categories-1');
+        else if (p < 3.5) setActiveSection('categories-2');
         else setActiveSection('categories-3');
       } else if (currentScroll < SECTION_OFFSETS.galeria - windowHeight / 2) {
         setActiveSection('servicios');
-        const svcScroll = currentScroll - SECTION_OFFSETS.servicios;
-        const svcP = svcScroll / (windowHeight * 6); // Total height: 600vh
-        
-        // Balanced thresholds with a slight 'buffer' for intro screens
-        if (svcP < 0.25) {
-          setActiveSvc(-1);
-        } else if (svcP < 0.45) {
-          setActiveSvc(0);
-        } else if (svcP < 0.65) {
-          setActiveSvc(1);
-        } else {
-          setActiveSvc(2);
-        }
-        
+        setActiveSvc(0);
       } else if (currentScroll < SECTION_OFFSETS.galeria + windowHeight * 4) {
         setActiveSection('galeria');
         const galScroll = currentScroll - SECTION_OFFSETS.galeria;
         const galP = galScroll / (windowHeight * 4); // Total height: 400vh
-        
+
         // Balanced intro transition
         if (galP < 0.55) {
           setActiveGal(-1);

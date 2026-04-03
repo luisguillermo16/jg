@@ -6,7 +6,7 @@
 /* ── Outer section: 400vh scroll range ── */
 .cats-section {
   position: relative;
-  height: 400vh;
+  height: 500vh;
   background: #050607;
 }
 

@@ -40,7 +40,7 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
         <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ease-out ${activeGal === -1 ? 'opacity-100 scale-100 z-50' : 'opacity-0 scale-95 z-0 pointer-events-none'}`}>
           <CinematicGlow />
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center">
-            <motion.h2 
+            <motion.h2
               key="gallery-title"
               initial={{ opacity: 0, y: 40 }}
               animate={activeGal === -1 ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}

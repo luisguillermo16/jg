@@ -1,20 +1,18 @@
 /* ============================================================
    CHARACTER PROFILE — CharacterProfile.css
-   Estilos del componente de perfil (Nosotros)
+   Estilos refinados para el componente de perfil
    ============================================================ */
 
-.profile-container {
-  background-color: #000000;
-  color: #FFFFFF;
-  min-height: 100vh;
-  position: relative;
-  overflow: hidden;
+.font-paloseco {
+  font-family: 'Paloseco', sans-serif;
+}
+
+.font-inter {
   font-family: 'Inter', sans-serif;
 }
 
-@media (max-width: 768px) {
-  .profile-container {
-    height: auto;
-    min-height: 100vh;
-  }
+/* El componente usa principalmente Tailwind, pero agregamos este toque de glassmorphism */
+.backdrop-blur-sm {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }

@@ -76,7 +76,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, containerRef, heroIndex, i
 
             {/* ── Background Video Layer (Sticky - FIJO) ── */}
             <div className="sticky top-0 h-screen w-full overflow-hidden bg-black flex items-center justify-center">
-                <motion.div 
+                <motion.div
                     style={{ scale: videoScale, filter: videoFilter }}
                     className="absolute inset-0 w-full h-full"
                 >
@@ -104,24 +104,24 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, containerRef, heroIndex, i
 
                     {/* 1. Logo & CTAs Screen (Scene 1) */}
                     <motion.div
-                        style={{ 
-                            opacity: scene1Opacity, 
-                            y: scene1Y, 
+                        style={{
+                            opacity: scene1Opacity,
+                            y: scene1Y,
                             scale: scene1Scale,
                             pointerEvents: scene1PointerEvents as any
                         }}
                         className="absolute inset-0 flex flex-col items-center justify-center gap-8 will-change-transform"
                     >
                         <div className="flex flex-col items-center gap-2 md:gap-4">
-                            <motion.img 
-                                src={logo} 
-                                alt="JG Producciones" 
-                                className="h-40 md:h-[18rem] w-auto brightness-200 drop-shadow-[0_0_100px_rgba(163,255,0,0.5)]" 
+                            <motion.img
+                                src={logo}
+                                alt="JG Producciones"
+                                className="h-40 md:h-[18rem] w-auto brightness-200 drop-shadow-[0_0_100px_rgba(163,255,0,0.5)]"
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 1.5, ease: "easeOut" }}
                             />
-                            <motion.h2 
+                            <motion.h2
                                 className="text-4xl md:text-[8rem] font-black text-white tracking-[0.02em] font-paloseco uppercase text-center"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -132,21 +132,15 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, containerRef, heroIndex, i
                         </div>
 
                         <div className="flex flex-col items-center gap-12 mt-8">
-                            <button
-                                onClick={() => setIsMuted(false)}
-                                className="group relative px-12 py-4 bg-accent text-black font-black uppercase tracking-widest rounded-full hover:scale-110 transition-all duration-500 shadow-[0_15px_45px_rgba(163,255,0,0.5)] font-remixa overflow-hidden text-sm"
-                            >
-                                <span className="relative z-10">Explorar</span>
-                                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                            </button>
+
                         </div>
                     </motion.div>
 
                     {/* 2. Main Title Screen (Scene 2) */}
                     <motion.div
-                        style={{ 
-                            opacity: scene2Opacity, 
-                            y: scene2Y, 
+                        style={{
+                            opacity: scene2Opacity,
+                            y: scene2Y,
                             scale: scene2Scale,
                             pointerEvents: scene2PointerEvents as any
                         }}
@@ -159,16 +153,16 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, containerRef, heroIndex, i
 
                     {/* 3. Detailed Description Screen (Scene 3) */}
                     <motion.div
-                        style={{ 
-                            opacity: scene3Opacity, 
-                            y: scene3Y, 
+                        style={{
+                            opacity: scene3Opacity,
+                            y: scene3Y,
                             scale: scene3Scale,
                             pointerEvents: scene3PointerEvents as any
                         }}
                         className="absolute inset-0 flex flex-col items-center justify-center px-4 will-change-transform"
                     >
                         <div className="max-w-4xl flex flex-col items-center">
-                            <motion.span 
+                            <motion.span
                                 style={{ opacity: scene3Opacity }}
                                 className="text-accent uppercase tracking-[0.6em] text-xs font-bold mb-8"
                             >
