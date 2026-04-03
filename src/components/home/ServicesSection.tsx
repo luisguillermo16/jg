@@ -1,5 +1,6 @@
 import { type FC } from 'react';
 import { motion } from 'framer-motion';
+import CinematicGlow from '../CinematicGlow';
 
 interface Service {
   title: string;
@@ -17,7 +18,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, activeSvc }) => {
     <section id="servicios" className="relative h-[600vh] bg-black">
       {/* Snap Points for the 4 service states, precisely timed with scroll logic */}
       <div className="absolute inset-0 pointer-events-none z-[50]">
-        <div className="h-[150vh] w-full" style={{ scrollSnapAlign: 'start' }} />
+        <div className="h-[150vh] w-full" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }} />
         <div className="h-[126vh] w-full" style={{ scrollSnapAlign: 'start' }} />
         <div className="h-[132vh] w-full" style={{ scrollSnapAlign: 'start' }} />
         <div className="h-[192vh] w-full" style={{ scrollSnapAlign: 'start' }} />
@@ -27,8 +28,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, activeSvc }) => {
 
         {/* Intro Screen - Servicios Pinned */}
         <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ${activeSvc === -1 ? 'opacity-100 scale-100 z-50' : 'opacity-0 scale-105 z-0 pointer-events-none'}`}>
-          <div className="absolute inset-0 bg-[#050607]" />
-          <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ background: 'radial-gradient(circle at 80% 80%, #1a3d00, transparent 50%), radial-gradient(circle at 20% 20%, #0d2200, transparent 50%)' }} />
+          <CinematicGlow />
           <div className="relative z-10 w-full max-w-7xl mx-auto text-center">
             <motion.h2 
               key="services-title"
@@ -41,7 +41,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, activeSvc }) => {
               Servicios
             </motion.h2>
 
-            <p className="text-white/60 text-base md:text-3xl max-w-2xl mx-auto font-playfair italic px-4 leading-snug">
+            <p className="text-white/60 text-base md:text-3xl max-w-2xl mx-auto font-playfair px-4 leading-snug">
               Infraestructura técnica de nivel internacional adaptada a la escala de tu visión.
             </p>
           </div>

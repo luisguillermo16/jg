@@ -1,6 +1,7 @@
 import React, { type FC } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import VolumeVideo from '../VolumeVideo';
+import './HeroSection.css';
 import logo from '../../assets/brand/logo.png';
 import heroVideo from '../../assets/home/vids/hero.mp4';
 

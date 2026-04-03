@@ -1,0 +1,25 @@
+/* ============================================================
+   HERO SECTION STYLES
+   Usado en: HeroSection.tsx, Navbar.tsx, FooterSection.tsx
+   ============================================================ */
+
+/* Font utilities — usadas vía Tailwind en múltiples componentes */
+.font-remixa {
+  font-family: 'Paloseco', sans-serif;
+}
+
+.font-paloseco {
+  font-family: 'Paloseco', sans-serif;
+}
+
+/* Hero main title — Scene 2 de HeroSection */
+.hero-title {
+  font-family: 'Paloseco', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  line-height: 1.1;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 24px;
+  letter-spacing: -1.5px;
+  max-width: 800px;
+}

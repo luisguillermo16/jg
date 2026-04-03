@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './GallerySection.css';
+import CinematicGlow from '../CinematicGlow';
 
 
 
@@ -29,7 +30,7 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
     <section id="galeria" className="relative h-[400vh] bg-black">
       {/* Snap Points to manage the two stages (Intro vs Grid) */}
       <div className="absolute inset-0 pointer-events-none z-[50]">
-        <div className="h-[200vh] w-full" style={{ scrollSnapAlign: 'start' }} />
+        <div className="h-[200vh] w-full" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }} />
         <div className="h-[200vh] w-full" style={{ scrollSnapAlign: 'start' }} />
       </div>
 
@@ -37,8 +38,7 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
 
         {/* Stage 1: Intro Screen (Full Page Title) */}
         <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ease-out ${activeGal === -1 ? 'opacity-100 scale-100 z-50' : 'opacity-0 scale-95 z-0 pointer-events-none'}`}>
-          <div className="absolute inset-0 bg-[#050607]" />
-          <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ background: 'radial-gradient(circle at 80% 80%, #1a3d00, transparent 50%), radial-gradient(circle at 20% 20%, #0d2200, transparent 50%)' }} />
+          <CinematicGlow />
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center">
             <motion.h2 
               key="gallery-title"
@@ -51,7 +51,7 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
               Galeria
             </motion.h2>
 
-            <p className="text-white/60 text-base md:text-3xl max-w-3xl mx-auto font-playfair italic px-4 leading-snug">
+            <p className="text-white/60 text-base md:text-3xl max-w-3xl mx-auto font-playfair px-4 leading-snug">
               Capturamos la esencia de cada evento con el estilo y la precisión que nos caracteriza. Una curaduría visual de nuestras producciones más icónicas.
             </p>
           </div>

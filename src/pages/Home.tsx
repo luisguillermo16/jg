@@ -131,12 +131,12 @@ const Home: FC = () => {
         const svcScroll = currentScroll - SECTION_OFFSETS.servicios;
         const svcP = svcScroll / (windowHeight * 6); // Total height: 600vh
         
-        // Balanced thresholds with a slight 'buffer' before snap points
-        if (svcP < 0.22) {
+        // Balanced thresholds with a slight 'buffer' for intro screens
+        if (svcP < 0.25) {
           setActiveSvc(-1);
-        } else if (svcP < 0.43) {
+        } else if (svcP < 0.45) {
           setActiveSvc(0);
-        } else if (svcP < 0.64) {
+        } else if (svcP < 0.65) {
           setActiveSvc(1);
         } else {
           setActiveSvc(2);
@@ -148,7 +148,7 @@ const Home: FC = () => {
         const galP = galScroll / (windowHeight * 4); // Total height: 400vh
         
         // Balanced intro transition
-        if (galP < 0.5) {
+        if (galP < 0.55) {
           setActiveGal(-1);
         } else {
           setActiveGal(0);

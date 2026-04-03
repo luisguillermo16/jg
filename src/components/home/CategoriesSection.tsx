@@ -1,7 +1,9 @@
 import { type FC } from 'react';
 import { motion } from 'framer-motion';
 import VolumeVideo from '../VolumeVideo';
+import './CategoriesSection.css';
 import { openContactModal } from '../../utils/modal';
+import CinematicGlow from '../CinematicGlow';
 
 interface Category {
   id: string;
@@ -51,13 +53,9 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
           className="cats-slide"
           style={{ opacity: activeIndex === 0 ? 1 : 0, zIndex: activeIndex === 0 ? 2 : 1 }}
         >
-          <div className="cats-slide-bg" style={{ background: '#000' }} />
-          <div
-            className="cats-slide-bg cats-intro-glow"
-            style={{ background: 'radial-gradient(ellipse 100% 100% at 50% 100%, #1a3d00 0%, #050e00 60%, transparent 100%)', opacity: 0.7 }}
-          />
+          <CinematicGlow />
           <div className="cat-intro-content">
-            <motion.h2 
+            <motion.h2
               key="cats-intro-title"
               initial={{ opacity: 0, y: 40 }}
               animate={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}

@@ -1,6 +1,7 @@
 import { type FC, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import galleryImg from '../assets/gallery/MRW01846.jpg';
+import CinematicGlow from '../components/CinematicGlow';
 
 const Nosotros: FC = () => {
   useEffect(() => {
@@ -55,15 +56,10 @@ const Nosotros: FC = () => {
     <div className="relative text-white selection:bg-accent selection:text-black h-screen overflow-hidden font-sans">
       <Navbar />
 
-      {/* ── Background: Matching Categories (Predeterminado) ── */}
+      {/* ── Background: Cinematic Web3 Glow ── */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black" />
-        <div 
-          className="absolute inset-0 opacity-70"
-          style={{ 
-            background: 'radial-gradient(ellipse 100% 100% at 50% 100%, #1a3d00 0%, #050e00 60%, transparent 100%)' 
-          }}
-        />
+        <CinematicGlow />
       </div>
 
       <main className="relative z-10 h-full flex items-center justify-center px-6 md:px-12 lg:px-20 pt-8 lg:pt-12">
