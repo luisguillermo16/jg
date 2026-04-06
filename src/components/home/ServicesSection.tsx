@@ -1,70 +1,147 @@
 import { type FC } from 'react';
 import { motion } from 'framer-motion';
+import './ServicesSection.css';
+import { openContactModal } from '../../utils/modal';
+import CinematicGlow from '../CinematicGlow';
 
 interface Service {
   title: string;
   desc: string;
   image: string;
+  tag: string;
 }
 
 interface ServicesSectionProps {
   services: Service[];
-  activeSvc: number;
+  progress: number;
 }
 
-const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
+const ServicesSection: FC<ServicesSectionProps> = ({ services, progress }) => {
+  // 7 screens (Intro + 6 services) over 700vh.
+  const activeIndex = Math.min(6, Math.floor(progress * 6.99));
+
   return (
-    <section id="servicios" className="relative min-h-screen bg-[#050607] py-24 px-6 md:px-12 lg:px-16 overflow-hidden">
-      <div className="relative z-10 max-w-7xl mx-auto w-full flex flex-col h-full">
+    <section id="servicios" className="svc-section">
+      {/* Snap Markers for 7 pages */}
+      <div className="svc-snap-markers">
+        {[...Array(7)].map((_, i) => (
+          <div key={i} className="svc-snap-stop" />
+        ))}
+      </div>
 
-        {/* Semantic Header - Centered & Refined (White) */}
-        <header className="mb-16 text-center">
-          <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-black text-white leading-tight tracking-tight font-paloseco uppercase">
-            Nuestros Servicios
-          </h2>
-        </header>
+      <div className="svc-sticky">
+        {/* ════ INTRO SLIDE (Index 0) ════ */}
+        <div
+          className="svc-slide"
+          style={{
+            opacity: activeIndex === 0 ? 1 : 0,
+            zIndex: activeIndex === 0 ? 10 : 1,
+            pointerEvents: activeIndex === 0 ? 'auto' : 'none'
+          }}
+        >
+          <CinematicGlow />
 
-        {/* Balanced 3-Column Grid (LG:3, MD:2, SM:1) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((svc, idx) => (
-            <motion.article
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ delay: idx * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="card-full-bleed group min-h-[400px] lg:min-h-[460px] rounded-lg overflow-hidden"
+          <div className="svc-intro-content">
+            <motion.h2
+              initial={{ opacity: 0, y: 40 }}
+              animate={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              className="svc-intro-title font-paloseco"
             >
-              {/* Image without hover effects */}
-              <img
-                src={svc.image}
-                alt={`Servicio de ${svc.title} - JG Producciones`}
-                loading="lazy"
-                className="card-bg-image opacity-90"
-              />
+              NUESTROS SERVICIOS
+            </motion.h2>
 
-              {/* Minimalist Visual Overlay */}
-              <div className="card-overlay" style={{ background: 'linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.9) 100%)' }} />
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="svc-intro-desc text-white/60 mb-12"
+            >
+              Soluciones integrales de producción AV con los más altos estándares de la industria cinematográfica.
+            </motion.p>
+          </div>
+        </div>
 
-              {/* Informative Content - Static & Clean (White) */}
-              <div className="card-content p-8">
-                <h3 className="text-xl lg:text-2xl text-white font-black uppercase mb-3 font-paloseco tracking-tight">
+        {/* ════ SERVICE SLIDES (Index 1 to 6) ════ */}
+        {services.map((svc, idx) => {
+          const slideIdx = idx + 1;
+          const isActive = activeIndex === slideIdx;
+
+          return (
+            <div
+              key={idx}
+              className="svc-slide"
+              style={{
+                opacity: isActive ? 1 : 0,
+                pointerEvents: isActive ? 'auto' : 'none',
+                zIndex: isActive ? 10 : 1
+              }}
+            >
+              <div className="svc-bg-wrapper">
+                <img src={svc.image} alt="" className="svc-bg-image" />
+                <div className="svc-bg-overlay" />
+                <div className="svc-bg-gradient" />
+              </div>
+
+             
+
+              <div className="svc-content">
+                {/* Title */}
+                <h3
+                  className="svc-title font-paloseco svc-reveal"
+                  style={{
+                    opacity: isActive ? 1 : 0,
+                    transform: isActive ? 'translateY(0)' : 'translateY(36px)',
+                    transitionDelay: isActive ? '0.5s' : '0s'
+                  }}
+                >
                   {svc.title}
                 </h3>
 
-                <p className="text-white/70 text-sm lg:text-base leading-relaxed font-inter line-clamp-4">
+                {/* Description */}
+                <p
+                  className="svc-desc svc-reveal"
+                  style={{
+                    opacity: isActive ? 1 : 0,
+                    transform: isActive ? 'translateY(0)' : 'translateY(24px)',
+                    transitionDelay: isActive ? '0.8s' : '0s'
+                  }}
+                >
                   {svc.desc}
                 </p>
+
+                {/* CTA */}
+                <div
+                  className="svc-cta svc-reveal"
+                  style={{
+                    opacity: isActive ? 1 : 0,
+                    transform: isActive ? 'translateY(0)' : 'translateY(20px)',
+                    transitionDelay: isActive ? '1.1s' : '0s'
+                  }}
+                >
+                  <button onClick={openContactModal} className="svc-btn font-paloseco">
+                    <span>Cotizar Ahora</span>
+                    <div className="svc-btn-shine" />
+                  </button>
+                </div>
               </div>
-            </motion.article>
+            </div>
+          );
+        })}
+
+        {/* Vertical Progress Dots (Visible only on desktop) */}
+        <div className="svc-progress-bar">
+          {[...Array(7)].map((_, i) => (
+            <div
+              key={i}
+              className={`svc-pip ${activeIndex === i ? 'active' : ''}`}
+            />
           ))}
         </div>
       </div>
-
-      {/* Decorative Flare - Blanco Sutil */}
-      <div className="absolute top-[30%] right-[-15%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[160px] pointer-events-none" />
     </section>
   );
 };
 
 export default ServicesSection;
+

@@ -30,16 +30,6 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
   const activeIndex = Math.min(3, Math.floor(progress * 3.99));
   const activeCatIndex = activeIndex - 1; // -1 = intro, 0-2 = categories
 
-  // Jump directly to a specific category slide
-  const scrollToCategory = (slideIndex: number) => {
-    const container = document.querySelector('.home-container');
-    const section = document.getElementById('categories');
-    if (container && section) {
-      // Each slide is 1 snap stop (100vh). Slide 0 = intro, 1-3 = categories.
-      const targetScroll = section.offsetTop + (slideIndex + 1) * window.innerHeight;
-      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
-    }
-  };
 
   return (
     <section
@@ -78,23 +68,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
               Especialistas en transformar la visión de cada cliente en una producción técnica sin precedentes.
             </p>
 
-            {/* Quick-access chips */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-              transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="cat-quick-nav"
-            >
-              {categories.map((cat, i) => (
-                <button
-                  key={cat.id}
-                  onClick={() => scrollToCategory(i)}
-                  className="cat-quick-chip font-remixa"
-                >
-                  {cat.title}
-                </button>
-              ))}
-            </motion.div>
+            {/* Quick-access chips removed to match ServicesSection */}
           </div>
         </div>
 
@@ -132,19 +106,6 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
 
               {/* Text content — bottom left, staggered reveal */}
               <div className="cats-content">
-                {/* Tag */}
-                <div
-                  className="cat-tag-row cats-reveal"
-                  style={{
-                    transitionDelay: isActive ? '0.2s' : '0s',
-                    opacity: isActive ? 1 : 0,
-                    transform: isActive ? 'translateY(0)' : 'translateY(28px)',
-                  }}
-                >
-                  <span className="cat-tag-line" />
-                  <span className="cat-tag-text">{cat.tag}</span>
-                </div>
-
                 {/* Title */}
                 <h3
                   className="cat-title cats-reveal"

@@ -70,7 +70,7 @@ const STATS = [
 ];
 
 const StatsBannerSection: FC = () => (
-  <section className="relative bg-black py-24 px-6 overflow-hidden">
+  <section className="relative bg-black min-h-screen md:min-h-[auto] py-12 md:py-24 px-6 overflow-hidden flex flex-col justify-center snap-start">
     {/* Top + bottom accent lines */}
     <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#A3FF00]/40 to-transparent" />
     <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#A3FF00]/40 to-transparent" />
@@ -78,7 +78,7 @@ const StatsBannerSection: FC = () => (
     {/* Subtle radial wash */}
     <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,rgba(163,255,0,0.04),transparent)] pointer-events-none" />
 
-    <div className="relative max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-6">
+    <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-6">
       {STATS.map(({ value, label }) => (
         <StatItem key={label} value={value} label={label} />
       ))}

@@ -28,7 +28,7 @@ const CTASection: FC = () => (
         Siguiente paso
       </motion.span>
 
-      <h2 className="text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter font-paloseco leading-[0.85] mb-8 text-white">
+      <h2 className="text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight font-paloseco leading-[1.1] mb-8 text-white">
         ¿Listo para<br />
         el <span className="text-[#A3FF00]">siguiente</span><br />
         nivel?

@@ -46,32 +46,38 @@ export const SERVICES = [
   {
     title: "Acústica Impecable",
     desc: "Cada palabra y cada nota llegan nítidas a toda la sala. Sistemas Line Array de alta fidelidad sin distorsión, sin zonas muertas.",
-    image: serviceAudio
+    image: serviceAudio,
+    tag: "Audio de Alta Gama"
   },
   {
     title: "Escenarios que Impresionan",
     desc: "Iluminación robótica inteligente que convierte cualquier espacio en una experiencia visual única e irrepetible.",
-    image: serviceLighting
+    image: serviceLighting,
+    tag: "Iluminación Robótica"
   },
   {
     title: "Visuales que Impactan",
     desc: "Pantallas LED en alta definición que mantienen la atención de tus invitados y amplifican cada momento clave.",
-    image: serviceLed
+    image: serviceLed,
+    tag: "Pantallas LED UHD"
   },
   {
     title: "Momentos Inolvidables",
     desc: "Pirotecnia fría y niebla densa que generan reacciones espontáneas y convierten instantes ordinarios en escenas épicas.",
-    image: gal6
+    image: gal6,
+    tag: "Efectos Especiales"
   },
   {
     title: "Escenarios a tu Medida",
     desc: "Tarimas y estructuras truss seguras y personalizadas. Cada presentación con la presencia que merece.",
-    image: gal3
+    image: gal3,
+    tag: "Estructuras y Tarimas"
   },
   {
     title: "Nada se Pierde",
     desc: "Cobertura multicámara y transmisión en vivo para que cada ángulo, cada emoción, quede inmortalizado.",
-    image: gal4
+    image: gal4,
+    tag: "Streaming y Video"
   }
 ];
 

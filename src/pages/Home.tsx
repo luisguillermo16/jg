@@ -30,8 +30,8 @@ if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
 const Home: FC = () => {
   const [heroIndex, setHeroIndex] = useState(0);
   const [catsProgress, setCatsProgress] = useState(0);
+  const [svcsProgress, setSvcsProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('hero');
-  const [activeSvc, setActiveSvc] = useState(-1);
   const [activeGal, setActiveGal] = useState(-1);
   const [isMuted, setIsMuted] = useState(true);
 
@@ -41,6 +41,7 @@ const Home: FC = () => {
 
   // LERP Tracking Refs
   const smoothCatsProgress = useRef(0);
+  const smoothSvcsProgress = useRef(0);
   const rafId = useRef<number>(0);
 
   // Advanced Scroll Reset logic
@@ -96,7 +97,7 @@ const Home: FC = () => {
       const svcEl = document.getElementById('servicios');
       const galEl = document.getElementById('galeria');
       const svcStart = svcEl ? svcEl.offsetTop : windowHeight * 8;
-      const galStart = galEl ? galEl.offsetTop : windowHeight * 12;
+      const galStart = galEl ? galEl.offsetTop : windowHeight * 15;
 
       // Update CSS Variables for smooth, non-React animations
       const hProg = Math.max(0, Math.min(1, currentScroll / (windowHeight * 2)));
@@ -106,6 +107,11 @@ const Home: FC = () => {
       const catsMax = windowHeight * 5;
       const cProg = Math.max(0, Math.min(1, (currentScroll - catsStart) / catsMax));
       container.style.setProperty('--cats-progress', cProg.toFixed(4));
+
+      // Services Progress Calculation (700vh)
+      const sMax = windowHeight * 7;
+      const sProg = Math.max(0, Math.min(1, (currentScroll - svcStart) / sMax));
+      container.style.setProperty('--svcs-progress', sProg.toFixed(4));
 
       // 1. Hero Index Calculation
       const currentHeroIndex = Math.min(2, Math.floor(hProg * 3.1));
@@ -118,7 +124,17 @@ const Home: FC = () => {
         setCatsProgress(smoothCatsProgress.current);
       }
 
-      // 3. Section detection
+      // 3. Services smooth progress
+      const sProgSmooth = lerp(smoothSvcsProgress.current, sProg, LERP_FACTOR);
+      if (Math.abs(smoothSvcsProgress.current - sProgSmooth) > 0.001) {
+        smoothSvcsProgress.current = sProgSmooth;
+        // Optimization: Use a separate state for React if needed, but here we can just update a state
+        // To avoid too many re-renders, consider if we need a state at all or just use the CSS variable
+        // But the component needs to know the active index for opacity transitions.
+        setSvcsProgress(sProgSmooth);
+      }
+
+      // 4. Section detection
       if (currentScroll < catsStart - windowHeight / 2) {
         if (currentScroll < windowHeight * 0.8) setActiveSection('hero');
         else if (currentScroll < windowHeight * 1.8) setActiveSection('hero-2');
@@ -136,7 +152,6 @@ const Home: FC = () => {
           setActiveSection('nosotros');
         } else {
           setActiveSection('servicios');
-          setActiveSvc(0);
         }
       } else if (currentScroll < galStart + windowHeight * 4) {
         setActiveSection('galeria');
@@ -204,7 +219,7 @@ const Home: FC = () => {
         <StatsBannerSection />
         <MemoServices
           services={SERVICES}
-          activeSvc={activeSvc}
+          progress={svcsProgress}
         />
         <AboutSection />
         <TestimonialsSection />

@@ -128,20 +128,20 @@
 /* ── Category title ── */
 .cat-title {
   font-family: 'Paloseco', sans-serif;
-  font-size: clamp(2.8rem, 7vw, 6rem);
+  font-size: clamp(2.2rem, 5.5vw, 4.5rem);
   font-weight: 900;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  line-height: 0.88;
+  line-height: 1.1;
   margin-bottom: 20px;
 }
 
 /* ── Description ── */
 .cat-desc {
-  font-size: clamp(0.9rem, 1.7vw, 1.2rem);
+  font-size: clamp(0.85rem, 1.4vw, 1.1rem);
   color: rgba(255, 255, 255, 0.72);
-  line-height: 1.75;
+  line-height: 1.65;
   font-weight: 400;
   max-width: 560px;
 }
