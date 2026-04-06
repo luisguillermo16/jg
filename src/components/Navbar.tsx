@@ -7,67 +7,64 @@ interface NavbarProps {
   activeSection?: string;
 }
 
-const NavLinks: FC<{ 
-  isHome: boolean; 
-  isNosotros: boolean; 
-  activeSection: string; 
+// Only the section links — no CTA button here
+const NavLinks: FC<{
+  isHome: boolean;
+  activeSection: string;
   scrollToSection: (e: React.MouseEvent<HTMLAnchorElement>, id: string) => void;
   setIsMenuOpen: (open: boolean) => void;
   onContactClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-}> = memo(({ isHome, isNosotros, activeSection, scrollToSection, setIsMenuOpen, onContactClick }) => {
+}> = memo(({ isHome, activeSection, scrollToSection, setIsMenuOpen, onContactClick }) => {
   const isActive = (id: string) => {
     if (!isHome) return false;
     if (id === 'hero' && activeSection.startsWith('hero')) return true;
-    if (id === 'nosotros' && isNosotros) return true;
     return activeSection === id;
   };
 
+  const linkClass = (id: string) =>
+    `px-4 py-2 text-sm font-semibold transition-all duration-300 font-remixa ${
+      isActive(id) ? 'text-[#A3FF00]' : 'text-white/60 hover:text-white'
+    }`;
+
   return (
     <>
-      <li key="home">
-        <a 
-          href="/" 
-          onClick={(e) => scrollToSection(e, 'hero')} 
-          className={`px-4 py-2 text-sm font-semibold transition-all duration-300 ${isActive('hero') ? 'text-accent' : 'text-text hover:text-accent'} font-remixa`}
-        >
+      {/* 1. Home */}
+      <li>
+        <a href="/" onClick={(e) => scrollToSection(e, 'hero')} className={linkClass('hero')}>
           Home
         </a>
       </li>
-      <li key="servicios">
-        <a 
-          href="#servicios" 
-          onClick={(e) => scrollToSection(e, '#servicios')} 
-          className={`px-4 py-2 text-sm font-semibold transition-all duration-300 ${isActive('servicios') ? 'text-accent' : 'text-text hover:text-accent'} font-remixa`}
-        >
+
+      {/* 2. Servicios */}
+      <li>
+        <a href="#servicios" onClick={(e) => scrollToSection(e, '#servicios')} className={linkClass('servicios')}>
           Servicios
         </a>
       </li>
-      <li key="contact">
-        <a 
-          href="#contact" 
-          onClick={onContactClick} 
-          className={`mx-2 px-8 py-2.5 rounded-full text-sm font-bold transition-all duration-300 shadow-xl ${isActive('contact') ? 'bg-accent/80 scale-105' : 'bg-accent'} text-black hover:scale-105 hover:shadow-[0_0_20px_rgba(163,255,0,0.5)] font-remixa`}
-        >
-          Contactanos
-        </a>
-      </li>
-      <li key="galeria">
-        <a 
-          href="#galeria" 
-          onClick={(e) => scrollToSection(e, '#galeria')} 
-          className={`px-4 py-2 text-sm font-semibold transition-all duration-300 ${isActive('galeria') ? 'text-accent' : 'text-text hover:text-accent'} font-remixa`}
-        >
-          Galeria
-        </a>
-      </li>
-      <li key="nosotros">
-        <Link 
-          to="/nosotros" 
-          onClick={() => setIsMenuOpen(false)} 
-          className={`px-4 py-2 text-sm font-semibold transition-all duration-300 ${isNosotros ? 'text-accent' : 'text-text hover:text-accent'} font-remixa`}
-        >
+
+      {/* 3. Nosotros */}
+      <li>
+        <a href="#nosotros" onClick={(e) => scrollToSection(e, '#nosotros')} className={linkClass('nosotros')}>
           Nosotros
-        </Link>
+        </a>
+      </li>
+
+      {/* 4. Galería */}
+      <li>
+        <a href="#galeria" onClick={(e) => scrollToSection(e, '#galeria')} className={linkClass('galeria')}>
+          Galería
+        </a>
+      </li>
+
+      {/* 5. Contáctanos — visually distinct CTA */}
+      <li>
+        <a
+          href="#contact"
+          onClick={onContactClick}
+          className="ml-2 px-5 py-2 rounded-full text-sm font-bold border border-[#A3FF00]/40 bg-[#A3FF00]/10 text-[#A3FF00] hover:bg-[#A3FF00] hover:text-black hover:border-[#A3FF00] transition-all duration-300 font-remixa inline-flex items-center"
+        >
+          Contáctanos
+        </a>
       </li>
     </>
   );
@@ -110,9 +107,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
     };
 
     scrollTarget.addEventListener('scroll', handleScroll, { passive: true });
-    // Initial check
     updateScrollProgress();
-
     return () => scrollTarget.removeEventListener('scroll', handleScroll);
   }, [location.pathname]);
 
@@ -124,19 +119,16 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     setIsMenuOpen(false);
-    
-    // Normalize ID
+
     const sectionId = id.startsWith('#') ? id.slice(1) : id;
 
     if (location.pathname !== '/') {
-       // Navigate to home with hash
-       navigate(`/#${sectionId}`);
-       return;
+      navigate(`/#${sectionId}`);
+      return;
     }
 
     const container = document.querySelector('.home-container');
     if (!container) {
-      // Fallback if home-container is missing but we are on /
       const element = document.getElementById(sectionId);
       if (element) element.scrollIntoView({ behavior: 'smooth' });
       return;
@@ -152,11 +144,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
       const containerRect = container.getBoundingClientRect();
       const elementRect = element.getBoundingClientRect();
       const targetScroll = elementRect.top - containerRect.top + container.scrollTop;
-
-      container.scrollTo({ 
-        top: targetScroll, 
-        behavior: 'smooth' 
-      });
+      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
     }
   };
 
@@ -173,67 +161,87 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
   };
 
   const isHome = location.pathname === '/';
-  const isNosotros = location.pathname === '/nosotros';
+  const scrolled = scrollProgress > 0.02;
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-[1000] flex justify-between items-center px-6 md:px-20 py-6 md:py-8 transition-all duration-500 bg-transparent`}>
-        <div className="flex items-center gap-4 flex-1">
-          <Link to="/" className="relative flex items-center justify-center w-12 h-12 md:w-16 md:h-16" onClick={(e) => scrollToSection(e, 'hero')}>
-            {/* SVG Progress Circle */}
-            <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 64 64">
-              <circle cx="32" cy="32" r={radius} className="fill-none stroke-white/10 stroke-[2.5]" />
-              <circle cx="32" cy="32" r={radius} className="fill-none stroke-[#a3ff00] stroke-[3] ease-out transition-[stroke-dashoffset] duration-300"
-                strokeDasharray={circumference}
-                strokeDashoffset={dashOffset}
-                style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 12px rgba(163, 255, 0, 0.7))' }}
-              />
-            </svg>
-            <img src={logo} alt="JG Producciones" className="relative z-10 h-7 md:h-10 w-auto object-contain brightness-200 transition-all duration-500 hover:scale-110" />
-          </Link>
-        </div>
+      <nav className="fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-6 md:px-10 py-5 md:py-6 transition-all duration-500">
 
-        {/* Desktop Menu - Floating Pill Style */}
-        <div className={`hidden md:flex items-center transition-all duration-700 px-2 py-2 ${scrollProgress > 0.02 ? 'bg-black/50 backdrop-blur-2xl rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.5)]' : 'bg-transparent'}`}>
-          <ul className="flex gap-1 m-0 p-0 list-none items-center">
-            <NavLinks 
-              isHome={isHome} 
-              isNosotros={isNosotros} 
-              activeSection={activeSection} 
-              scrollToSection={scrollToSection} 
-              setIsMenuOpen={setIsMenuOpen} 
+        {/* ── LEFT: Logo + progress ring ── */}
+        <Link
+          to="/"
+          className="relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 flex-shrink-0"
+          onClick={(e) => scrollToSection(e, 'hero')}
+        >
+          <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r={radius} className="fill-none stroke-white/10 stroke-[2.5]" />
+            <circle
+              cx="32" cy="32" r={radius}
+              className="fill-none stroke-[#a3ff00] stroke-[3] ease-out transition-[stroke-dashoffset] duration-300"
+              strokeDasharray={circumference}
+              strokeDashoffset={dashOffset}
+              style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 10px rgba(163,255,0,0.7))' }}
+            />
+          </svg>
+          <img
+            src={logo}
+            alt="JG Producciones"
+            className="relative z-10 h-6 md:h-9 w-auto object-contain brightness-200 transition-all duration-500 hover:scale-110"
+          />
+        </Link>
+
+        {/* ── CENTER: Navigation pill (desktop) ── */}
+        <div
+          className={`hidden md:flex items-center transition-all duration-700 px-2 py-1.5 ${
+            scrolled
+              ? 'bg-black/55 backdrop-blur-2xl rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
+              : 'bg-transparent'
+          }`}
+        >
+          <ul className="flex gap-0.5 m-0 p-0 list-none items-center">
+            <NavLinks
+              isHome={isHome}
+              activeSection={activeSection}
+              scrollToSection={scrollToSection}
+              setIsMenuOpen={setIsMenuOpen}
               onContactClick={handleContactClick}
             />
           </ul>
         </div>
 
-        {/* Mobile Toggle */}
-        <div className="flex md:hidden flex-1 justify-end">
+        {/* ── RIGHT: CTA button (desktop) + mobile hamburger ── */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+          {/* Desktop CTA inside pill is handled by NavLinks */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle Menu"
-            className="w-12 h-12 flex flex-col items-center justify-center gap-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full z-[1100]"
+            className="flex md:hidden w-11 h-11 flex-col items-center justify-center gap-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full z-[1100]"
           >
-            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
-            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+            <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+            <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
+            <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
           </button>
         </div>
-
-        <div className="hidden md:flex flex-1" />
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 z-[900] md:hidden transition-all duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+      {/* ── Mobile Menu Overlay ── */}
+      <div
+        className={`fixed inset-0 z-[900] md:hidden transition-all duration-500 ${
+          isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
         <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl" onClick={() => setIsMenuOpen(false)} />
-        <div className={`absolute inset-x-0 top-0 pt-32 pb-12 px-8 bg-gradient-to-b from-[#0a1f00]/40 to-black border-b border-white/10 transition-all duration-500 transform ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div
+          className={`absolute inset-x-0 top-0 pt-28 pb-12 px-8 bg-gradient-to-b from-[#091800]/50 to-black border-b border-white/10 transition-all duration-500 transform ${
+            isMenuOpen ? 'translate-y-0' : '-translate-y-full'
+          }`}
+        >
           <ul className="flex flex-col gap-6 m-0 p-0 list-none items-center">
-            <NavLinks 
-              isHome={isHome} 
-              isNosotros={isNosotros} 
-              activeSection={activeSection} 
-              scrollToSection={scrollToSection} 
-              setIsMenuOpen={setIsMenuOpen} 
+            <NavLinks
+              isHome={isHome}
+              activeSection={activeSection}
+              scrollToSection={scrollToSection}
+              setIsMenuOpen={setIsMenuOpen}
               onContactClick={handleContactClick}
             />
           </ul>
@@ -246,4 +254,3 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
 };
 
 export default Navbar;
-

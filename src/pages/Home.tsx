@@ -6,7 +6,11 @@ import { CATEGORIES, SERVICES, GALLERY_IMAGES } from '../data/homeData';
 import HeroSection from '../components/home/HeroSection';
 import CategoriesSection from '../components/home/CategoriesSection';
 import ServicesSection from '../components/home/ServicesSection';
+import AboutSection from '../components/home/AboutSection';
+import StatsBannerSection from '../components/home/StatsBannerSection';
+import TestimonialsSection from '../components/home/TestimonialsSection';
 import GallerySection from '../components/home/GallerySection';
+import CTASection from '../components/home/CTASection';
 
 import SoundToggle from '../components/home/SoundToggle';
 import FooterSection from '../components/home/FooterSection';
@@ -85,15 +89,14 @@ const Home: FC = () => {
     const container = containerRef.current;
     if (!container) return;
 
-    const SECTION_OFFSETS = {
-      hero: 0,
-      categories: windowHeight * 3,
-      servicios: windowHeight * 8, // Categories now has 500vh
-      galeria: windowHeight * 9.1, // Servicios is now ~100vh + small buffer
-    };
-
     const tick = () => {
       const currentScroll = container.scrollTop;
+
+      // Measure section positions dynamically from the DOM
+      const svcEl = document.getElementById('servicios');
+      const galEl = document.getElementById('galeria');
+      const svcStart = svcEl ? svcEl.offsetTop : windowHeight * 8;
+      const galStart = galEl ? galEl.offsetTop : windowHeight * 12;
 
       // Update CSS Variables for smooth, non-React animations
       const hProg = Math.max(0, Math.min(1, currentScroll / (windowHeight * 2)));
@@ -108,33 +111,37 @@ const Home: FC = () => {
       const currentHeroIndex = Math.min(2, Math.floor(hProg * 3.1));
       if (currentHeroIndex !== heroIndex) setHeroIndex(currentHeroIndex);
 
-      // 2. Categories Progress
+      // 2. Categories smooth progress
       const cProgSmooth = lerp(smoothCatsProgress.current, cProg, LERP_FACTOR);
       if (Math.abs(smoothCatsProgress.current - cProgSmooth) > 0.001) {
         smoothCatsProgress.current = cProgSmooth;
         setCatsProgress(smoothCatsProgress.current);
       }
 
-      // 3. Section Updates
-      if (currentScroll < SECTION_OFFSETS.categories - windowHeight / 2) {
+      // 3. Section detection
+      if (currentScroll < catsStart - windowHeight / 2) {
         if (currentScroll < windowHeight * 0.8) setActiveSection('hero');
         else if (currentScroll < windowHeight * 1.8) setActiveSection('hero-2');
         else setActiveSection('hero-3');
-      } else if (currentScroll < SECTION_OFFSETS.servicios - windowHeight / 2) {
-        const p = (currentScroll - SECTION_OFFSETS.categories) / windowHeight;
+      } else if (currentScroll < svcStart - windowHeight / 2) {
+        const p = (currentScroll - catsStart) / windowHeight;
         if (p < 1.0) setActiveSection('categories-intro');
         else if (p < 2.25) setActiveSection('categories-1');
         else if (p < 3.5) setActiveSection('categories-2');
         else setActiveSection('categories-3');
-      } else if (currentScroll < SECTION_OFFSETS.galeria - windowHeight / 2) {
-        setActiveSection('servicios');
-        setActiveSvc(0);
-      } else if (currentScroll < SECTION_OFFSETS.galeria + windowHeight * 4) {
+      } else if (currentScroll < galStart - windowHeight / 2) {
+        const nosotrosEl = document.getElementById('nosotros');
+        const nosotrosTop = nosotrosEl ? nosotrosEl.offsetTop : Infinity;
+        if (currentScroll >= nosotrosTop - windowHeight / 2) {
+          setActiveSection('nosotros');
+        } else {
+          setActiveSection('servicios');
+          setActiveSvc(0);
+        }
+      } else if (currentScroll < galStart + windowHeight * 4) {
         setActiveSection('galeria');
-        const galScroll = currentScroll - SECTION_OFFSETS.galeria;
-        const galP = galScroll / (windowHeight * 4); // Total height: 400vh
-
-        // Balanced intro transition
+        const galScroll = currentScroll - galStart;
+        const galP = galScroll / (windowHeight * 4);
         if (galP < 0.55) {
           setActiveGal(-1);
         } else {
@@ -198,10 +205,14 @@ const Home: FC = () => {
           services={SERVICES}
           activeSvc={activeSvc}
         />
+        <AboutSection />
+        <StatsBannerSection />
+        <TestimonialsSection />
         <MemoGallery
           activeGal={activeGal}
           galleryImages={GALLERY_IMAGES}
         />
+        <CTASection />
       </main>
       <FooterSection />
       <SoundToggle isMuted={isMuted} setIsMuted={setIsMuted} isVisible={isVideoSection} />
