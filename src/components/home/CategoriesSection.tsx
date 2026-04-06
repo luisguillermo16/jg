@@ -27,11 +27,19 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
   isMuted,
 }) => {
   // 4 screens (Intro + 3 cats) over a 500vh scroll range.
-  // Using floor with 4 screens ensures even distribution (125vh each).
   const activeIndex = Math.min(3, Math.floor(progress * 3.99));
   const activeCatIndex = activeIndex - 1; // -1 = intro, 0-2 = categories
 
-
+  // Jump directly to a specific category slide
+  const scrollToCategory = (slideIndex: number) => {
+    const container = document.querySelector('.home-container');
+    const section = document.getElementById('categories');
+    if (container && section) {
+      // Each slide is 1 snap stop (100vh). Slide 0 = intro, 1-3 = categories.
+      const targetScroll = section.offsetTop + (slideIndex + 1) * window.innerHeight;
+      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    }
+  };
 
   return (
     <section
@@ -69,6 +77,24 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
             <p className="cat-intro-desc">
               Especialistas en transformar la visión de cada cliente en una producción técnica sin precedentes.
             </p>
+
+            {/* Quick-access chips */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+              transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="cat-quick-nav"
+            >
+              {categories.map((cat, i) => (
+                <button
+                  key={cat.id}
+                  onClick={() => scrollToCategory(i)}
+                  className="cat-quick-chip font-remixa"
+                >
+                  {cat.title}
+                </button>
+              ))}
+            </motion.div>
           </div>
         </div>
 

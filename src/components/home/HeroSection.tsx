@@ -1,5 +1,6 @@
 import React, { type FC } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import VolumeVideo from '../VolumeVideo';
 import './HeroSection.css';
 import logo from '../../assets/brand/logo.png';
@@ -59,6 +60,17 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, containerRef, heroIndex, i
     const scene1PointerEvents = useTransform(scene1Opacity, (v) => v > 0.1 ? 'auto' : 'none');
     const scene2PointerEvents = useTransform(scene2Opacity, (v) => v > 0.1 ? 'auto' : 'none');
     const scene3PointerEvents = useTransform(scene3Opacity, (v) => v > 0.1 ? 'auto' : 'none');
+
+    const scrollToServices = () => {
+        const container = document.querySelector('.home-container');
+        const el = document.getElementById('servicios');
+        if (container && el) {
+            const containerRect = container.getBoundingClientRect();
+            const elementRect = el.getBoundingClientRect();
+            const targetScroll = elementRect.top - containerRect.top + container.scrollTop;
+            container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+        }
+    };
 
     return (
         <section id="hero-section" ref={heroRef} className="relative w-full h-[300vh] bg-black">
@@ -149,6 +161,16 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, containerRef, heroIndex, i
                         <h1 className="hero-title text-center drop-shadow-[0_0_50px_rgba(0,0,0,0.9)] leading-tight">
                             Producción profesional premium para eventos sociales y corporativos <br className="hidden md:block" />
                         </h1>
+
+                        {/* Bypass button — for returning users who want to skip the narrative */}
+                        <motion.button
+                            style={{ opacity: scene2Opacity }}
+                            onClick={scrollToServices}
+                            className="mt-8 flex items-center gap-1.5 text-white/35 hover:text-white/80 transition-all duration-300 text-[10px] uppercase tracking-[0.35em] font-bold group"
+                        >
+                            Explorar Servicios
+                            <ChevronDownIcon className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
+                        </motion.button>
                     </motion.div>
 
                     {/* 3. Detailed Description Screen (Scene 3) */}

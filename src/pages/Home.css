@@ -23,3 +23,10 @@
 .home-container main {
   display: contents;
 }
+
+/* ── Mobile: use proximity to prevent scroll trap in Gallery ── */
+@media (hover: none) and (pointer: coarse) {
+  .home-container {
+    scroll-snap-type: y proximity;
+  }
+}

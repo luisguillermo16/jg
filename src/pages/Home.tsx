@@ -201,12 +201,12 @@ const Home: FC = () => {
           progress={catsProgress}
           isMuted={isMuted}
         />
+        <StatsBannerSection />
         <MemoServices
           services={SERVICES}
           activeSvc={activeSvc}
         />
         <AboutSection />
-        <StatsBannerSection />
         <TestimonialsSection />
         <MemoGallery
           activeGal={activeGal}

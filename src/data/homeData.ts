@@ -36,41 +36,41 @@ export const CATEGORIES = [
   {
     id: 'corporativos',
     title: 'Corporativos',
-    description: 'Precisión técnica y excelencia operativa para lanzamientos de marca, conferencias y eventos empresariales de alto impacto visual y sonoro.',
+    description: 'Puntualidad, respaldo técnico y excelencia operativa para lanzamientos de marca, conferencias y eventos empresariales de alto impacto. Sin errores, sin improvisación.',
     video: corporativoVideo,
-    tag: 'Precisión y Professionalismo'
+    tag: 'Precisión y Confianza'
   }
 ];
 
 export const SERVICES = [
   {
-    title: "Sonido Profesional",
-    desc: "Sistemas Line Array de alta fidelidad para una cobertura acústica perfecta.",
+    title: "Acústica Impecable",
+    desc: "Cada palabra y cada nota llegan nítidas a toda la sala. Sistemas Line Array de alta fidelidad sin distorsión, sin zonas muertas.",
     image: serviceAudio
   },
   {
-    title: "Iluminación Robótica",
-    desc: "Cabezas móviles y efectos que transforman tu celebración en algo único.",
+    title: "Escenarios que Impresionan",
+    desc: "Iluminación robótica inteligente que convierte cualquier espacio en una experiencia visual única e irrepetible.",
     image: serviceLighting
   },
   {
-    title: "Pantallas LED HD",
-    desc: "Módulos de alta definición para visuales impactantes en tiempo real.",
+    title: "Visuales que Impactan",
+    desc: "Pantallas LED en alta definición que mantienen la atención de tus invitados y amplifican cada momento clave.",
     image: serviceLed
   },
   {
-    title: "Efectos Especiales",
-    desc: "Pirotecnia fría y niebla densa que añaden magia a cada momento.",
+    title: "Momentos Inolvidables",
+    desc: "Pirotecnia fría y niebla densa que generan reacciones espontáneas y convierten instantes ordinarios en escenas épicas.",
     image: gal6
   },
   {
-    title: "Tarimas y Truss",
-    desc: "Estructuras sólidas y escenarios personalizados para presentaciones.",
+    title: "Escenarios a tu Medida",
+    desc: "Tarimas y estructuras truss seguras y personalizadas. Cada presentación con la presencia que merece.",
     image: gal3
   },
   {
-    title: "Producción de Video",
-    desc: "Cobertura multicámara y streaming para capturar cada ángulo.",
+    title: "Nada se Pierde",
+    desc: "Cobertura multicámara y transmisión en vivo para que cada ángulo, cada emoción, quede inmortalizado.",
     image: gal4
   }
 ];

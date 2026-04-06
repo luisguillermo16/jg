@@ -236,3 +236,34 @@
     font-size: clamp(3rem, 14vw, 5.5rem);
   }
 }
+
+/* ── Quick-access navigation chips ── */
+.cat-quick-nav {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 36px;
+}
+
+.cat-quick-chip {
+  padding: 8px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 100px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  cursor: pointer;
+  transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  white-space: nowrap;
+}
+
+.cat-quick-chip:hover {
+  border-color: #a3ff00;
+  color: #a3ff00;
+  background: rgba(163, 255, 0, 0.06);
+  box-shadow: 0 0 16px rgba(163, 255, 0, 0.18);
+}

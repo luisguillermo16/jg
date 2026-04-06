@@ -56,12 +56,12 @@ const NavLinks: FC<{
         </a>
       </li>
 
-      {/* 5. Contáctanos — visually distinct CTA */}
+      {/* 5. Contáctanos — solid green CTA */}
       <li>
         <a
           href="#contact"
           onClick={onContactClick}
-          className="ml-2 px-5 py-2 rounded-full text-sm font-bold border border-[#A3FF00]/40 bg-[#A3FF00]/10 text-[#A3FF00] hover:bg-[#A3FF00] hover:text-black hover:border-[#A3FF00] transition-all duration-300 font-remixa inline-flex items-center"
+          className="ml-2 px-5 py-2 rounded-full text-sm font-bold bg-[#A3FF00] text-black hover:bg-white transition-all duration-300 font-remixa inline-flex items-center shadow-[0_0_20px_rgba(163,255,0,0.35)] hover:shadow-[0_0_28px_rgba(255,255,255,0.3)]"
         >
           Contáctanos
         </a>
