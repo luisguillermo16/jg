@@ -29,3 +29,5 @@ dist-ssr
 *.avi
 # Assets
 src/assets/*.mp4
+.vercel
+.env*.local
