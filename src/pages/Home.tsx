@@ -203,14 +203,14 @@ const Home: FC = () => {
 
       <main>
         <MemoHero
-          heroRef={heroRef as any}
+          heroRef={heroRef}
           containerRef={containerRef}
           heroIndex={heroIndex}
           isMuted={isMuted}
           isVisible={activeSection.startsWith('hero')}
         />
         <MemoCategories
-          categoriesRef={categoriesRef as any}
+          categoriesRef={categoriesRef}
           categories={CATEGORIES}
           progress={catsProgress}
           isMuted={isMuted}
