@@ -34,11 +34,16 @@ const ContactModal: FC<ContactModalProps> = ({ isOpen, onClose }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const formatMonthLabel = (value: string) => {
+  const formatDateLabel = (value: string) => {
     if (!value) return '';
-    const [year, month] = value.split('-');
-    const date = new Date(parseInt(year), parseInt(month) - 1);
-    return date.toLocaleDateString('es-CO', { month: 'long', year: 'numeric' });
+    const date = new Date(value);
+    return date.toLocaleString('es-CO', { 
+      day: 'numeric',
+      month: 'long', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -46,12 +51,12 @@ const ContactModal: FC<ContactModalProps> = ({ isOpen, onClose }) => {
 
     const { nombre, apellido, telefono, descripcion, ciudad, tipoEvento, fechaEvento } = formData;
 
-    const fechaLabel = formatMonthLabel(fechaEvento);
+    const fechaLabel = formatDateLabel(fechaEvento);
 
     const message =
       `Hola, mi nombre es ${nombre} ${apellido}.\n` +
       `Tipo de evento: ${tipoEvento}\n` +
-      `Fecha estimada: ${fechaLabel}\n` +
+      `Fecha y hora: ${fechaLabel}\n` +
       `Ciudad: ${ciudad} | Teléfono: ${telefono}\n` +
       `Detalle: ${descripcion}`;
 
@@ -198,15 +203,14 @@ const ContactModal: FC<ContactModalProps> = ({ isOpen, onClose }) => {
                     </div>
                   </motion.div>
                   <motion.div variants={itemVariants} className="space-y-1">
-                    <label className="text-[9px] uppercase tracking-[0.2em] text-accent font-black px-1">Fecha del Evento</label>
+                    <label className="text-[9px] uppercase tracking-[0.2em] text-accent font-black px-1">Fecha y Hora del Evento</label>
                     <input
                       required
-                      type="month"
+                      type="datetime-local"
                       name="fechaEvento"
                       value={formData.fechaEvento}
                       onChange={handleChange}
                       className={inputClass}
-                      min={new Date().toISOString().slice(0, 7)}
                     />
                   </motion.div>
                 </div>
