@@ -4,7 +4,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import VolumeVideo from '../VolumeVideo';
 import './HeroSection.css';
 import logo from '../../assets/brand/logo.png';
-import heroVideo from '../../assets/home/vids/hero.mp4';
+const heroVideo = 'https://luispineda.b-cdn.net/hero.mp4';
 
 interface HeroSectionProps {
     heroRef: React.RefObject<HTMLDivElement | null>;
