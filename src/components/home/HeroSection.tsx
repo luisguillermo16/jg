@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import { motion } from 'framer-motion';
 import './HeroSection.css';
 import logo from '../../assets/brand/logo.png';
-import heroImage from '../../assets/home/img/hero 4.png';
+import heroImage from '../../assets/home/img/hero_4.webp';
 
 
 interface HeroSectionProps {
@@ -45,6 +45,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                         alt="Hero Background"
                         className="w-full h-full object-cover opacity-100"
                         loading="eager"
+                        fetchPriority="high"
                     />
                 </motion.div>
 
