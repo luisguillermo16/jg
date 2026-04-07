@@ -12,6 +12,7 @@
   height: 100vh;
   scroll-padding-top: 0;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain; /* prevent iOS page bounce */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -24,9 +25,10 @@
   display: contents;
 }
 
-/* ── Mobile: use proximity to prevent scroll trap in Gallery ── */
+/* ── Mobile: use proximity to prevent scroll trap; allow momentum scrolling ── */
 @media (hover: none) and (pointer: coarse) {
   .home-container {
     scroll-snap-type: y proximity;
+    scroll-snap-stop: normal; /* allow momentum scrolling through sections */
   }
 }

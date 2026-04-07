@@ -4,6 +4,7 @@ import VolumeVideo from '../VolumeVideo';
 import './CategoriesSection.css';
 import { openContactModal } from '../../utils/modal';
 import CinematicGlow from '../CinematicGlow';
+import { isMobileDevice } from '../../utils/deviceUtils';
 
 interface Category {
   id: string;
@@ -95,10 +96,12 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                   playsInline
                   className="cats-bg-video"
                   style={{
-                    transform: isActive ? 'scale(1.15)' : 'scale(1)',
-                    transition: isActive
+                    // Mobile: no Ken Burns (CPU/GPU savings), will-change only on active
+                    transform: (isActive && !isMobileDevice) ? 'scale(1.15)' : 'scale(1)',
+                    transition: (isActive && !isMobileDevice)
                       ? 'transform 10s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-                      : 'transform 1s ease',
+                      : 'none',
+                    willChange: isActive ? 'transform' : 'auto',
                   }}
                 />
                 {/* Overlay 50% */}

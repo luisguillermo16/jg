@@ -4,6 +4,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import VolumeVideo from '../VolumeVideo';
 import './HeroSection.css';
 import logo from '../../assets/brand/logo.png';
+import { isMobileDevice } from '../../utils/deviceUtils';
 const heroVideo = 'https://luispineda.b-cdn.net/hero.mp4';
 
 interface HeroSectionProps {
@@ -22,10 +23,10 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, containerRef, heroIndex, i
         offset: ["start start", "end end"]
     });
 
-    // Use spring for much smoother, fluid motion (avoids jerky scroll updates)
+    // Mobile: stiffer spring = effectively instant (skips expensive physics frames)
     const smoothProgress = useSpring(scrollYProgress, {
-        stiffness: 70,
-        damping: 25,
+        stiffness: isMobileDevice ? 300 : 70,
+        damping:   isMobileDevice ? 60  : 25,
         restDelta: 0.001
     });
 
@@ -45,14 +46,22 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, containerRef, heroIndex, i
     const scene3Y = useTransform(smoothProgress, [0.75, 1.0], [50, 0]);
 
     // Video Effects
-    const videoScale = useTransform(smoothProgress, [0, 1], [1, 1.15]);
-    const videoBlurValue = useTransform(smoothProgress, [0, 1], [0, 8]);
+    // Mobile: reduced scale range (less GPU compositing area) + NO blur (biggest GPU cost)
+    const videoScale = useTransform(smoothProgress, [0, 1], [1, isMobileDevice ? 1.04 : 1.15]);
     const videoBrightnessValue = useTransform(smoothProgress, [0, 0.5, 1], [0.55, 0.45, 0.35]);
+    const videoBlurValue = useTransform(smoothProgress, [0, 1], [0, isMobileDevice ? 0 : 8]);
 
-    // Transform video effects into CSS strings
+    // Mobile: brightness only (blur creates a new GPU compositing layer every frame = jank)
+    // Use number[] (not [number, number] tuple) — required by Framer Motion's MultiTransformer type
     const videoFilter = useTransform(
         [videoBlurValue, videoBrightnessValue],
-        ([blur, brightness]) => `brightness(${brightness}) saturate(1.2) blur(${blur}px)`
+        (values: number[]) => {
+            const blur = values[0];
+            const brightness = values[1];
+            return isMobileDevice
+                ? `brightness(${brightness})`
+                : `brightness(${brightness}) saturate(1.2) blur(${blur}px)`;
+        }
     );
 
     // Helper to control pointer events based on opacity

@@ -59,7 +59,8 @@
   width: 100% !important;
   height: 100% !important;
   object-fit: cover;
-  will-change: transform;
+  /* will-change managed via inline style in CategoriesSection.tsx
+     (only active slide gets will-change:transform to save GPU memory on mobile) */
 }
 
 /* 50% dark overlay */

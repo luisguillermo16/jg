@@ -1,4 +1,5 @@
 import { type FC, useState, useEffect, useRef, memo } from 'react';
+import { isMobileDevice } from '../utils/deviceUtils';
 import Navbar from '../components/Navbar';
 import { CATEGORIES, SERVICES, GALLERY_IMAGES } from '../data/homeData';
 
@@ -43,6 +44,7 @@ const Home: FC = () => {
   const smoothCatsProgress = useRef(0);
   const smoothSvcsProgress = useRef(0);
   const rafId = useRef<number>(0);
+  const rafFrame = useRef(0); // for mobile 30fps throttle
 
   // Advanced Scroll Reset logic
   useEffect(() => {
@@ -91,6 +93,12 @@ const Home: FC = () => {
     if (!container) return;
 
     const tick = () => {
+      rafFrame.current++;
+      // Mobile: target ~30fps to halve JS CPU usage
+      if (isMobileDevice && rafFrame.current % 2 !== 0) {
+        rafId.current = requestAnimationFrame(tick);
+        return;
+      }
       const currentScroll = container.scrollTop;
 
       // Measure section positions dynamically from the DOM
