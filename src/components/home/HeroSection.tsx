@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import { motion } from 'framer-motion';
 import './HeroSection.css';
 import logo from '../../assets/brand/logo.png';
-import heroImage from '../../assets/home/img/hero_4.webp';
+const heroImage = 'https://luispineda.b-cdn.net/hero_4.webp';
 
 
 interface HeroSectionProps {

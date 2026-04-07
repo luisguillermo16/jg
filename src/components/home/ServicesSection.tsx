@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import './ServicesSection.css';
 import { openContactModal } from '../../utils/modal';
 import CinematicGlow from '../CinematicGlow';
-import seccionesImg from '../../assets/home/img/secciones.png';
+const seccionesImg = 'https://luispineda.b-cdn.net/secciones.webp';
 import { motion } from 'framer-motion';
 
 interface Service {

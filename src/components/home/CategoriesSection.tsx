@@ -4,7 +4,7 @@ import './CategoriesSection.css';
 import { openContactModal } from '../../utils/modal';
 import CinematicGlow from '../CinematicGlow';
 import { isMobileDevice } from '../../utils/deviceUtils';
-import seccionesImg from '../../assets/home/img/secciones.webp';
+const seccionesImg = 'https://luispineda.b-cdn.net/secciones.webp';
 import { motion } from 'framer-motion';
 
 interface Category {
@@ -61,6 +61,8 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
               src={seccionesImg} 
               alt="" 
               className="w-full h-full object-cover brightness-100"
+              loading="eager"
+              fetchPriority="high"
             />
           </div>
           
