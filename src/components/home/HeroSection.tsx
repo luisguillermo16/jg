@@ -33,7 +33,6 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
             {/* Scroll-down prompt (Centered & Visible) */}
             <div className={`absolute bottom-10 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 transition-opacity duration-500 ${heroIndex === 0 ? 'opacity-90' : 'opacity-0'}`}>
                 <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/70 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]">Explorar experiencias</span>
-                <div className="w-[1.5px] h-12 bg-gradient-to-b from-accent to-transparent shadow-[0_0_15px_rgba(163,255,0,0.4)]" />
             </div>
 
             {/* ── Background Image Layer (Sticky) ── */}

@@ -71,7 +71,7 @@ const SpotlightsNav: React.FC<SpotlightsNavProps> = ({
       
       const dpr = window.devicePixelRatio;
       const logicalWidth = width / dpr;
-      const logicalHeight = height / dpr;
+      // const logicalHeight = height / dpr;
       
       ctx.scale(dpr, dpr);
 
@@ -87,7 +87,7 @@ const SpotlightsNav: React.FC<SpotlightsNavProps> = ({
         if (light.x === 0) light.x = light.targetX; // Initial position
         light.x += (light.targetX - light.x) * 0.08;
 
-        // Draw beam
+        /* Drawing disabled to remove Canvas gradients as requested
         const gradient = ctx.createLinearGradient(
           light.x, 0,
           light.x, logicalHeight
@@ -104,17 +104,14 @@ const SpotlightsNav: React.FC<SpotlightsNavProps> = ({
         gradient.addColorStop(1, `rgba(${color}, 0)`);
 
         ctx.beginPath();
-        // Top of beam (narrow)
         ctx.moveTo(light.x - 15, 0);
         ctx.lineTo(light.x + 15, 0);
-        // Bottom of beam (wide)
         ctx.lineTo(light.x + 80, logicalHeight);
         ctx.lineTo(light.x - 80, logicalHeight);
         ctx.closePath();
         ctx.fillStyle = gradient;
         ctx.fill();
         
-        // Add a small flare at the top
         ctx.beginPath();
         ctx.arc(light.x, 0, 20, 0, Math.PI * 2);
         const flare = ctx.createRadialGradient(light.x, 0, 0, light.x, 0, 20);
@@ -122,6 +119,7 @@ const SpotlightsNav: React.FC<SpotlightsNavProps> = ({
         flare.addColorStop(1, `rgba(${color}, 0)`);
         ctx.fillStyle = flare;
         ctx.fill();
+        */
       });
 
       animationFrameId = requestAnimationFrame(draw);

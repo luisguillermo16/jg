@@ -74,13 +74,6 @@
   z-index: 1;
 }
 
-/* Bottom-up gradient for text legibility */
-.cats-bg-gradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.2) 45%, transparent 75%);
-  z-index: 2;
-}
 
 /* ── Intro slide specific glow ── */
 .cats-intro-glow {

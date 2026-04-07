@@ -122,8 +122,6 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                 />
                 {/* Overlay 50% */}
                 <div className="cats-bg-overlay" />
-                {/* Bottom gradient for text legibility */}
-                <div className="cats-bg-gradient" />
               </div>
 
               {/* Text content — bottom left, staggered reveal */}

@@ -79,9 +79,8 @@ const Nosotros: FC = () => {
         </motion.div>
 
         {/* Background */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 text-center">
           <CinematicGlow />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black z-10" />
           <img
             src={galleryImg}
             alt="Fondo cinemático JG Producciones"
@@ -102,8 +101,6 @@ const Nosotros: FC = () => {
 
       {/* ── NUESTRA ESENCIA ── */}
       <section className="relative py-32 px-6 md:px-12 lg:px-24 bg-[#050607] overflow-hidden">
-        {/* Top accent line */}
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#A3FF00]/25 to-transparent" />
         <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[35%] h-[55%] bg-[#A3FF00]/4 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -155,8 +152,6 @@ const Nosotros: FC = () => {
 
       {/* ── CALL TO ACTION ── */}
       <section className="py-40 px-6 text-center bg-black relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(163,255,0,0.07),transparent)] pointer-events-none" />
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#A3FF00]/20 to-transparent" />
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
