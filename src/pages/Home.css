@@ -7,9 +7,12 @@
   background-color: var(--bg);
   scroll-snap-type: y mandatory;
   scroll-snap-stop: always;
-  scroll-behavior: smooth;
+  /* REMOVED scroll-behavior: smooth — conflicta con scroll-snap en móvil
+     y puede causar doble-animación o snap errático en Chrome/Safari mobile.
+     Los scrolls programáticos pasan behavior:'smooth' directamente en scrollTo(). */
   overflow-y: scroll;
   height: 100vh;
+  height: 100dvh; /* dvh: respeta la barra URL dinámica de iOS/Android */
   scroll-padding-top: 0;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain; /* prevent iOS page bounce */

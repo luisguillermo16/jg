@@ -25,6 +25,24 @@
 }
 
 /* ============================================================
+   STICKY WRAPPER — Promovido a compositor layer de GPU
+   Esto es CRÍTICO para evitar el flash negro en scroll-snap móvil.
+   El compositor thread puede renderizar este layer en cada frame
+   de scroll SIN esperar al hilo principal de JS/Layout.
+   ============================================================ */
+.hero-sticky {
+  /* Promover a compositor layer ANTES de que empiece el scroll */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  /* 100dvh: respeta la barra URL dinámica en iOS/Android
+     Fallback a 100vh para browsers sin soporte dvh */
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ============================================================
    HERO ENTRANCE ANIMATIONS — Pure CSS, zero JS delay
    Arrancan en el primer frame de pintura, no esperan React
    ============================================================ */
@@ -53,7 +71,7 @@
 
 /* animation-fill-mode: both → empieza en el estado "from" durante el delay */
 .hero-animate-1 {
-  opacity: 0; /* fallback por si JS desactiva animaciones */
+  opacity: 0;
   animation: hero-fade-up 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
 }
 

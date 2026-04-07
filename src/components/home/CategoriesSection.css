@@ -29,18 +29,40 @@
 .cats-sticky {
   position: sticky;
   top: 0;
+  /* 100dvh: respeta la barra URL dinámica de iOS/Android */
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
-  transform: translateZ(0); /* promote to dedicated GPU compositing layer */
-  contain: layout style;   /* limit repaint scope to this subtree */
+  /* Promover a compositor layer de GPU ANTES del scroll.
+     El compositor thread puede redibujar este elemento cada frame
+     de scroll sin bloquear el hilo principal de JS. */
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* Evitar que el background del section se vea durante transiciones */
+  background: #050607;
+  contain: layout style;
+}
+
+/* ── Layer base permanente — siempre visible, evita negro puro durante crossfade ── */
+/* Este layer está por debajo de todos los slides (z-index 0) y nunca tiene opacidad 0.
+   Si un slide está en transición (opacity < 1), este layer provee el fondo visible. */
+.cats-base-bg {
+  position: absolute;
+  inset: 0;
+  background: #050607;
+  z-index: 0;
 }
 
 /* ── Every slide is stacked absolutely inside sticky ── */
 .cats-slide {
   position: absolute;
   inset: 0;
-  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: opacity;
+  /* transition removida de aquí — ahora se maneja via inline style:
+     incoming: transition: none (aparece instantáneo)
+     outgoing: transition: opacity 0.5s — esto evita SIEMPRE frames de negro */
+  will-change: auto; /* will-change se activa solo en el slide activo va inline */
 }
 
 /* Background helper (solid color layers for intro) */

@@ -58,12 +58,22 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
       </div>
 
       {/* ── Sticky viewport — stays fixed while user scrolls 400vh ── */}
+      {/* cats-sticky: GPU compositor layer (will-change + backface en CSS) */}
       <div className="cats-sticky">
+
+        {/* Layer base permanente — nunca muestra negro puro durante crossfade */}
+        <div className="cats-base-bg" aria-hidden="true" />
 
         {/* ── SLIDE 0: Intro ── */}
         <div
           className="cats-slide"
-          style={{ opacity: activeIndex === 0 ? 1 : 0, zIndex: activeIndex === 0 ? 2 : 1 }}
+          style={{
+            opacity: activeIndex === 0 ? 1 : 0,
+            zIndex: activeIndex === 0 ? 2 : 1,
+            // Incoming: sin transición (aparece al instante, nunca hay negro)
+            // Outgoing: fade suave
+            transition: activeIndex === 0 ? 'none' : 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
         >
           <CinematicGlow />
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -97,7 +107,13 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
             <div
               key={cat.id}
               className="cats-slide"
-              style={{ opacity: isActive ? 1 : 0, zIndex: isActive ? 2 : 1 }}
+              style={{
+                opacity: isActive ? 1 : 0,
+                zIndex: isActive ? 2 : 1,
+                // Incoming: sin transición (aparece al instante)
+                // Outgoing: fade suave — nunca hay frame de negro puro
+                transition: isActive ? 'none' : 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
             >
               {/* Ken Burns background wrapper */}
               <div className="cats-bg-wrapper">

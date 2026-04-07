@@ -35,8 +35,9 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
             </div>
 
             {/* ── Background Image Layer (Sticky) ── */}
-            <div className="sticky top-0 h-screen w-full overflow-hidden bg-black flex items-center justify-center">
-                {/* Imagen cargada con máxima prioridad, decoding síncrono para evitar flash */}
+            {/* hero-sticky: promueve el layer a la GPU (will-change + backface), evita flash negro en scroll-snap móvil */}
+            <div className="hero-sticky sticky top-0 w-full overflow-hidden bg-black flex items-center justify-center">
+                {/* Imagen cargada con máxima prioridad, decoding async no bloquea hilo principal */}
                 <div className="absolute inset-0 w-full h-full">
                     <img
                         src={heroImage}
@@ -44,7 +45,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                         className="w-full h-full object-cover opacity-100"
                         loading="eager"
                         fetchPriority="high"
-                        decoding="sync"
+                        decoding="async"
                     />
                 </div>
 
