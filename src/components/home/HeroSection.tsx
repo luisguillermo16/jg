@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import { motion } from 'framer-motion';
 import './HeroSection.css';
 import logo from '../../assets/brand/logo.png';
-import heroImage from '../../assets/home/img/hero .png';
+import heroImage from '../../assets/home/img/hero 4.png';
 
 
 interface HeroSectionProps {
@@ -49,10 +49,6 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                     />
                 </motion.div>
 
-                {/* Grain Overlay */}
-                <div className="absolute inset-0 z-10 opacity-30 pointer-events-none select-none">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_10%,rgba(0,0,0,0.9)_100%)]" />
-                </div>
 
                 {/* Screen Content Layers */}
                 <div
@@ -62,12 +58,13 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
 
                     {/* 1. Logo & CTAs Screen (User provided snippet) */}
                     <motion.div
-                        className="absolute inset-0 flex flex-col md:flex-row items-center justify-start md:justify-center md:justify-between px-6 md:pl-[80px] md:pr-[120px] gap-12 md:gap-16 pt-[100px] md:pt-0 will-change-transform"
+                        className="absolute inset-0 flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:pl-[80px] md:pr-[120px] gap-8 md:gap-16 pt-[20px] md:pt-0 will-change-transform"
                     >
+
                         {/* LEFT — Título + descripción + CTAs */}
-                        <div className="flex flex-col items-center md:items-start text-center md:text-left gap-6 md:gap-8 max-w-full md:max-w-[60%]">
+                        <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left gap-6 md:gap-8 max-w-full md:max-w-[60%]">
                             <motion.h1
-                                className="text-4xl md:text-[5rem] font-black text-white leading-[1.1] font-paloseco uppercase text-shadow-strong tracking-tight"
+                                className="text-[32px] md:text-[4.8rem] font-black text-white leading-[1.1] font-paloseco uppercase text-shadow-strong tracking-tight"
                                 initial={{ opacity: 0, y: 40 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
@@ -77,7 +74,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                                 Eventos
                             </motion.h1>
                             <motion.p
-                                className="text-[1rem] md:text-[1.4rem] text-white/90 leading-snug font-remixa max-w-[95%] md:max-w-3xl"
+                                className="text-[0.95rem] md:text-[1.35rem] text-white/90 leading-snug font-remixa max-w-[95%] md:max-w-3xl"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
@@ -92,13 +89,17 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                             >
                                 <motion.button
                                     onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))}
-                                    className="px-8 py-3.5 bg-accent text-black text-[11px] md:text-[13px] font-black uppercase tracking-widest rounded-full shadow-[0_0_30px_rgba(163,255,0,0.3)] hover:shadow-[0_0_50px_rgba(163,255,0,0.5)] transition-all duration-300 transform hover:scale-105"
+                                    whileHover={{ y: -2, filter: 'brightness(1.15)' }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="px-8 py-3.5 bg-accent text-black text-[12px] md:text-[14px] font-black uppercase tracking-widest rounded-full transition-all duration-300"
                                 >
                                     Hablar con un experto
                                 </motion.button>
                                 <motion.button
                                     onClick={scrollToServices}
-                                    className="px-8 py-3.5 border border-white/20 bg-white/5 backdrop-blur-md text-white/80 text-[11px] md:text-[13px] font-bold uppercase tracking-widest rounded-full hover:bg-white/10 hover:border-white/40 transition-all duration-300 transform hover:scale-105"
+                                    whileHover={{ y: -2, backgroundColor: 'rgba(255,255,255,0.2)' }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="px-8 py-3.5 border border-white/40 bg-white/10 backdrop-blur-xl text-white font-black text-[12px] md:text-[14px] uppercase tracking-widest rounded-full transition-all duration-300"
                                 >
                                     Nuestros Servicios
                                 </motion.button>
@@ -106,7 +107,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                         </div>
 
                         {/* RIGHT — Logo + wordmark (Hidden on mobile) */}
-                        <div className="hidden md:flex flex-col items-center gap-2 md:gap-4 flex-shrink-0 md:-mt-40">
+                        <div className="hidden md:flex flex-col items-center gap-2 md:gap-4 flex-shrink-0 md:mt-[-60px]">
                             <motion.img
                                 src={logo}
                                 alt="JG Producciones"

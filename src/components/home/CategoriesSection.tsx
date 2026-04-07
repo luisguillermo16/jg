@@ -4,6 +4,8 @@ import './CategoriesSection.css';
 import { openContactModal } from '../../utils/modal';
 import CinematicGlow from '../CinematicGlow';
 import { isMobileDevice } from '../../utils/deviceUtils';
+import seccionesImg from '../../assets/home/img/secciones.png';
+import { motion } from 'framer-motion';
 
 interface Category {
   id: string;
@@ -54,35 +56,39 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
           style={{ opacity: activeIndex === 0 ? 1 : 0, zIndex: activeIndex === 0 ? 2 : 1 }}
         >
           <CinematicGlow />
-          <div className="cat-intro-content">
-            {/* Pure CSS transition — runs on GPU compositor, not JS thread */}
-            <h2
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            <img 
+              src={seccionesImg} 
+              alt="" 
+              className="w-full h-full object-cover brightness-100"
+            />
+          </div>
+          
+          <div className="cat-intro-content relative z-10">
+            {/* Cinematic reveal - triggers when section is in view and it's the intro slide */}
+            <motion.h2
               className="cat-intro-title"
-              style={{
-                opacity: activeIndex === 0 ? 1 : 0,
-                transform: activeIndex === 0 ? 'translateY(0)' : 'translateY(40px)',
-                transition: 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1)',
-                willChange: 'opacity, transform',
-              }}
+              initial={{ opacity: 0, y: 60, scale: 0.9 }}
+              whileInView={activeIndex === 0 ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: -40, scale: 0.95 }}
+              viewport={{ amount: 0.2 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             >
               Nuestras <br />
               Categorías
-            </h2>
+            </motion.h2>
 
-            <p
+            <motion.p 
               className="cat-intro-desc"
-              style={{
-                opacity: activeIndex === 0 ? 1 : 0,
-                transform: activeIndex === 0 ? 'translateY(0)' : 'translateY(24px)',
-                transition: 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s',
-                willChange: 'opacity, transform',
-              }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+              viewport={{ amount: 0.2 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
             >
               Especialistas en transformar la visión de cada cliente en una producción técnica sin precedentes.
-            </p>
-
-            {/* Quick-access chips removed to match ServicesSection */}
+            </motion.p>
           </div>
+          
+          {/* Quick-access chips removed to match ServicesSection */}
         </div>
 
         {/* ════ SLIDES 1–3: Category videos ════ */}

@@ -2,6 +2,8 @@ import { type FC } from 'react';
 import './ServicesSection.css';
 import { openContactModal } from '../../utils/modal';
 import CinematicGlow from '../CinematicGlow';
+import seccionesImg from '../../assets/home/img/secciones.png';
+import { motion } from 'framer-motion';
 
 interface Service {
   title: string;
@@ -40,31 +42,36 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, progress }) => {
         >
           <CinematicGlow />
 
-          <div className="svc-intro-content">
-            {/* Pure CSS transition — runs on GPU compositor, not JS thread */}
-            <h2
-              className="svc-intro-title font-paloseco"
-              style={{
-                opacity: activeIndex === 0 ? 1 : 0,
-                transform: activeIndex === 0 ? 'translateY(0)' : 'translateY(40px)',
-                transition: 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1)',
-                willChange: 'opacity, transform',
-              }}
-            >
-              NUESTROS SERVICIOS
-            </h2>
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            <img 
+              src={seccionesImg} 
+              alt="" 
+              className="w-full h-full object-cover brightness-100"
+            />
+          </div>
 
-            <p
-              className="svc-intro-desc text-white/60 mb-12"
-              style={{
-                opacity: activeIndex === 0 ? 1 : 0,
-                transform: activeIndex === 0 ? 'translateY(0)' : 'translateY(30px)',
-                transition: 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s',
-                willChange: 'opacity, transform',
-              }}
+          <div className="svc-intro-content relative z-10">
+            {/* Cinematic reveal - triggers when section is in view and it's the intro slide */}
+            <motion.h2
+              className="svc-intro-title"
+              initial={{ opacity: 0, y: 60, scale: 0.9 }}
+              whileInView={activeIndex === 0 ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: -40, scale: 0.95 }}
+              viewport={{ amount: 0.2 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            >
+              Nuestros <br />
+              Servicios
+            </motion.h2>
+
+            <motion.p 
+              className="svc-intro-desc"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+              viewport={{ amount: 0.2 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
             >
               Soluciones integrales de producción AV con los más altos estándares de la industria cinematográfica.
-            </p>
+            </motion.p>
           </div>
         </div>
 

@@ -161,8 +161,8 @@
   padding: 14px 52px;
   background: #a3ff00;
   color: #000;
-  font-weight: 800;
-  font-size: 0.78rem;
+  font-weight: 900;
+  font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.22em;
   border: none;
@@ -170,13 +170,13 @@
   cursor: pointer;
   overflow: hidden;
   font-family: 'Paloseco', sans-serif;
-  box-shadow: 0 10px 30px rgba(163, 255, 0, 0.35);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cat-btn:hover {
-  transform: scale(1.07);
-  box-shadow: 0 18px 44px rgba(163, 255, 0, 0.55);
+  transform: translateY(-3px);
+  filter: brightness(1.1);
+  box-shadow: none;
 }
 
 .cat-btn span {
@@ -251,23 +251,25 @@
 }
 
 .cat-quick-chip {
-  padding: 8px 22px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 24px;
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
   border-radius: 100px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 0.7rem;
-  font-weight: 700;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.72rem;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.22em;
   cursor: pointer;
-  transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.4s ease;
   white-space: nowrap;
 }
 
 .cat-quick-chip:hover {
   border-color: #a3ff00;
   color: #a3ff00;
-  background: rgba(163, 255, 0, 0.06);
-  box-shadow: 0 0 16px rgba(163, 255, 0, 0.18);
+  background: rgba(163, 255, 0, 0.05);
+  transform: translateY(-1.5px);
+  box-shadow: none;
 }

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './GallerySection.css';
 import CinematicGlow from '../CinematicGlow';
+import seccionesImg from '../../assets/home/img/secciones.png';
 
 
 
@@ -39,21 +40,37 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
         {/* Stage 1: Intro Screen (Full Page Title) */}
         <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ease-out ${activeGal === -1 ? 'opacity-100 scale-100 z-50' : 'opacity-0 scale-95 z-0 pointer-events-none'}`}>
           <CinematicGlow />
+
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            <img 
+              src={seccionesImg} 
+              alt="" 
+              className="w-full h-full object-cover brightness-100"
+            />
+          </div>
+          
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center">
+            {/* Cinematic reveal - triggers when section is in view and it's the intro stage */}
             <motion.h2
-              key="gallery-title"
-              initial={{ opacity: 0, y: 40 }}
-              animate={activeGal === -1 ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              className="text-[clamp(3.25rem,12vw,9rem)] font-black text-white uppercase tracking-tighter leading-[0.9] md:leading-[0.8] mb-6 md:mb-12 px-2"
+              className="text-white text-[10vw] leading-[1] font-black uppercase font-paloseco tracking-tighter"
+              initial={{ opacity: 0, scale: 0.9, y: 60 }}
+              whileInView={activeGal === -1 ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.95, y: -40 }}
+              viewport={{ amount: 0.2 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             >
               Nuestra <br />
-              Galeria
+              Galería
             </motion.h2>
 
-            <p className="text-white/60 text-base md:text-3xl max-w-3xl mx-auto font-playfair px-4 leading-snug">
-              Capturamos la esencia de cada evento con el estilo y la precisión que nos caracteriza. Una curaduría visual de nuestras producciones más icónicas.
-            </p>
+            <motion.p 
+              className="text-white/60 text-base md:text-3xl max-w-3xl mx-auto font-playfair px-4 leading-snug mt-12"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={activeGal === -1 ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+              viewport={{ amount: 0.2 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+            >
+              Una curaduría visual de nuestras producciones más icónicas, donde la tecnología y el arte convergen.
+            </motion.p>
           </div>
         </div>
 

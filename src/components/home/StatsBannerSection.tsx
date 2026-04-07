@@ -1,4 +1,5 @@
 import { type FC, useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 
 interface StatItemProps {
   value: string;
@@ -78,11 +79,17 @@ const StatsBannerSection: FC = () => (
     {/* Subtle radial wash */}
     <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,rgba(163,255,0,0.04),transparent)] pointer-events-none" />
 
-    <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-6">
+    <motion.div 
+      className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-6"
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+    >
       {STATS.map(({ value, label }) => (
         <StatItem key={label} value={value} label={label} />
       ))}
-    </div>
+    </motion.div>
   </section>
 );
 

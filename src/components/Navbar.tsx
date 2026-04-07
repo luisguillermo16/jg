@@ -59,7 +59,7 @@ const NavLinks: FC<{
         <a
           href="#contact"
           onClick={onContactClick}
-          className="ml-2 px-5 py-2 rounded-full text-sm font-bold bg-[#A3FF00] text-black hover:bg-white transition-all duration-300 font-remixa inline-flex items-center shadow-[0_0_20px_rgba(163,255,0,0.35)] hover:shadow-[0_0_28px_rgba(255,255,255,0.3)]"
+          className="ml-2 px-6 py-2.5 rounded-full text-sm font-black bg-[#A3FF00] text-black transition-all duration-300 font-remixa inline-flex items-center hover:-translate-y-0.5 hover:brightness-110"
         >
           Contáctanos
         </a>
@@ -179,13 +179,13 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
                 className="fill-none stroke-[#a3ff00] stroke-[3] ease-out transition-[stroke-dashoffset] duration-300"
                 strokeDasharray={circumference}
                 strokeDashoffset={dashOffset}
-                style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 10px rgba(163,255,0,0.7))' }}
+                style={{ strokeLinecap: 'round' }}
               />
             </svg>
             <img
               src={logo}
               alt="JG Producciones"
-              className="relative z-10 h-[14px] w-auto object-contain brightness-200 transition-all duration-500 group-hover:scale-110"
+              className="relative z-10 h-[14px] w-auto object-contain brightness-200 transition-all duration-500"
             />
           </div>
           <span className="block sm:hidden text-white font-paloseco font-black text-[14px] uppercase tracking-[0.02em] drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-all duration-500 whitespace-nowrap translate-y-[1px]">
