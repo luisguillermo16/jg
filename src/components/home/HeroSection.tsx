@@ -11,11 +11,10 @@ interface HeroSectionProps {
     containerRef: React.RefObject<HTMLDivElement | null>;
     heroIndex: number;
     isMuted: boolean;
-    setIsMuted: (val: boolean) => void;
     isVisible: boolean;
 }
 
-const HeroSection: FC<HeroSectionProps> = ({ heroRef, containerRef, heroIndex, isMuted, setIsMuted, isVisible }) => {
+const HeroSection: FC<HeroSectionProps> = ({ heroRef, containerRef, heroIndex, isMuted, isVisible }) => {
     // Custom hook to get framer-motion scroll progress
     const { scrollYProgress } = useScroll({
         target: heroRef,

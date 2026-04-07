@@ -12,9 +12,8 @@ const NavLinks: FC<{
   isHome: boolean;
   activeSection: string;
   scrollToSection: (e: React.MouseEvent<HTMLAnchorElement>, id: string) => void;
-  setIsMenuOpen: (open: boolean) => void;
   onContactClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-}> = memo(({ isHome, activeSection, scrollToSection, setIsMenuOpen, onContactClick }) => {
+}> = memo(({ isHome, activeSection, scrollToSection, onContactClick }) => {
   const isActive = (id: string) => {
     if (!isHome) return false;
     if (id === 'hero' && activeSection.startsWith('hero')) return true;
@@ -203,7 +202,6 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
               isHome={isHome}
               activeSection={activeSection}
               scrollToSection={scrollToSection}
-              setIsMenuOpen={setIsMenuOpen}
               onContactClick={handleContactClick}
             />
           </ul>
@@ -241,7 +239,6 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
               isHome={isHome}
               activeSection={activeSection}
               scrollToSection={scrollToSection}
-              setIsMenuOpen={setIsMenuOpen}
               onContactClick={handleContactClick}
             />
           </ul>

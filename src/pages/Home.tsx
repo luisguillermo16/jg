@@ -207,7 +207,6 @@ const Home: FC = () => {
           containerRef={containerRef}
           heroIndex={heroIndex}
           isMuted={isMuted}
-          setIsMuted={setIsMuted}
           isVisible={activeSection.startsWith('hero')}
         />
         <MemoCategories
