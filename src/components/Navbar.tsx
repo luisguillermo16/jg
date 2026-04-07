@@ -21,8 +21,7 @@ const NavLinks: FC<{
   };
 
   const linkClass = (id: string) =>
-    `px-4 py-2 text-sm font-semibold transition-all duration-300 font-remixa ${
-      isActive(id) ? 'text-[#A3FF00]' : 'text-white/60 hover:text-white'
+    `px-4 py-2 text-sm font-semibold transition-all duration-300 font-remixa ${isActive(id) ? 'text-[#A3FF00]' : 'text-white/60 hover:text-white'
     }`;
 
   return (
@@ -111,7 +110,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
   }, [location.pathname]);
 
   // Stroke Progress Math
-  const radius = 28;
+  const radius = 30;
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference - scrollProgress * circumference;
 
@@ -169,7 +168,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
         {/* ── LEFT: Logo + progress ring ── */}
         <Link
           to="/"
-          className="relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 flex-shrink-0"
+          className="relative flex items-center justify-center w-[48px] h-[48px] flex-shrink-0"
           onClick={(e) => scrollToSection(e, 'hero')}
         >
           <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 64 64">
@@ -185,17 +184,16 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
           <img
             src={logo}
             alt="JG Producciones"
-            className="relative z-10 h-6 md:h-9 w-auto object-contain brightness-200 transition-all duration-500 hover:scale-110"
+            className="relative z-10 h-[14px] w-auto object-contain brightness-200 transition-all duration-500 hover:scale-110"
           />
         </Link>
 
         {/* ── CENTER: Navigation pill (desktop) ── */}
         <div
-          className={`hidden md:flex items-center transition-all duration-700 px-2 py-1.5 ${
-            scrolled
-              ? 'bg-black/55 backdrop-blur-2xl rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
-              : 'bg-transparent'
-          }`}
+          className={`hidden md:flex items-center transition-all duration-700 px-2 py-1.5 ${scrolled
+            ? 'bg-black/55 backdrop-blur-2xl rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
+            : 'bg-transparent'
+            }`}
         >
           <ul className="flex gap-0.5 m-0 p-0 list-none items-center">
             <NavLinks
@@ -224,15 +222,13 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
 
       {/* ── Mobile Menu Overlay ── */}
       <div
-        className={`fixed inset-0 z-[900] md:hidden transition-all duration-500 ${
-          isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`fixed inset-0 z-[900] md:hidden transition-all duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
       >
         <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl" onClick={() => setIsMenuOpen(false)} />
         <div
-          className={`absolute inset-x-0 top-0 pt-28 pb-12 px-8 bg-gradient-to-b from-[#091800]/50 to-black border-b border-white/10 transition-all duration-500 transform ${
-            isMenuOpen ? 'translate-y-0' : '-translate-y-full'
-          }`}
+          className={`absolute inset-x-0 top-0 pt-28 pb-12 px-8 bg-gradient-to-b from-[#091800]/50 to-black border-b border-white/10 transition-all duration-500 transform ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'
+            }`}
         >
           <ul className="flex flex-col gap-6 m-0 p-0 list-none items-center">
             <NavLinks

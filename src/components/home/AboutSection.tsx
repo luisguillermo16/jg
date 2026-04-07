@@ -34,6 +34,7 @@ const AboutSection: FC = () => (
   <section
     id="nosotros"
     className="relative bg-[#050607] py-32 px-6 md:px-12 lg:px-24 overflow-hidden"
+    style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
   >
     {/* Top accent line */}
     <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#A3FF00]/25 to-transparent" />

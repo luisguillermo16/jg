@@ -24,11 +24,3 @@
 .home-container main {
   display: contents;
 }
-
-/* ── Mobile: use proximity to prevent scroll trap; allow momentum scrolling ── */
-@media (hover: none) and (pointer: coarse) {
-  .home-container {
-    scroll-snap-type: y proximity;
-    scroll-snap-stop: normal; /* allow momentum scrolling through sections */
-  }
-}

@@ -70,7 +70,7 @@ const STATS = [
 ];
 
 const StatsBannerSection: FC = () => (
-  <section className="relative bg-black min-h-screen md:min-h-[auto] py-12 md:py-24 px-6 overflow-hidden flex flex-col justify-center snap-start">
+  <section className="relative bg-black min-h-screen md:min-h-[auto] py-12 md:py-24 px-6 overflow-hidden flex flex-col justify-center snap-start" style={{ scrollSnapStop: 'always' }}>
     {/* Top + bottom accent lines */}
     <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#A3FF00]/40 to-transparent" />
     <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#A3FF00]/40 to-transparent" />

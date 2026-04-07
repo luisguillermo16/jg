@@ -108,10 +108,9 @@ const Home: FC = () => {
       const galStart = galEl ? galEl.offsetTop : windowHeight * 15;
 
       // Update CSS Variables for smooth, non-React animations
-      const hProg = Math.max(0, Math.min(1, currentScroll / (windowHeight * 2)));
+      const hProg = Math.max(0, Math.min(1, currentScroll / windowHeight));
       container.style.setProperty('--hero-progress', hProg.toFixed(4));
-
-      const catsStart = windowHeight * 3;
+      const catsStart = windowHeight;
       const catsMax = windowHeight * 5;
       const cProg = Math.max(0, Math.min(1, (currentScroll - catsStart) / catsMax));
       container.style.setProperty('--cats-progress', cProg.toFixed(4));
@@ -121,8 +120,8 @@ const Home: FC = () => {
       const sProg = Math.max(0, Math.min(1, (currentScroll - svcStart) / sMax));
       container.style.setProperty('--svcs-progress', sProg.toFixed(4));
 
-      // 1. Hero Index Calculation
-      const currentHeroIndex = Math.min(2, Math.floor(hProg * 3.1));
+      // 1. Hero Index Calculation (Static Hero)
+      const currentHeroIndex = 0;
       if (currentHeroIndex !== heroIndex) setHeroIndex(currentHeroIndex);
 
       // 2. Categories progress — raw cProg for instant snap response
@@ -144,9 +143,7 @@ const Home: FC = () => {
 
       // 4. Section detection
       if (currentScroll < catsStart - windowHeight / 2) {
-        if (currentScroll < windowHeight * 0.8) setActiveSection('hero');
-        else if (currentScroll < windowHeight * 1.8) setActiveSection('hero-2');
-        else setActiveSection('hero-3');
+        setActiveSection('hero');
       } else if (currentScroll < svcStart - windowHeight / 2) {
         const p = (currentScroll - catsStart) / windowHeight;
         if (p < 1.0) setActiveSection('categories-intro');
@@ -197,7 +194,7 @@ const Home: FC = () => {
   }, []);
 
   // Auto-mute logic and SoundToggle visibility condition
-  const isVideoSection = activeSection.startsWith('hero') || activeSection.startsWith('categories');
+  const isVideoSection = activeSection.startsWith('categories');
 
   useEffect(() => {
     if (!isVideoSection && !isMuted) {
@@ -214,8 +211,6 @@ const Home: FC = () => {
           heroRef={heroRef}
           containerRef={containerRef}
           heroIndex={heroIndex}
-          isMuted={isMuted}
-          isVisible={activeSection.startsWith('hero')}
         />
         <MemoCategories
           categoriesRef={categoriesRef}
