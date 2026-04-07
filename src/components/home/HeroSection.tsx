@@ -40,13 +40,16 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                 <motion.div
                     className="absolute inset-0 w-full h-full"
                 >
-                    <img
-                        src={heroImage}
-                        alt="Hero Background"
+                    <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
                         className="w-full h-full object-cover opacity-100"
-                        loading="eager"
-                        fetchPriority="high"
-                    />
+                        poster={heroImage}
+                    >
+                        <source src="https://luispineda.b-cdn.net/hero.mp4" type="video/mp4" />
+                    </video>
                 </motion.div>
 
 
