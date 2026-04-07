@@ -165,27 +165,32 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
     <>
       <nav className="fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-6 md:px-10 py-5 md:py-6 transition-all duration-500">
 
-        {/* ── LEFT: Logo + progress ring ── */}
+        {/* ── LEFT: Logo + progress ring + name ── */}
         <Link
           to="/"
-          className="relative flex items-center justify-center w-[48px] h-[48px] flex-shrink-0"
+          className="group flex items-center gap-3 w-auto flex-shrink-0"
           onClick={(e) => scrollToSection(e, 'hero')}
         >
-          <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 64 64">
-            <circle cx="32" cy="32" r={radius} className="fill-none stroke-white/10 stroke-[2.5]" />
-            <circle
-              cx="32" cy="32" r={radius}
-              className="fill-none stroke-[#a3ff00] stroke-[3] ease-out transition-[stroke-dashoffset] duration-300"
-              strokeDasharray={circumference}
-              strokeDashoffset={dashOffset}
-              style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 10px rgba(163,255,0,0.7))' }}
+          <div className="relative flex items-center justify-center w-12 h-12 flex-shrink-0">
+            <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 64 64">
+              <circle cx="32" cy="32" r={radius} className="fill-none stroke-white/10 stroke-[2.5]" />
+              <circle
+                cx="32" cy="32" r={radius}
+                className="fill-none stroke-[#a3ff00] stroke-[3] ease-out transition-[stroke-dashoffset] duration-300"
+                strokeDasharray={circumference}
+                strokeDashoffset={dashOffset}
+                style={{ strokeLinecap: 'round', filter: 'drop-shadow(0 0 10px rgba(163,255,0,0.7))' }}
+              />
+            </svg>
+            <img
+              src={logo}
+              alt="JG Producciones"
+              className="relative z-10 h-[14px] w-auto object-contain brightness-200 transition-all duration-500 group-hover:scale-110"
             />
-          </svg>
-          <img
-            src={logo}
-            alt="JG Producciones"
-            className="relative z-10 h-[14px] w-auto object-contain brightness-200 transition-all duration-500 hover:scale-110"
-          />
+          </div>
+          <span className="block sm:hidden text-white font-paloseco font-black text-[14px] uppercase tracking-[0.02em] drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-all duration-500 whitespace-nowrap translate-y-[1px]">
+            Producciones
+          </span>
         </Link>
 
         {/* ── CENTER: Navigation pill (desktop) ── */}
@@ -211,7 +216,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle Menu"
-            className="flex md:hidden w-11 h-11 flex-col items-center justify-center gap-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full z-[1100]"
+            className="flex md:hidden w-12 h-12 flex-col items-center justify-center gap-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full z-[1100]"
           >
             <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
             <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />

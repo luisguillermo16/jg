@@ -30,10 +30,10 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                 <div id="hero" className="h-screen w-full" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }} />
             </div>
 
-            {/* Scroll-down prompt */}
-            <div className={`scroll-prompt flex flex-col items-center gap-2 transition-opacity duration-500 ${heroIndex === 0 ? 'opacity-50' : 'opacity-0'}`}>
-                <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/40">Explorar experiencias</span>
-                <div className="w-[1px] h-12 bg-gradient-to-b from-accent to-transparent" />
+            {/* Scroll-down prompt (Centered & Visible) */}
+            <div className={`absolute bottom-10 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 transition-opacity duration-500 ${heroIndex === 0 ? 'opacity-90' : 'opacity-0'}`}>
+                <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/70 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]">Explorar experiencias</span>
+                <div className="w-[1.5px] h-12 bg-gradient-to-b from-accent to-transparent shadow-[0_0_15px_rgba(163,255,0,0.4)]" />
             </div>
 
             {/* ── Background Image Layer (Sticky) ── */}
@@ -57,16 +57,16 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                 {/* Screen Content Layers */}
                 <div
                     data-active-index={heroIndex}
-                    className="relative z-20 w-full h-full flex flex-col items-center justify-center pt-20"
+                    className="relative z-20 w-full h-full"
                 >
 
                     {/* 1. Logo & CTAs Screen (User provided snippet) */}
                     <motion.div
-                        className="absolute inset-0 flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:pl-[80px] md:pr-[120px] gap-12 md:gap-16 will-change-transform"
+                        className="absolute inset-0 flex flex-col md:flex-row items-center justify-start md:justify-center md:justify-between px-6 md:pl-[80px] md:pr-[120px] gap-12 md:gap-16 pt-[100px] md:pt-0 will-change-transform"
                     >
                         {/* LEFT — Título + descripción + CTAs */}
                         <div className="flex flex-col items-center md:items-start text-center md:text-left gap-6 md:gap-8 max-w-full md:max-w-[60%]">
-                            <motion.h1 
+                            <motion.h1
                                 className="text-4xl md:text-[5rem] font-black text-white leading-[1.1] font-paloseco uppercase text-shadow-strong tracking-tight"
                                 initial={{ opacity: 0, y: 40 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -76,7 +76,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                                 Técnica para<br />
                                 Eventos
                             </motion.h1>
-                            <motion.p 
+                            <motion.p
                                 className="text-[1rem] md:text-[1.4rem] text-white/90 leading-snug font-remixa max-w-[95%] md:max-w-3xl"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -84,7 +84,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                             >
                                 Diseñamos y ejecutamos bodas, conciertos y eventos corporativos integrando pantallas LED, sonido e iluminación con estándares técnicos de alto nivel.<br />
                             </motion.p>
-                            <motion.div 
+                            <motion.div
                                 className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-6 md:mt-8"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -105,8 +105,8 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                             </motion.div>
                         </div>
 
-                        {/* RIGHT — Logo + wordmark */}
-                        <div className="flex flex-col items-center gap-2 md:gap-4 flex-shrink-0 md:-mt-40">
+                        {/* RIGHT — Logo + wordmark (Hidden on mobile) */}
+                        <div className="hidden md:flex flex-col items-center gap-2 md:gap-4 flex-shrink-0 md:-mt-40">
                             <motion.img
                                 src={logo}
                                 alt="JG Producciones"
