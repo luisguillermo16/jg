@@ -15,6 +15,7 @@
   src: url('./assets/fonts/RemixaTest-Semibold-BF649a5c1233077.otf') format('opentype');
   font-weight: 600;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -22,6 +23,7 @@
   src: url('./assets/fonts/Paloseco-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -29,6 +31,7 @@
   src: url('./assets/fonts/PlayfairDisplay-VariableFont_wght.ttf') format('truetype-variations');
   font-weight: 100 900;
   font-style: normal;
+  font-display: swap;
 }
 
 /* ── Design Tokens ── */

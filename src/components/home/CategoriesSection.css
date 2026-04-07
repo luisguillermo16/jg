@@ -89,12 +89,12 @@
   z-index: 20;
 }
 
-/* Shared stagger reveal transition */
+/* Shared stagger reveal transition — will-change gestionado via inline style */
 .cats-reveal {
   transition:
-    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  /* sin will-change aquí: solo se activa en el slide activo vía inline style */
 }
 
 /* ── Tag row ── */
@@ -222,6 +222,53 @@
   line-height: 1.65;
 }
 
+/* ── Intro slide animations — CSS puro, sin Framer Motion ── */
+
+/* Keyframe compartido: fade + rise */
+@keyframes cats-intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(56px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cats-intro-rise-desc {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estado inicial — invisible antes de .is-visible */
+.cat-intro-animate {
+  opacity: 0;
+  transform: translateY(56px) scale(0.92);
+  will-change: opacity, transform;
+}
+
+.cat-intro-animate-desc {
+  opacity: 0;
+  transform: translateY(28px);
+  will-change: opacity, transform;
+}
+
+/* Disparado al añadir .is-visible — anima con CSS keyframe fluido */
+.cat-intro-animate.is-visible {
+  animation: cats-intro-rise 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+.cat-intro-animate-desc.is-visible {
+  animation: cats-intro-rise-desc 1s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+}
+
 /* ── Mobile responsive ── */
 @media (max-width: 768px) {
   .cats-content {
@@ -231,6 +278,47 @@
 
   .cat-intro-title {
     font-size: clamp(3rem, 14vw, 5.5rem);
+  }
+
+  /* Transiciones más cortas en móvil para mejor respuesta */
+  .cats-reveal {
+    transition-duration: 0.55s;
+  }
+
+  /* Slide opacity más rápida en móvil */
+  .cats-slide {
+    transition-duration: 0.55s;
+  }
+
+  /* Intro animation más rápida en móvil */
+  .cat-intro-animate.is-visible {
+    animation-duration: 0.75s;
+  }
+  .cat-intro-animate-desc.is-visible {
+    animation-duration: 0.65s;
+  }
+
+  /* Liberar will-change después de animar en móvil */
+  .cat-intro-animate.is-visible,
+  .cat-intro-animate-desc.is-visible {
+    will-change: auto;
+  }
+}
+
+/* ── Accesibilidad: sin animaciones si el usuario lo prefiere ── */
+@media (prefers-reduced-motion: reduce) {
+  .cat-intro-animate,
+  .cat-intro-animate-desc {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+  .cats-reveal {
+    transition: none;
+  }
+  .cats-slide {
+    transition: none;
   }
 }
 

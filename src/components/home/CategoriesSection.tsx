@@ -1,11 +1,10 @@
-import { type FC } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import VolumeVideo from '../VolumeVideo';
 import './CategoriesSection.css';
 import { openContactModal } from '../../utils/modal';
 import CinematicGlow from '../CinematicGlow';
 import { isMobileDevice } from '../../utils/deviceUtils';
 import seccionesImg from '../../assets/home/img/secciones.webp';
-import { motion } from 'framer-motion';
 
 interface Category {
   id: string;
@@ -30,9 +29,19 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
 }) => {
   // 4 screens (Intro + 3 cats) over a 500vh scroll range.
   // 5 snap stops over 500vh → each at cProg 0, 0.2, 0.4, 0.6, 0.8
-  // Math.floor(p * 5): 0→0, 0.2→1, 0.4→2, 0.6→3, 0.8→4 (capped to 3)
   const activeIndex = Math.min(3, Math.floor(progress * 5));
   const activeCatIndex = activeIndex - 1; // -1 = intro, 0-2 = categories
+
+  // Dispara la animación CSS del intro en el primer frame de pintura
+  // (no depende de IntersectionObserver ni de Framer Motion)
+  const [introReady, setIntroReady] = useState(false);
+  useEffect(() => {
+    // requestAnimationFrame garantiza que el DOM ya pintó antes de añadir la clase
+    const raf = requestAnimationFrame(() => {
+      setIntroReady(true);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
 
   return (
@@ -51,46 +60,34 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
       {/* ── Sticky viewport — stays fixed while user scrolls 400vh ── */}
       <div className="cats-sticky">
 
+        {/* ── SLIDE 0: Intro ── */}
         <div
           className="cats-slide"
           style={{ opacity: activeIndex === 0 ? 1 : 0, zIndex: activeIndex === 0 ? 2 : 1 }}
         >
           <CinematicGlow />
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-            <img 
-              src={seccionesImg} 
-              alt="" 
+            <img
+              src={seccionesImg}
+              alt=""
               className="w-full h-full object-cover brightness-100"
               loading="eager"
               fetchPriority="high"
+              decoding="sync"
             />
           </div>
-          
+
           <div className="cat-intro-content relative z-10">
-            {/* Cinematic reveal - triggers when section is in view and it's the intro slide */}
-            <motion.h2
-              className="cat-intro-title"
-              initial={{ opacity: 0, y: 60, scale: 0.9 }}
-              whileInView={activeIndex === 0 ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: -40, scale: 0.95 }}
-              viewport={{ amount: 0.2 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            >
+            {/* Animación CSS pura — clase .is-visible disparada en el primer frame */}
+            <h2 className={`cat-intro-title cat-intro-animate${introReady ? ' is-visible' : ''}`}>
               Nuestras <br />
               Categorías
-            </motion.h2>
+            </h2>
 
-            <motion.p 
-              className="cat-intro-desc"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
-              viewport={{ amount: 0.2 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-            >
+            <p className={`cat-intro-desc cat-intro-animate-desc${introReady ? ' is-visible' : ''}`}>
               Especialistas en transformar la visión de cada cliente en una producción técnica sin precedentes.
-            </motion.p>
+            </p>
           </div>
-          
-          {/* Quick-access chips removed to match ServicesSection */}
         </div>
 
         {/* ════ SLIDES 1–3: Category videos ════ */}
@@ -114,11 +111,12 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                   playsInline
                   className="cats-bg-video"
                   style={{
-                    // Mobile: no Ken Burns (CPU/GPU savings), will-change only on active
+                    // Mobile: no Ken Burns (CPU/GPU savings)
                     transform: (isActive && !isMobileDevice) ? 'scale(1.15)' : 'scale(1)',
                     transition: (isActive && !isMobileDevice)
                       ? 'transform 10s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
                       : 'none',
+                    // will-change solo en el slide activo
                     willChange: isActive ? 'transform' : 'auto',
                   }}
                 />
@@ -132,9 +130,11 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                 <h3
                   className="cat-title cats-reveal"
                   style={{
-                    transitionDelay: isActive ? '0.5s' : '0s',
+                    transitionDelay: isActive ? '0.4s' : '0s',
                     opacity: isActive ? 1 : 0,
-                    transform: isActive ? 'translateY(0)' : 'translateY(36px)',
+                    transform: isActive ? 'translateY(0)' : 'translateY(30px)',
+                    // will-change solo en elementos que están animando
+                    willChange: isActive ? 'opacity, transform' : 'auto',
                   }}
                 >
                   {cat.title}
@@ -144,9 +144,10 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                 <p
                   className="cat-desc cats-reveal"
                   style={{
-                    transitionDelay: isActive ? '0.8s' : '0s',
+                    transitionDelay: isActive ? '0.65s' : '0s',
                     opacity: isActive ? 1 : 0,
-                    transform: isActive ? 'translateY(0)' : 'translateY(24px)',
+                    transform: isActive ? 'translateY(0)' : 'translateY(22px)',
+                    willChange: isActive ? 'opacity, transform' : 'auto',
                   }}
                 >
                   {cat.description}
@@ -156,9 +157,10 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                 <div
                   className="cat-cta cats-reveal"
                   style={{
-                    transitionDelay: isActive ? '1.1s' : '0s',
+                    transitionDelay: isActive ? '0.9s' : '0s',
                     opacity: isActive ? 1 : 0,
-                    transform: isActive ? 'translateY(0)' : 'translateY(20px)',
+                    transform: isActive ? 'translateY(0)' : 'translateY(18px)',
+                    willChange: isActive ? 'opacity, transform' : 'auto',
                   }}
                 >
                   <button onClick={openContactModal} className="cat-btn">
