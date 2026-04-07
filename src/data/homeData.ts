@@ -3,9 +3,9 @@ const socialVideo = 'https://luispineda.b-cdn.net/social.mp4';
 const corporativoVideo = 'https://luispineda.b-cdn.net/corporativo.mp4';
 // Usar CDN de Bunny.net para los videos
 
-import serviceAudio from '../assets/home/icons/service_audio.png';
-import serviceLighting from '../assets/home/icons/service_lighting.png';
-import serviceLed from '../assets/home/icons/service_led.png';
+import serviceAudio from '../assets/home/icons/service_audio.webp';
+import serviceLighting from '../assets/home/icons/service_lighting.webp';
+import serviceLed from '../assets/home/icons/service_led.webp';
 import gal1 from '../assets/gallery/MRW01846.jpg';
 import gal2 from '../assets/gallery/MRW03505.jpg';
 import gal3 from '../assets/gallery/MRW03575.jpg';

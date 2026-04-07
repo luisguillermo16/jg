@@ -30,17 +30,32 @@
   position: sticky;
   top: 0;
   height: 100vh;
+  height: 100dvh; /* dvh: barra URL dinámica iOS/Android */
   overflow: hidden;
-  transform: translateZ(0); /* promote to dedicated GPU compositing layer */
-  contain: layout style;   /* limit repaint scope to this subtree */
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: #050607; /* evita negro durante crossfade */
+  contain: layout style;
+}
+
+/* Layer base permanente — SIEMPRE visible, impide negro puro */
+.svc-base-bg {
+  position: absolute;
+  inset: 0;
+  background: #050607;
+  z-index: 0;
 }
 
 /* ── Each slide stacked absolutely ── */
 .svc-slide {
   position: absolute;
   inset: 0;
-  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: opacity;
+  /* transition gestionada inline:
+     incoming: sin transición (aparece instantáneo, sin negro)
+     outgoing: fade 0.5s — nunca hay gap negro */
+  will-change: auto;
 }
 
 /* ── Background image wrapper ── */
@@ -98,6 +113,33 @@
   line-height: 0.85;
   margin-bottom: 36px;
 }
+
+/* ── Animaciones intro CSS puras (sin Framer Motion) ── */
+.svc-intro-animate {
+  opacity: 0;
+  transform: translateY(56px) scale(0.92);
+  will-change: opacity, transform;
+}
+.svc-intro-animate-desc {
+  opacity: 0;
+  transform: translateY(28px);
+  will-change: opacity, transform;
+}
+.svc-intro-animate.is-visible {
+  animation: svc-intro-rise 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+.svc-intro-animate-desc.is-visible {
+  animation: svc-intro-rise-desc 1s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+}
+@keyframes svc-intro-rise {
+  from { opacity: 0; transform: translateY(56px) scale(0.92); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes svc-intro-rise-desc {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 
 .svc-intro-desc {
   font-size: clamp(1rem, 2.2vw, 1.6rem);
