@@ -117,11 +117,11 @@ const Home: FC = () => {
       const currentHeroIndex = Math.min(2, Math.floor(hProg * 3.1));
       if (currentHeroIndex !== heroIndex) setHeroIndex(currentHeroIndex);
 
-      // 2. Categories smooth progress
+      // 2. Categories progress — raw cProg for instant snap response
       const cProgSmooth = lerp(smoothCatsProgress.current, cProg, LERP_FACTOR);
       if (Math.abs(smoothCatsProgress.current - cProgSmooth) > 0.001) {
         smoothCatsProgress.current = cProgSmooth;
-        setCatsProgress(smoothCatsProgress.current);
+        setCatsProgress(cProg); // raw — no LERP lag on slide switch
       }
 
       // 3. Services smooth progress
@@ -142,8 +142,8 @@ const Home: FC = () => {
       } else if (currentScroll < svcStart - windowHeight / 2) {
         const p = (currentScroll - catsStart) / windowHeight;
         if (p < 1.0) setActiveSection('categories-intro');
-        else if (p < 2.25) setActiveSection('categories-1');
-        else if (p < 3.5) setActiveSection('categories-2');
+        else if (p < 2.0) setActiveSection('categories-1');
+        else if (p < 3.0) setActiveSection('categories-2');
         else setActiveSection('categories-3');
       } else if (currentScroll < galStart - windowHeight / 2) {
         const nosotrosEl = document.getElementById('nosotros');

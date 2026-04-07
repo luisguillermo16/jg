@@ -27,7 +27,9 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
   isMuted,
 }) => {
   // 4 screens (Intro + 3 cats) over a 500vh scroll range.
-  const activeIndex = Math.min(3, Math.floor(progress * 3.99));
+  // 5 snap stops over 500vh → each at cProg 0, 0.2, 0.4, 0.6, 0.8
+  // Math.floor(p * 5): 0→0, 0.2→1, 0.4→2, 0.6→3, 0.8→4 (capped to 3)
+  const activeIndex = Math.min(3, Math.floor(progress * 5));
   const activeCatIndex = activeIndex - 1; // -1 = intro, 0-2 = categories
 
 
@@ -39,7 +41,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
     >
       {/* ── Invisible snap markers — 4 × 100vh ── */}
       <div className="cats-snap-markers" aria-hidden="true">
-        {[0, 1, 2, 3].map((i) => (
+        {[0, 1, 2, 3, 4].map((i) => (
           <div key={i} className="cats-snap-stop" />
         ))}
       </div>
@@ -87,6 +89,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                   src={cat.video}
                   autoPlay
                   loop
+                  preload="metadata"
                   isMuted={isMuted}
                   isVisible={isActive}
                   playsInline
