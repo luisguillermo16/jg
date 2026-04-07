@@ -30,6 +30,8 @@
   top: 0;
   height: 100vh;
   overflow: hidden;
+  transform: translateZ(0); /* promote to dedicated GPU compositing layer */
+  contain: layout style;   /* limit repaint scope to this subtree */
 }
 
 /* ── Every slide is stacked absolutely inside sticky ── */

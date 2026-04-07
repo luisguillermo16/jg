@@ -1,5 +1,4 @@
 import { type FC } from 'react';
-import { motion } from 'framer-motion';
 import VolumeVideo from '../VolumeVideo';
 import './CategoriesSection.css';
 import { openContactModal } from '../../utils/modal';
@@ -56,18 +55,29 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
         >
           <CinematicGlow />
           <div className="cat-intro-content">
-            <motion.h2
-              key="cats-intro-title"
-              initial={{ opacity: 0, y: 40 }}
-              animate={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            {/* Pure CSS transition — runs on GPU compositor, not JS thread */}
+            <h2
               className="cat-intro-title"
+              style={{
+                opacity: activeIndex === 0 ? 1 : 0,
+                transform: activeIndex === 0 ? 'translateY(0)' : 'translateY(40px)',
+                transition: 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1)',
+                willChange: 'opacity, transform',
+              }}
             >
               Nuestras <br />
               Categorías
-            </motion.h2>
+            </h2>
 
-            <p className="cat-intro-desc">
+            <p
+              className="cat-intro-desc"
+              style={{
+                opacity: activeIndex === 0 ? 1 : 0,
+                transform: activeIndex === 0 ? 'translateY(0)' : 'translateY(24px)',
+                transition: 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s',
+                willChange: 'opacity, transform',
+              }}
+            >
               Especialistas en transformar la visión de cada cliente en una producción técnica sin precedentes.
             </p>
 

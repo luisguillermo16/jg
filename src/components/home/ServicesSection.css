@@ -30,6 +30,8 @@
   top: 0;
   height: 100vh;
   overflow: hidden;
+  transform: translateZ(0); /* promote to dedicated GPU compositing layer */
+  contain: layout style;   /* limit repaint scope to this subtree */
 }
 
 /* ── Each slide stacked absolutely ── */
@@ -53,7 +55,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  will-change: transform;
+  /* no will-change: images are not animated, promoting 6 layers wastes GPU memory */
 }
 
 /* 50% dark overlay — Match Categories */

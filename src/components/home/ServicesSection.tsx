@@ -1,5 +1,4 @@
 import { type FC } from 'react';
-import { motion } from 'framer-motion';
 import './ServicesSection.css';
 import { openContactModal } from '../../utils/modal';
 import CinematicGlow from '../CinematicGlow';
@@ -42,23 +41,30 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, progress }) => {
           <CinematicGlow />
 
           <div className="svc-intro-content">
-            <motion.h2
-              initial={{ opacity: 0, y: 40 }}
-              animate={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            {/* Pure CSS transition — runs on GPU compositor, not JS thread */}
+            <h2
               className="svc-intro-title font-paloseco"
+              style={{
+                opacity: activeIndex === 0 ? 1 : 0,
+                transform: activeIndex === 0 ? 'translateY(0)' : 'translateY(40px)',
+                transition: 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1)',
+                willChange: 'opacity, transform',
+              }}
             >
               NUESTROS SERVICIOS
-            </motion.h2>
+            </h2>
 
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={activeIndex === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            <p
               className="svc-intro-desc text-white/60 mb-12"
+              style={{
+                opacity: activeIndex === 0 ? 1 : 0,
+                transform: activeIndex === 0 ? 'translateY(0)' : 'translateY(30px)',
+                transition: 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s',
+                willChange: 'opacity, transform',
+              }}
             >
               Soluciones integrales de producción AV con los más altos estándares de la industria cinematográfica.
-            </motion.p>
+            </p>
           </div>
         </div>
 
