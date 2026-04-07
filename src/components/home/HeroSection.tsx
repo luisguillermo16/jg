@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import { motion } from 'framer-motion';
 import './HeroSection.css';
 import logo from '../../assets/brand/logo.png';
-import heroImage from '../../assets/home/img/hero.png';
+import heroImage from '../../assets/home/img/hero1.webp';
 
 
 interface HeroSectionProps {
@@ -40,16 +40,13 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                 <motion.div
                     className="absolute inset-0 w-full h-full"
                 >
-                    <video
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
+                    <img
+                        src={heroImage}
+                        alt="Hero Background"
                         className="w-full h-full object-cover opacity-100"
-                        poster={heroImage}
-                    >
-                        <source src="https://luispineda.b-cdn.net/hero.mp4" type="video/mp4" />
-                    </video>
+                        loading="eager"
+                        fetchPriority="high"
+                    />
                 </motion.div>
 
 

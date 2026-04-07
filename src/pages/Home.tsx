@@ -125,19 +125,18 @@ const Home: FC = () => {
       if (currentHeroIndex !== heroIndex) setHeroIndex(currentHeroIndex);
 
       // 2. Categories progress — raw cProg for instant snap response
-      const cProgSmooth = lerp(smoothCatsProgress.current, cProg, LERP_FACTOR);
-      if (Math.abs(smoothCatsProgress.current - cProgSmooth) > 0.001) {
-        smoothCatsProgress.current = cProgSmooth;
-        setCatsProgress(cProg); // raw — no LERP lag on slide switch
+      const cProgThreshold = isMobileDevice ? 0.005 : 0.001;
+      const cProgDiff = Math.abs(smoothCatsProgress.current - cProg);
+      if (cProgDiff > cProgThreshold) {
+        smoothCatsProgress.current = cProg;
+        setCatsProgress(cProg);
       }
 
       // 3. Services smooth progress
       const sProgSmooth = lerp(smoothSvcsProgress.current, sProg, LERP_FACTOR);
-      if (Math.abs(smoothSvcsProgress.current - sProgSmooth) > 0.001) {
+      const sProgThreshold = isMobileDevice ? 0.008 : 0.002;
+      if (Math.abs(smoothSvcsProgress.current - sProgSmooth) > sProgThreshold) {
         smoothSvcsProgress.current = sProgSmooth;
-        // Optimization: Use a separate state for React if needed, but here we can just update a state
-        // To avoid too many re-renders, consider if we need a state at all or just use the CSS variable
-        // But the component needs to know the active index for opacity transitions.
         setSvcsProgress(sProgSmooth);
       }
 
