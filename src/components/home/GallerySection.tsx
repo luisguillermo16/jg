@@ -3,10 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './GallerySection.css';
 import CinematicGlow from '../CinematicGlow';
-import seccionesImg from '../../assets/home/img/secciones.webp';
-
-
-
+import CinematicBackground from '../CinematicBackground';
 
 interface GallerySectionProps {
   activeGal: number;
@@ -26,8 +23,6 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
   }, [selectedImg]);
 
   return (
-
-
     <section id="galeria" className="relative h-[400vh] bg-black">
       {/* Snap Points to manage the two stages (Intro vs Grid) */}
       <div className="absolute inset-0 pointer-events-none z-[50]">
@@ -39,15 +34,9 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
 
         {/* Stage 1: Intro Screen (Full Page Title) */}
         <div className={`absolute inset-0 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ease-out ${activeGal === -1 ? 'opacity-100 scale-100 z-50' : 'opacity-0 scale-95 z-0 pointer-events-none'}`}>
+          <CinematicBackground />
           <CinematicGlow />
 
-          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-            <img 
-              src={seccionesImg} 
-              alt="" 
-              className="w-full h-full object-cover brightness-100"
-            />
-          </div>
           
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center">
             {/* Cinematic reveal - triggers when section is in view and it's the intro stage */}
@@ -98,7 +87,6 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
                 </div>
               ))}
             </div>
-            {/* Scroll bottom spacer */}
           </div>
         </div>
       </div>
@@ -109,7 +97,6 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
           className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/95 transition-all duration-300 backdrop-blur-md"
           onClick={() => setSelectedImg(null)}
         >
-
           {/* Close button */}
           <button
             className="absolute top-6 right-6 text-white text-4xl hover:scale-110 transition-transform"
@@ -131,9 +118,7 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
         </div>
       )}
     </section>
-
   );
 };
-
 
 export default GallerySection;

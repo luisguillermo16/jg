@@ -1,10 +1,10 @@
-import { type FC, useEffect, useState } from 'react';
+import { type FC } from 'react';
 import VolumeVideo from '../VolumeVideo';
 import './CategoriesSection.css';
 import { openContactModal } from '../../utils/modal';
 import CinematicGlow from '../CinematicGlow';
+import CinematicBackground from '../CinematicBackground';
 import { isMobileDevice } from '../../utils/deviceUtils';
-import seccionesImg from '../../assets/home/img/secciones.webp';
 
 interface Category {
   id: string;
@@ -32,17 +32,9 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
   const activeIndex = Math.min(3, Math.floor(progress * 5));
   const activeCatIndex = activeIndex - 1; // -1 = intro, 0-2 = categories
 
-  // Dispara la animación CSS del intro en el primer frame de pintura
-  // (no depende de IntersectionObserver ni de Framer Motion)
-  const [introReady, setIntroReady] = useState(false);
-  useEffect(() => {
-    // requestAnimationFrame garantiza que el DOM ya pintó antes de añadir la clase
-    const raf = requestAnimationFrame(() => {
-      setIntroReady(true);
-    });
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
+  // La animación ahora se dispara dinámicamente según el scroll (activeIndex === 0)
+  // Esto permite que la animación se repita o se mantenga según la posición del usuario.
+  const isIntroActive = activeIndex === 0;
 
   return (
     <section
@@ -68,33 +60,25 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
         <div
           className="cats-slide"
           style={{
-            opacity: activeIndex === 0 ? 1 : 0,
-            zIndex: activeIndex === 0 ? 2 : 1,
+            opacity: isIntroActive ? 1 : 0,
+            zIndex: isIntroActive ? 2 : 1,
             // Incoming: sin transición (aparece al instante, nunca hay negro)
             // Outgoing: fade suave
-            transition: activeIndex === 0 ? 'none' : 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: isIntroActive ? 'none' : 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         >
+          <CinematicBackground />
           <CinematicGlow />
-          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-            <img
-              src={seccionesImg}
-              alt=""
-              className="w-full h-full object-cover brightness-100"
-              loading="eager"
-              fetchPriority="high"
-              decoding="sync"
-            />
-          </div>
+
 
           <div className="cat-intro-content relative z-10">
-            {/* Animación CSS pura — clase .is-visible disparada en el primer frame */}
-            <h2 className={`cat-intro-title cat-intro-animate${introReady ? ' is-visible' : ''}`}>
+            {/* Animación de scroll: .is-visible se activa cuando el slide 0 es el activo */}
+            <h2 className={`cat-intro-title cat-intro-animate${isIntroActive ? ' is-visible' : ''}`}>
               Nuestras <br />
               Categorías
             </h2>
 
-            <p className={`cat-intro-desc cat-intro-animate-desc${introReady ? ' is-visible' : ''}`}>
+            <p className={`cat-intro-desc cat-intro-animate-desc${isIntroActive ? ' is-visible' : ''}`}>
               Especialistas en transformar la visión de cada cliente en una producción técnica sin precedentes.
             </p>
           </div>
@@ -188,9 +172,6 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
             </div>
           );
         })}
-
-
-
       </div>
     </section>
   );

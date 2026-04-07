@@ -10,11 +10,7 @@ const CinematicGlow = () => {
   if (isMobileDevice) {
     return (
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Base negra */}
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(to top, #000000 0%, #020500 60%, transparent 100%)' }}
-        />
+
         {/* Glow simulado — gradiente grande y suave, sin blur */}
         <div
           className="absolute inset-0"
@@ -35,11 +31,7 @@ const CinematicGlow = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
 
-      {/* ── Base negra ── */}
-      <div
-        className="absolute inset-0"
-        style={{ background: `linear-gradient(to top, #000000 0%, #020500 60%, transparent 100%)` }}
-      />
+
 
       {/* ── Capa 1: Glow principal — blur-2xl ── */}
       <div

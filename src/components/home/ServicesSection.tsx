@@ -1,8 +1,8 @@
-import { type FC, useEffect, useState } from 'react';
+import { type FC } from 'react';
 import './ServicesSection.css';
 import { openContactModal } from '../../utils/modal';
 import CinematicGlow from '../CinematicGlow';
-import seccionesImg from '../../assets/home/img/secciones.webp';
+import CinematicBackground from '../CinematicBackground';
 
 interface Service {
   title: string;
@@ -20,12 +20,9 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, progress }) => {
   // 7 screens (Intro + 6 services) over 700vh.
   const activeIndex = Math.min(6, Math.floor(progress * 6.99));
 
-  // Dispara la animación del intro en el primer frame (sin Framer Motion)
-  const [introReady, setIntroReady] = useState(false);
-  useEffect(() => {
-    const raf = requestAnimationFrame(() => setIntroReady(true));
-    return () => cancelAnimationFrame(raf);
-  }, []);
+  // La animación ahora depende de activeIndex para sincronizarse con el scroll
+  // Se activa cuando el usuario llega al slide de introducción (index 0)
+  const isIntroActive = activeIndex === 0;
 
   return (
     <section id="servicios" className="svc-section">
@@ -44,35 +41,26 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, progress }) => {
         <div
           className="svc-slide"
           style={{
-            opacity: activeIndex === 0 ? 1 : 0,
-            zIndex: activeIndex === 0 ? 10 : 1,
-            pointerEvents: activeIndex === 0 ? 'auto' : 'none',
-            // Incoming: sin transición (aparece al instante, sin negro)
+            opacity: isIntroActive ? 1 : 0,
+            zIndex: isIntroActive ? 10 : 1,
+            pointerEvents: isIntroActive ? 'auto' : 'none',
+            // Incoming: sin transición (aparece al instante, nunca hay negro)
             // Outgoing: fade suave
-            transition: activeIndex === 0 ? 'none' : 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: isIntroActive ? 'none' : 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         >
+          <CinematicBackground />
           <CinematicGlow />
 
-          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-            <img
-              src={seccionesImg}
-              alt=""
-              className="w-full h-full object-cover brightness-100"
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-            />
-          </div>
 
           <div className="svc-intro-content relative z-10">
-            {/* Animación CSS pura — igual que CategoriesSection */}
-            <h2 className={`svc-intro-title svc-intro-animate${introReady ? ' is-visible' : ''}`}>
+            {/* Animación de scroll: .is-visible se activa cuando el slide 0 es el activo */}
+            <h2 className={`svc-intro-title svc-intro-animate${isIntroActive ? ' is-visible' : ''}`}>
               Nuestros <br />
               Servicios
             </h2>
 
-            <p className={`svc-intro-desc svc-intro-animate-desc${introReady ? ' is-visible' : ''}`}>
+            <p className={`svc-intro-desc svc-intro-animate-desc${isIntroActive ? ' is-visible' : ''}`}>
               Soluciones integrales de producción AV con los más altos estándares de la industria cinematográfica.
             </p>
           </div>

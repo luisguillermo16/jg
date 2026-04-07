@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import './HeroSection.css';
 import logo from '../../assets/brand/logo.png';
-import heroImage from '../../assets/home/img/hero1.webp';
+import heroImage from '../../assets/home/img/hero_new.webp';
 
 
 interface HeroSectionProps {
@@ -37,25 +37,36 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
             {/* ── Background Image Layer (Sticky) ── */}
             {/* hero-sticky: promueve el layer a la GPU (will-change + backface), evita flash negro en scroll-snap móvil */}
             <div className="hero-sticky sticky top-0 w-full overflow-hidden bg-black flex items-center justify-center">
-                {/* Imagen cargada con máxima prioridad, decoding async no bloquea hilo principal */}
-                <div className="absolute inset-0 w-full h-full">
+                {/* Imagen cargada con máxima prioridad, desvanece suavemente al final del scroll */}
+                <div 
+                    className="absolute inset-0 w-full h-full"
+                    style={{
+                        opacity: `calc(1 - var(--hero-progress, 0))`
+                    } as any}
+                >
                     <img
                         src={heroImage}
                         alt="Hero Background"
-                        className="w-full h-full object-cover opacity-100"
+                        className="w-full h-full object-cover"
                         loading="eager"
                         fetchPriority="high"
                         decoding="async"
                     />
                 </div>
 
-                {/* Screen Content Layers */}
+
+                {/* Screen Content Layers — Animados por el scroll vía variables CSS (--hero-progress) */}
                 <div
                     data-active-index={heroIndex}
                     className="relative z-20 w-full h-full"
+                    style={{
+                        opacity: `calc(1 - var(--hero-progress, 0) * 1.8)`,
+                        transform: `scale(calc(1 + var(--hero-progress, 0) * 0.08))`
+                    } as any}
                 >
                     {/* Logo & CTAs — animaciones CSS puras, sin Framer Motion */}
                     <div className="absolute inset-0 flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:pl-[80px] md:pr-[120px] gap-8 md:gap-16 pt-[20px] md:pt-0">
+
 
                         {/* LEFT — Título + descripción + CTAs */}
                         <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left gap-6 md:gap-8 max-w-full md:max-w-[60%]">
