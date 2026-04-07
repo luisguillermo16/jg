@@ -1,6 +1,7 @@
-const bodaVideo = 'https://luispineda.b-cdn.net/boda.mp4';
-const socialVideo = 'https://luispineda.b-cdn.net/social.mp4';
-const corporativoVideo = 'https://luispineda.b-cdn.net/corporativo.mp4';
+import bodaVideo from '../assets/home/vids/boda.mp4';
+import socialVideo from '../assets/home/vids/social.mp4';
+import corporativoVideo from '../assets/home/vids/corporativo.mp4';
+// Use local versions for categories
 
 import serviceAudio from '../assets/home/icons/service_audio.png';
 import serviceLighting from '../assets/home/icons/service_lighting.png';

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './GallerySection.css';
 import CinematicGlow from '../CinematicGlow';
-const seccionesImg = 'https://luispineda.b-cdn.net/secciones.webp';
+import seccionesImg from '../../assets/home/img/secciones.webp';
 
 
 
