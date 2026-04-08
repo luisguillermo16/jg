@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import './HeroSection.css';
-import logo from '../../assets/brand/logo.png';
+import logo from '../../assets/brand/logo.webp';
 import heroImage from '../../assets/home/img/hero_new.webp';
 
 

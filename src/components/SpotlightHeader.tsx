@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import logo from '../assets/brand/logo.png';
+import logo from '../assets/brand/logo.webp';
 import SpotlightsNav from './SpotlightsNav';
 import { openContactModal } from '../utils/modal';
 

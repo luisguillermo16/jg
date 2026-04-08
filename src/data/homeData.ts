@@ -6,18 +6,18 @@ const corporativoVideo = 'https://luispineda.b-cdn.net/corporativo.mp4';
 import serviceAudio from '../assets/home/icons/service_audio.webp';
 import serviceLighting from '../assets/home/icons/service_lighting.webp';
 import serviceLed from '../assets/home/icons/service_led.webp';
-import gal1 from '../assets/gallery/MRW01846.jpg';
-import gal2 from '../assets/gallery/MRW03505.jpg';
-import gal3 from '../assets/gallery/MRW03575.jpg';
-import gal4 from '../assets/gallery/MRW04373.jpg';
-import gal5 from '../assets/gallery/MRW08896.jpg';
-import gal6 from '../assets/gallery/MRW09177.jpg';
-import gal7 from '../assets/gallery/MRW09244.jpg';
-import gal8 from '../assets/gallery/MRW09445.jpg';
-import gal9 from '../assets/gallery/MRW09447.jpg';
-import gal10 from '../assets/gallery/MRW09474.jpg';
-import gal11 from '../assets/gallery/MRW09758.jpg';
-import gal12 from '../assets/gallery/MRW09772.jpg';
+import gal1 from '../assets/gallery/MRW01846.webp';
+import gal2 from '../assets/gallery/MRW03505.webp';
+import gal3 from '../assets/gallery/MRW03575.webp';
+import gal4 from '../assets/gallery/MRW04373.webp';
+import gal5 from '../assets/gallery/MRW08896.webp';
+import gal6 from '../assets/gallery/MRW09177.webp';
+import gal7 from '../assets/gallery/MRW09244.webp';
+import gal8 from '../assets/gallery/MRW09445.webp';
+import gal9 from '../assets/gallery/MRW09447.webp';
+import gal10 from '../assets/gallery/MRW09474.webp';
+import gal11 from '../assets/gallery/MRW09758.webp';
+import gal12 from '../assets/gallery/MRW09772.webp';
 
 export const CATEGORIES = [
   {

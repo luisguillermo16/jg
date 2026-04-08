@@ -1,6 +1,6 @@
 import { type FC, useState, useEffect, memo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../assets/brand/logo.png';
+import logo from '../assets/brand/logo.webp';
 import ContactModal from './ContactModal';
 
 interface NavbarProps {
