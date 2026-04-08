@@ -109,6 +109,9 @@
   left: clamp(24px, 8vw, 96px);
   max-width: min(700px, 88%);
   z-index: 20;
+  /* Scroll-linked parallax */
+  transform: translateY(var(--cat-parallax-y, 0px));
+  will-change: transform;
 }
 
 /* Shared stagger reveal transition — will-change gestionado via inline style */
@@ -233,6 +236,8 @@
   letter-spacing: -0.02em;
   line-height: 0.85;
   margin-bottom: 36px;
+  /* Parallax scroll element */
+  transform: translateY(var(--intro-parallax-title, 0px));
 }
 
 .cat-intro-desc {
@@ -242,6 +247,8 @@
   margin: 0 auto;
   font-weight: 400;
   line-height: 1.65;
+  /* Parallax scroll element */
+  transform: translateY(var(--intro-parallax-desc, 0px));
 }
 
 /* ── Intro slide animations — CSS puro (Exactas a la Galería) ── */
@@ -271,25 +278,31 @@
 /* Estado inicial — invisible antes de .is-visible */
 .cat-intro-animate {
   opacity: 0;
-  transform: translateY(60px) scale(0.9);
+  transform: translateY(var(--intro-parallax-title, 40px)) scale(0.95);
   will-change: opacity, transform;
+  transition: 
+    opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cat-intro-animate-desc {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(var(--intro-parallax-desc, 20px));
   will-change: opacity, transform;
+  transition: 
+    opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s,
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
 }
 
-/* Disparado al añadir .is-visible — anima con CSS keyframe fluido */
+/* Disparado al añadir .is-visible */
 .cat-intro-animate.is-visible {
-  /* Título: 1.2s duración, 0.1s delay */
-  animation: cats-intro-rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  opacity: 1;
+  transform: translateY(var(--intro-parallax-title, 0px)) scale(1);
 }
 
 .cat-intro-animate-desc.is-visible {
-  /* Desc: 1.0s duración, 0.3s delay */
-  animation: cats-intro-rise-desc 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  opacity: 1;
+  transform: translateY(var(--intro-parallax-desc, 0px));
 }
 
 
