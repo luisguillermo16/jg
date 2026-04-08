@@ -27,12 +27,33 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
   progress,
   isMuted,
 }) => {
-  // 4 screens (Intro + 3 cats) over a 500vh scroll range.
-  // 5 snap stops over 500vh → each at cProg 0, 0.2, 0.4, 0.6, 0.8
-  // 4 screens (Intro + 3 cats) over a 500vh scroll range.
   const activeIndex = Math.min(3, Math.floor(progress * 5));
   const activeCatIndex = activeIndex - 1; // -1 = intro, 0-2 = categories
   const isIntroActive = activeIndex === 0;
+
+  // ── Lógica de Fluidez con Overlap ──
+  // Con LERP en Home.tsx, ahora podemos usar una ventana razonable para apreciar el zoom
+  const introExitStart = 0.02;
+  const introExitEnd = 0.16;
+  const rawExitNorm = Math.min(1, Math.max(0, (progress - introExitStart) / (introExitEnd - introExitStart)));
+  
+  // Curva de Fluidez Sedosa
+  const introExitNorm = Math.pow(rawExitNorm, 1.2); 
+
+  // Revelado del primer video (Overlap Fluido)
+  const slide1RevealStart = 0.06;
+  const slide1RevealEnd = 0.18;
+  const rawSvc1Norm = Math.min(1, Math.max(0, (progress - slide1RevealStart) / (slide1RevealEnd - slide1RevealStart)));
+  const slide1RevealNorm = Math.pow(rawSvc1Norm, 1.0);
+
+  // Estilos dinámicos de salida para el contenido de la intro
+  const introContentStyles = {
+    opacity: 1 - Math.pow(introExitNorm, 1.8),
+    transform: `translate(-50%, -50%) scale(${1 - introExitNorm * 0.35})`,
+    filter: `blur(${introExitNorm * 12}px)`,
+    transition: 'none', // Sincronizado con el scroll
+    willChange: 'transform, opacity, filter',
+  };
 
   return (
     <section
@@ -57,17 +78,31 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
         <div
           className="cats-slide"
           style={{
-            opacity: isIntroActive ? 1 : 0,
-            zIndex: isIntroActive ? 2 : 1,
+            // La intro permanece visible hasta que el zoom de salida termina
+            opacity: progress < introExitEnd ? 1 : 0,
+            zIndex: progress < introExitEnd ? 10 : 1,
             pointerEvents: isIntroActive ? 'auto' : 'none',
-            // Transición de desvanecido fluido
-            transition: isIntroActive ? 'none' : 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+            // Solo animamos la opacidad total si no estamos en el rango de scroll controlado
+            transition: (progress > 0 && progress < introExitEnd) ? 'none' : 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         >
-          <CinematicBackground />
-          <CinematicGlow />
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              opacity: 1 - introExitNorm,
+              transform: `scale(${1 + introExitNorm * 0.1})`,
+              transition: 'none'
+            }}
+          >
+            <CinematicBackground />
+            <CinematicGlow />
+          </div>
 
-          <div className="cat-intro-content relative z-10">
+          <div
+            className="cat-intro-content relative z-10"
+            style={introContentStyles}
+          >
             <h2 className={`cat-intro-title cat-intro-animate${isIntroActive ? ' is-visible' : ''}`}>
               Nuestras <br />
               Categorías
@@ -82,17 +117,20 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
         {/* ════ SLIDES 1–3: Category videos ════ */}
         {categories.map((cat, i) => {
           const isActive = activeCatIndex === i;
+          const isSlide1 = i === 0;
+          const isVisible = isActive || (isSlide1 && progress > slide1RevealStart && progress < 0.4);
 
           return (
             <div
               key={cat.id}
               className="cats-slide"
               style={{
-                opacity: isActive ? 1 : 0,
-                zIndex: isActive ? 2 : 1,
+                opacity: isSlide1
+                  ? (progress < 0.2 ? slide1RevealNorm : (isActive ? 1 : 0))
+                  : (isActive ? 1 : 0),
+                zIndex: isActive ? 5 : (isSlide1 && progress < 0.25 ? 2 : 1),
                 pointerEvents: isActive ? 'auto' : 'none',
-                // Transición de desvanecido fluido
-                transition: isActive ? 'none' : 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                transition: isActive ? 'none' : (progress < 0.25 && isSlide1 ? 'none' : 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)'),
               }}
             >
               {/* Ken Burns background wrapper */}
@@ -103,7 +141,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                   loop
                   preload="metadata"
                   isMuted={isMuted}
-                  isVisible={isActive}
+                  isVisible={isVisible}
                   playsInline
                   className="cats-bg-video"
                   style={{

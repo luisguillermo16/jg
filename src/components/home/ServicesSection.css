@@ -30,14 +30,16 @@
   position: sticky;
   top: 0;
   height: 100vh;
-  height: 100dvh; /* dvh: barra URL dinámica iOS/Android */
+  height: 100dvh;
   overflow: hidden;
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  background: #050607; /* evita negro durante crossfade */
+  background: #050607;
   contain: layout style;
+  /* Fuerza que el scroll se sienta más firme */
+  scroll-behavior: smooth;
 }
 
 /* Layer base permanente — SIEMPRE visible, impide negro puro */
@@ -101,6 +103,9 @@
   width: 100%;
   max-width: 1400px;
   padding: 0 24px;
+  /* Preparar para transformaciones intensas */
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
 }
 
 .svc-intro-title {

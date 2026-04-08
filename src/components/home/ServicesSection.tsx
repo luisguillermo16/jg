@@ -17,12 +17,32 @@ interface ServicesSectionProps {
 }
 
 const ServicesSection: FC<ServicesSectionProps> = ({ services, progress }) => {
-  // 7 screens (Intro + 6 services) over 700vh.
   const activeIndex = Math.min(6, Math.floor(progress * 6.99));
-
-  // La animación ahora depende de activeIndex para sincronizarse con el scroll
-  // Se activa cuando el usuario llega al slide de introducción (index 0)
   const isIntroActive = activeIndex === 0;
+
+  // ── Lógica de Fluidez con Overlap ──
+  // LERP en Home.tsx maneja la inercia, aquí definimos la estética
+  const introExitStart = 0.02;
+  const introExitEnd = 0.16; 
+  const rawExitNorm = Math.min(1, Math.max(0, (progress - introExitStart) / (introExitEnd - introExitStart)));
+  
+  // Curva de Fluidez Sedosa
+  const introExitNorm = Math.pow(rawExitNorm, 1.2);
+
+  // Revelado del primer servicio (Overlap Fluido)
+  const svc1RevealStart = 0.05;
+  const svc1RevealEnd = 0.18;
+  const rawSvc1Norm = Math.min(1, Math.max(0, (progress - svc1RevealStart) / (svc1RevealEnd - svc1RevealStart)));
+  const svc1RevealNorm = Math.pow(rawSvc1Norm, 1.0);
+
+  // Estilos de salida para la intro de servicios
+  const introContentStyles = {
+    opacity: 1 - Math.pow(introExitNorm, 1.8),
+    transform: `translate(-50%, -50%) scale(${1 - introExitNorm * 0.35})`,
+    filter: `blur(${introExitNorm * 12}px)`,
+    transition: 'none',
+    willChange: 'transform, opacity, filter',
+  };
 
   return (
     <section id="servicios" className="svc-section">
@@ -41,20 +61,29 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, progress }) => {
         <div
           className="svc-slide"
           style={{
-            opacity: isIntroActive ? 1 : 0,
-            zIndex: isIntroActive ? 10 : 1,
+            opacity: progress < introExitEnd ? 1 : 0,
+            zIndex: progress < introExitEnd ? 10 : 1,
             pointerEvents: isIntroActive ? 'auto' : 'none',
-            // Incoming: sin transición (aparece al instante, nunca hay negro)
-            // Outgoing: fade suave
-            transition: isIntroActive ? 'none' : 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: (progress > 0 && progress < introExitEnd) ? 'none' : 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         >
-          <CinematicBackground />
-          <CinematicGlow />
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              opacity: 1 - introExitNorm * 0.5,
+              transform: `scale(${1 + introExitNorm * 0.15})`,
+              transition: 'none',
+            }}
+          >
+            <CinematicBackground />
+            <CinematicGlow />
+          </div>
 
-
-          <div className="svc-intro-content relative z-10">
-            {/* Animación de scroll: .is-visible se activa cuando el slide 0 es el activo */}
+          <div
+            className="svc-intro-content relative z-10"
+            style={introContentStyles}
+          >
             <h2 className={`svc-intro-title svc-intro-animate${isIntroActive ? ' is-visible' : ''}`}>
               Nuestros <br />
               Servicios
@@ -69,6 +98,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, progress }) => {
         {/* ════ SERVICE SLIDES (Index 1 to 6) ════ */}
         {services.map((svc, idx) => {
           const slideIdx = idx + 1;
+          const isSlide1 = idx === 0;
           const isActive = activeIndex === slideIdx;
 
           return (
@@ -76,12 +106,12 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services, progress }) => {
               key={idx}
               className="svc-slide"
               style={{
-                opacity: isActive ? 1 : 0,
+                opacity: isSlide1
+                  ? (progress < 0.15 ? svc1RevealNorm : (isActive ? 1 : 0))
+                  : (isActive ? 1 : 0),
+                zIndex: isActive ? 10 : (isSlide1 && progress < 0.2 ? 5 : 1),
                 pointerEvents: isActive ? 'auto' : 'none',
-                zIndex: isActive ? 10 : 1,
-                // Incoming: sin transición (aparece al instante)
-                // Outgoing: fade suave — nunca hay frame de negro puro
-                transition: isActive ? 'none' : 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                transition: isActive ? 'none' : (isSlide1 && progress < 0.2 ? 'none' : 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)'),
               }}
             >
               <div className="svc-bg-wrapper">

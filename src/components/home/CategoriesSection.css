@@ -59,10 +59,9 @@
 .cats-slide {
   position: absolute;
   inset: 0;
-  /* transition removida de aquí — ahora se maneja via inline style:
-     incoming: transition: none (aparece instantáneo)
-     outgoing: transition: opacity 0.5s — esto evita SIEMPRE frames de negro */
-  will-change: auto; /* will-change se activa solo en el slide activo va inline */
+  will-change: opacity;
+  /* Transición por defecto para cambios de estado discretos */
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Background helper (solid color layers for intro) */
@@ -222,6 +221,9 @@
   width: 100%;
   max-width: 1400px;
   padding: 0 24px;
+  /* Promover a layer de GPU para el zoom suave */
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
 }
 
 .cat-intro-title {
@@ -251,6 +253,7 @@
     opacity: 0;
     transform: translateY(60px) scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -262,6 +265,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -272,7 +276,7 @@
   opacity: 0;
   transform: translateY(40px) scale(0.95);
   will-change: opacity, transform;
-  transition: 
+  transition:
     opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1),
     transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -281,7 +285,7 @@
   opacity: 0;
   transform: translateY(20px);
   will-change: opacity, transform;
-  transition: 
+  transition:
     opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s,
     transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
 }
@@ -323,6 +327,7 @@
   .cat-intro-animate.is-visible {
     animation-duration: 0.75s;
   }
+
   .cat-intro-animate-desc.is-visible {
     animation-duration: 0.65s;
   }
@@ -336,6 +341,7 @@
 
 /* ── Accesibilidad: sin animaciones si el usuario lo prefiere ── */
 @media (prefers-reduced-motion: reduce) {
+
   .cat-intro-animate,
   .cat-intro-animate-desc {
     animation: none;
@@ -343,9 +349,11 @@
     transform: none;
     will-change: auto;
   }
+
   .cats-reveal {
     transition: none;
   }
+
   .cats-slide {
     transition: none;
   }

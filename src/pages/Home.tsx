@@ -94,10 +94,10 @@ const Home: FC = () => {
 
     const tick = () => {
       rafFrame.current++;
-      // Mobile: target ~30fps to halve JS CPU usage
-      if (isMobileDevice && rafFrame.current % 2 !== 0) {
-        rafId.current = requestAnimationFrame(tick);
-        return;
+      // Reducido throttle en móvil para mantener fluidez del LERP
+      if (isMobileDevice && rafFrame.current % 1.5 !== 0) {
+        // rafId.current = requestAnimationFrame(tick);
+        // return;
       }
       const currentScroll = container.scrollTop;
 
@@ -124,17 +124,17 @@ const Home: FC = () => {
       const currentHeroIndex = 0;
       if (currentHeroIndex !== heroIndex) setHeroIndex(currentHeroIndex);
 
-      // 2. Categories progress — raw cProg for instant snap response
-      const cProgThreshold = isMobileDevice ? 0.005 : 0.001;
-      const cProgDiff = Math.abs(smoothCatsProgress.current - cProg);
-      if (cProgDiff > cProgThreshold) {
-        smoothCatsProgress.current = cProg;
-        setCatsProgress(cProg);
+      // 2. Categories progress — LERP interpolation for smooth tracking
+      const cProgSmooth = lerp(smoothCatsProgress.current, cProg, LERP_FACTOR);
+      const cProgThreshold = isMobileDevice ? 0.0005 : 0.0001;
+      if (Math.abs(smoothCatsProgress.current - cProgSmooth) > cProgThreshold) {
+        smoothCatsProgress.current = cProgSmooth;
+        setCatsProgress(cProgSmooth);
       }
 
       // 3. Services smooth progress
       const sProgSmooth = lerp(smoothSvcsProgress.current, sProg, LERP_FACTOR);
-      const sProgThreshold = isMobileDevice ? 0.008 : 0.002;
+      const sProgThreshold = isMobileDevice ? 0.0005 : 0.0001;
       if (Math.abs(smoothSvcsProgress.current - sProgSmooth) > sProgThreshold) {
         smoothSvcsProgress.current = sProgSmooth;
         setSvcsProgress(sProgSmooth);
