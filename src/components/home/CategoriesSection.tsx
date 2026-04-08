@@ -30,16 +30,9 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
   // 4 screens (Intro + 3 cats) over a 500vh scroll range.
   // 5 snap stops over 500vh → each at cProg 0, 0.2, 0.4, 0.6, 0.8
   // 4 screens (Intro + 3 cats) over a 500vh scroll range.
-  // each at cProg: Intro (0-0.2), Cat1 (0.2-0.4), Cat2 (0.4-0.6), Cat3 (0.6-0.8)
   const activeIndex = Math.min(3, Math.floor(progress * 5));
   const activeCatIndex = activeIndex - 1; // -1 = intro, 0-2 = categories
   const isIntroActive = activeIndex === 0;
-
-  // --- Parallax Logic ---
-  // Intro Parallax (0 to 0.2)
-  const introFactor = Math.min(1, progress / 0.2);
-  const introTitleY = -introFactor * 100; // Moves up 100px
-  const introDescY = -introFactor * 60;   // Moves up 60px (staggered speed)
 
   return (
     <section
@@ -67,12 +60,9 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
             opacity: isIntroActive ? 1 : 0,
             zIndex: isIntroActive ? 2 : 1,
             pointerEvents: isIntroActive ? 'auto' : 'none',
-            transition: isIntroActive ? 'none' : 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-            // @ts-ignore
-            '--intro-parallax-title': `${introTitleY}px`,
-            // @ts-ignore
-            '--intro-parallax-desc': `${introDescY}px`,
-          } as React.CSSProperties}
+            // Transición de desvanecido fluido
+            transition: isIntroActive ? 'none' : 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
         >
           <CinematicBackground />
           <CinematicGlow />
@@ -92,11 +82,6 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
         {/* ════ SLIDES 1–3: Category videos ════ */}
         {categories.map((cat, i) => {
           const isActive = activeCatIndex === i;
-          
-          const start = (i + 1) * 0.2;
-          const end = (i + 2) * 0.2;
-          const catProgress = Math.max(0, Math.min(1, (progress - start) / (end - start)));
-          const catContentY = (1 - catProgress) * 40;
 
           return (
             <div
@@ -106,10 +91,9 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                 opacity: isActive ? 1 : 0,
                 zIndex: isActive ? 2 : 1,
                 pointerEvents: isActive ? 'auto' : 'none',
-                transition: isActive ? 'none' : 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-                // @ts-ignore
-                '--cat-parallax-y': `${catContentY}px`
-              } as React.CSSProperties}
+                // Transición de desvanecido fluido
+                transition: isActive ? 'none' : 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
             >
               {/* Ken Burns background wrapper */}
               <div className="cats-bg-wrapper">
@@ -123,10 +107,8 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                   playsInline
                   className="cats-bg-video"
                   style={{
-                    // Combine Ken Burns with a slight scroll-linked scale
-                    transform: (isActive && !isMobileDevice) 
-                      ? `scale(${1.1 + (catProgress * 0.05)})` 
-                      : 'scale(1)',
+                    // Ken Burns sutil y constante
+                    transform: (isActive && !isMobileDevice) ? 'scale(1.1)' : 'scale(1)',
                     transition: (isActive && !isMobileDevice)
                       ? 'transform 10s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
                       : 'none',
@@ -143,9 +125,9 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                 <h3
                   className="cat-title cats-reveal"
                   style={{
-                    transitionDelay: isActive ? '0.3s' : '0s',
+                    transitionDelay: isActive ? '0.4s' : '0s',
                     opacity: isActive ? 1 : 0,
-                    transform: isActive ? 'translateY(0)' : 'translateY(25px)',
+                    transform: isActive ? 'translateY(0)' : 'translateY(22px)',
                     willChange: isActive ? 'opacity, transform' : 'auto',
                   }}
                 >
@@ -156,7 +138,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                 <p
                   className="cat-desc cats-reveal"
                   style={{
-                    transitionDelay: isActive ? '0.5s' : '0s',
+                    transitionDelay: isActive ? '0.6s' : '0s',
                     opacity: isActive ? 1 : 0,
                     transform: isActive ? 'translateY(0)' : 'translateY(15px)',
                     willChange: isActive ? 'opacity, transform' : 'auto',
@@ -169,9 +151,9 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                 <div
                   className="cat-cta cats-reveal"
                   style={{
-                    transitionDelay: isActive ? '0.7s' : '0s',
+                    transitionDelay: isActive ? '0.8s' : '0s',
                     opacity: isActive ? 1 : 0,
-                    transform: isActive ? 'translateY(0)' : 'translateY(12px)',
+                    transform: isActive ? 'translateY(0)' : 'translateY(10px)',
                     willChange: isActive ? 'opacity, transform' : 'auto',
                   }}
                 >

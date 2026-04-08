@@ -115,23 +115,6 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef, heroIndex }) => {
                         </div>
                     </div>
 
-                    {/* ── Transition Title Bridge — Creates 'Tracción' with next section ── */}
-                    <div 
-                        className="absolute inset-0 flex items-center justify-center pointer-events-none z-50 px-6"
-                        style={{
-                            // Empieza a aparecer al 75% del scroll del hero y llega a opacidad 1 al 100%
-                            opacity: `calc(clamp(0, (var(--hero-progress, 0) - 0.75) * 4, 1))`,
-                            // Sube desde 60px abajo hacia el centro
-                            transform: `translateY(calc(60px - clamp(0, (var(--hero-progress, 0) - 0.75) * 240, 60) * 1px))`,
-                            filter: 'blur(calc(8px - clamp(0, (var(--hero-progress, 0) - 0.75) * 32, 8) * 1px))'
-                        } as any}
-                    >
-                        <h2 className="text-[3.5rem] md:text-[9rem] font-black text-white text-center font-paloseco uppercase leading-[0.85] tracking-[-0.02em]">
-                            Nuestras <br />
-                            Categorías
-                        </h2>
-                    </div>
-
                 </div>
             </div>
         </section>
