@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import './ServicesSection.css';
 import { openContactModal } from '../../utils/modal';
 import CinematicGlow from '../CinematicGlow';
@@ -38,37 +39,45 @@ const SVC_SLOT  = 1 / SVC_SLOTS;           // ≈ 0.1429
 const SVC_OVR   = SVC_SLOT * 0.1;          // 10% de overlap
 
 const getSvcLayerOpacity = (progress: number, slotIndex: number): number => {
-  const slotStart = slotIndex * SVC_SLOT;
-  const slotEnd   = slotStart + SVC_SLOT;
+  const snapIn   = slotIndex * SVC_SLOT;
+  const snapNext = (slotIndex + 1) * SVC_SLOT;
 
-  const fadeIn  = mapRange(progress, slotStart - SVC_OVR, slotStart + SVC_OVR, 0, 1);
-  const fadeOut = mapRange(progress, slotEnd   - SVC_OVR, slotEnd   + SVC_OVR, 1, 0);
+  // Fade-in: TERMINA exactamente en el snap point del slide (Regla 6)
+  const fadeIn = mapRange(progress, snapIn - 2 * SVC_OVR, snapIn, 0, 1);
+
+  // Fade-out: TERMINA exactamente en el snap point del siguiente slide
+  // Dwell Time: El último slide (6) es inmune al fade-out
+  const fadeOut = slotIndex === 6
+    ? 1
+    : mapRange(progress, snapNext - 2 * SVC_OVR, snapNext, 1, 0);
 
   return Math.min(fadeIn, fadeOut);
 };
 
-// Intro: fade-out puro al inicio del primer scroll
+// Intro: fade-out puro al llegar al primer snap de servicio (Regla 6)
 const getSvcIntroOpacity = (progress: number): number =>
-  mapRange(progress, SVC_SLOT - SVC_OVR, SVC_SLOT + SVC_OVR, 1, 0);
+  mapRange(progress, SVC_SLOT - 2 * SVC_OVR, SVC_SLOT, 1, 0);
 
 const ServicesSection: FC<ServicesSectionProps> = ({ services, progress }) => {
+  const shouldReduceMotion = useReducedMotion();
   // ── Slide activo para animaciones de TEXTO (hard-snap) ──
-  const activeIndex   = Math.min(6, Math.floor(progress * 6.99)); // 0=intro, 1-6=servicios
+  const activeIndex   = Math.min(6, Math.floor(progress * SVC_SLOTS)); // 0=intro, 1-6=servicios
   const isIntroActive = activeIndex === 0;
 
   // ── Zoom-out cinemático de la intro ──
-  const introZoomNorm  = mapRange(progress, SVC_SLOT - SVC_OVR, SVC_SLOT + SVC_OVR, 0, 1);
+  // Terminamos el efecto exactamente en el snap point (SVC_SLOT)
+  const introZoomNorm  = mapRange(progress, SVC_SLOT - 2 * SVC_OVR, SVC_SLOT, 0, 1);
   const introOpacity   = getSvcIntroOpacity(progress);
   const introContentStyles = {
     opacity:    Math.max(0, 1 - Math.pow(introZoomNorm, 1.8)),
-    transform:  `translate(-50%, -50%) scale(${1 - introZoomNorm * 0.35})`,
-    filter:     `blur(${introZoomNorm * 12}px)`,
+    transform:  `translate(-50%, -50%) scale(${shouldReduceMotion ? 1 : 1 - introZoomNorm * 0.35})`,
+    filter:     shouldReduceMotion ? 'none' : `blur(${introZoomNorm * 12}px)`,
     transition: 'none',
     willChange: 'transform, opacity, filter',
   };
 
   return (
-    <section id="servicios" className="svc-section">
+    <section id="servicios" className="svc-section" layoutScroll>
       {/* ── Snap Markers — 7 × 100dvh ── */}
       <div className="svc-snap-markers">
         {[...Array(SVC_SLOTS)].map((_, i) => (

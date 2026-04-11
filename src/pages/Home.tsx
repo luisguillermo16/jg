@@ -44,7 +44,17 @@ const Home: FC = () => {
   const smoothCatsProgress = useRef(0);
   const smoothSvcsProgress = useRef(0);
   const rafId = useRef<number>(0);
-  const rafFrame = useRef(0); // for mobile 30fps throttle
+  const rafFrame = useRef(0);
+  const [winHeight, setWinHeight] = useState(0);
+
+  // 1. Hydration & Resize Guard: Manejo de dimensiones en el cliente
+  useEffect(() => {
+    const handleResize = () => setWinHeight(window.innerHeight);
+    handleResize(); // Initial measurement
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Advanced Scroll Reset logic
   useEffect(() => {
@@ -100,20 +110,21 @@ const Home: FC = () => {
         // return;
       }
       const currentScroll = container.scrollTop;
+      const hHeight = winHeight || window.innerHeight;
 
-      // Measure section positions dynamically from the DOM
+      // Measure section positions dynamically
       const svcEl = document.getElementById('servicios');
       const galEl = document.getElementById('galeria');
-      const svcStart = svcEl ? svcEl.offsetTop : windowHeight * 8;
-      const galStart = galEl ? galEl.offsetTop : windowHeight * 15;
+      const svcStart = svcEl ? svcEl.offsetTop : hHeight * 8;
+      const galStart = galEl ? galEl.offsetTop : hHeight * 15;
 
       // ── Hero Progress (200vh) ──────────────────────────────────────────────
-      const hProg = Math.min(2, currentScroll / windowHeight);
+      const hProg = Math.min(2, currentScroll / hHeight);
       container.style.setProperty('--hero-progress', hProg.toFixed(4));
 
-      // ── Categories Progress (400vh, starts after 200vh Hero) ─────────────
-      const catsStart = windowHeight * 2;   // después del Hero (200vh)
-      const catsMax   = windowHeight * 4;   // 4 slides × 100vh: intro + Bodas + Sociales + Corp
+      // ── Categories Progress (400vh) ────────────────────────────────────────
+      const catsStart = hHeight * 2;
+      const catsMax   = hHeight * 4;
       const cProg = Math.max(0, Math.min(1, (currentScroll - catsStart) / catsMax));
       container.style.setProperty('--cats-progress', cProg.toFixed(4));
 

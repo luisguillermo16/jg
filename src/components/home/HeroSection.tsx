@@ -1,4 +1,5 @@
-import { type FC } from 'react';
+import { type FC, useState } from 'react';
+import { useReducedMotion } from 'framer-motion';
 import './HeroSection.css';
 import VolumeVideo from '../VolumeVideo';
 import logo from '../../assets/brand/logo.webp';
@@ -13,6 +14,8 @@ interface HeroSectionProps {
 }
 
 const HeroSection: FC<HeroSectionProps> = ({ heroRef }) => {
+    const shouldReduceMotion = useReducedMotion();
+    const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
     const scrollToServices = () => {
         const container = document.querySelector('.home-container');
@@ -26,7 +29,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef }) => {
     };
 
     return (
-        <section id="hero-section" ref={heroRef} className="relative w-full h-[200vh] bg-black">
+        <section id="hero-section" ref={heroRef} className="relative w-full h-[200vh] bg-black" layoutScroll>
             {/* Scroll Anchors for the two stages */}
             <div className="absolute inset-0 pointer-events-none z-[100]">
                 <div id="hero" className="h-screen w-full" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }} />
@@ -65,6 +68,7 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef }) => {
                         isVisible={true}
                         isMuted={true}
                         className="absolute inset-0 w-full h-full object-cover"
+                        onCanPlayThrough={() => setIsVideoLoaded(true)}
                     />
 
                     {/* Centered Logo & Text */}
@@ -89,8 +93,8 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef }) => {
                         className="absolute inset-0 w-full h-full"
                         style={{
                             opacity: `calc(min(1, max(0, var(--hero-progress, 0) * 2 - 0.8)))`,
-                            transform: `scale(calc(1.1 - (var(--hero-progress, 0) - 1) * 0.1))`,
-                            filter: `blur(calc(max(0, 1 - var(--hero-progress, 0)) * 20px))`
+                            transform: shouldReduceMotion ? 'none' : `scale(calc(1.1 - (var(--hero-progress, 0) - 1) * 0.1))`,
+                            filter: shouldReduceMotion ? 'none' : `blur(calc(max(0, 1 - var(--hero-progress, 0)) * 20px))`
                         } as any}
                     >
                         <img

@@ -3,6 +3,16 @@
    Usado en: HeroSection.tsx, Navbar.tsx, FooterSection.tsx
    ============================================================ */
 
+#hero-section {
+  position: relative;
+  width: 100%;
+  height: 200vh;
+  min-height: 200vh; /* CLS: Reserva el espacio antes de que cargue el JS */
+  background: #000;
+  /* GPU: Asegura subpixel-antialiased en todo el hero */
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
 /* Font utilities — usadas vía Tailwind en múltiples componentes */
 .font-remixa {
   font-family: 'Paloseco', sans-serif;
@@ -44,6 +54,17 @@
      Fallback a 100vh para browsers sin soporte dvh */
   height: 100vh;
   height: 100dvh;
+}
+
+/* ── Outer section: 400vh scroll range (intro + 3 categorías) ── */
+.cats-section {
+  position: relative;
+  height: 400vh;
+  min-height: 400vh; /* CLS Fix: Reserva el espacio en el layout */
+  background: #050607;
+  /* GPU Optimizations */
+  transform-style: preserve-3d;
+  -webkit-font-smoothing: subpixel-antialiased;
 }
 
 /* ============================================================

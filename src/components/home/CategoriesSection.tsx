@@ -1,5 +1,5 @@
-import { type FC } from 'react';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { type FC, useState } from 'react';
+import { motion, useScroll, useSpring, useTransform, useReducedMotion } from 'framer-motion';
 import VolumeVideo from '../VolumeVideo';
 import './CategoriesSection.css';
 import { openContactModal } from '../../utils/modal';
@@ -74,6 +74,9 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
   progress,
   isMuted,
 }) => {
+  const shouldReduceMotion = useReducedMotion();
+  const [loadedCount, setLoadedCount] = useState(0);
+  const isAllLoaded = loadedCount >= categories.length;
 
   // ── 1. Capturamos el progreso real del scroll en el contenedor custom ──────
   //    offset: ["start start", "end end"] → progress 0 cuando el top de la
@@ -125,7 +128,15 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
       id="categories"
       ref={categoriesRef}
       className="cats-section"
+      layoutScroll
     >
+      {/* ── Overlay de carga cinemático ── */}
+      <motion.div 
+        className="absolute inset-0 z-[500] bg-black pointer-events-none"
+        initial={{ opacity: 1 }}
+        animate={{ opacity: isAllLoaded ? 0 : 1 }}
+        transition={{ duration: 0.8, ease: "easeInOut" }}
+      />
       {/* ── Invisible snap markers — 4 × 100dvh ── */}
       <div className="cats-snap-markers" aria-hidden="true">
         {[0, 1, 2, 3].map((i) => (
@@ -218,16 +229,16 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
               <div className="cats-bg-wrapper">
                 <VolumeVideo
                   src={cat.video}
-                  autoPlay
-                  loop
-                  preload="metadata"
+                  isVisible={layerOpacity > 0.05}
                   isMuted={isMuted}
-                  isVisible={isLayerVisible}
+                  loop
                   playsInline
-                  className="cats-bg-video"
+                  autoPlay
+                  className="cats-video"
+                  onCanPlayThrough={() => setLoadedCount(prev => prev + 1)}
                   style={{
-                    transform:  (isActive && !isMobileDevice) ? 'scale(1.06)' : 'scale(1)',
-                    transition: (isActive && !isMobileDevice)
+                    transform:  (isActive && !isMobileDevice && !shouldReduceMotion) ? 'scale(1.06)' : 'scale(1)',
+                    transition: (isActive && !isMobileDevice && !shouldReduceMotion)
                       ? 'transform 12s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
                       : 'none',
                     willChange: isActive ? 'transform' : 'auto',
