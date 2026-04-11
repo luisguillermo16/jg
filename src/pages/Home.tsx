@@ -8,7 +8,7 @@ import HeroSection from '../components/home/HeroSection';
 import CategoriesSection from '../components/home/CategoriesSection';
 import ServicesSection from '../components/home/ServicesSection';
 import AboutSection from '../components/home/AboutSection';
-import StatsBannerSection from '../components/home/StatsBannerSection';
+
 import TestimonialsSection from '../components/home/TestimonialsSection';
 import GallerySection from '../components/home/GallerySection';
 import CTASection from '../components/home/CTASection';
@@ -85,7 +85,7 @@ const Home: FC = () => {
   }, []);
 
   useEffect(() => {
-    const LERP_FACTOR = 0.12;
+    const LERP_FACTOR = 0.35; // Aumentado para que la animación siga el snap muy de cerca
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
     const windowHeight = window.innerHeight;
@@ -107,16 +107,18 @@ const Home: FC = () => {
       const svcStart = svcEl ? svcEl.offsetTop : windowHeight * 8;
       const galStart = galEl ? galEl.offsetTop : windowHeight * 15;
 
-      // Update CSS Variables for smooth, non-React animations
-      const hProg = Math.max(0, Math.min(1, currentScroll / windowHeight));
+      // ── Hero Progress (200vh) ──────────────────────────────────────────────
+      const hProg = Math.min(2, currentScroll / windowHeight);
       container.style.setProperty('--hero-progress', hProg.toFixed(4));
-      const catsStart = windowHeight;
-      const catsMax = windowHeight * 5;
+
+      // ── Categories Progress (400vh, starts after 200vh Hero) ─────────────
+      const catsStart = windowHeight * 2;   // después del Hero (200vh)
+      const catsMax   = windowHeight * 4;   // 4 slides × 100vh: intro + Bodas + Sociales + Corp
       const cProg = Math.max(0, Math.min(1, (currentScroll - catsStart) / catsMax));
       container.style.setProperty('--cats-progress', cProg.toFixed(4));
 
-      // Services Progress Calculation (700vh)
-      const sMax = windowHeight * 7;
+      // ── Services Progress (700vh, posición leída del DOM) ────────────────
+      const sMax  = windowHeight * 7;   // 7 slides × 100vh
       const sProg = Math.max(0, Math.min(1, (currentScroll - svcStart) / sMax));
       container.style.setProperty('--svcs-progress', sProg.toFixed(4));
 
@@ -144,11 +146,12 @@ const Home: FC = () => {
       if (currentScroll < catsStart - windowHeight / 2) {
         setActiveSection('hero');
       } else if (currentScroll < svcStart - windowHeight / 2) {
+        // Cada slide de categorías ocupa exactamente 1 página (100vh)
         const p = (currentScroll - catsStart) / windowHeight;
-        if (p < 1.0) setActiveSection('categories-intro');
-        else if (p < 2.0) setActiveSection('categories-1');
-        else if (p < 3.0) setActiveSection('categories-2');
-        else setActiveSection('categories-3');
+        if (p < 1.0)       setActiveSection('categories-intro');
+        else if (p < 2.0)  setActiveSection('categories-1');    // Bodas
+        else if (p < 3.0)  setActiveSection('categories-2');    // Sociales
+        else               setActiveSection('categories-3');    // Corporativos
       } else if (currentScroll < galStart - windowHeight / 2) {
         const nosotrosEl = document.getElementById('nosotros');
         const nosotrosTop = nosotrosEl ? nosotrosEl.offsetTop : Infinity;
@@ -157,14 +160,15 @@ const Home: FC = () => {
         } else {
           setActiveSection('servicios');
         }
-      } else if (currentScroll < galStart + windowHeight * 4) {
+      } else if (currentScroll < galStart + windowHeight * 2) {
+        // Gallery: 200vh total (2 snap points × 100vh)
         setActiveSection('galeria');
         const galScroll = currentScroll - galStart;
-        const galP = galScroll / (windowHeight * 4);
-        if (galP < 0.55) {
-          setActiveGal(-1);
+        const galP = galScroll / (windowHeight * 2);
+        if (galP < 0.5) {
+          setActiveGal(-1); // intro
         } else {
-          setActiveGal(0);
+          setActiveGal(0);  // grid
         }
       } else {
         setActiveSection('contact');
@@ -209,26 +213,25 @@ const Home: FC = () => {
         <MemoHero
           heroRef={heroRef}
           containerRef={containerRef}
-          heroIndex={heroIndex}
         />
         <MemoCategories
           categoriesRef={categoriesRef}
+          containerRef={containerRef}
           categories={CATEGORIES}
           progress={catsProgress}
           isMuted={isMuted}
         />
-        <StatsBannerSection />
         <MemoServices
           services={SERVICES}
           progress={svcsProgress}
         />
-        <AboutSection />
-        <TestimonialsSection />
+        <AboutSection key="about" />
+        <TestimonialsSection key="testimonials" />
         <MemoGallery
           activeGal={activeGal}
           galleryImages={GALLERY_IMAGES}
         />
-        <CTASection />
+        <CTASection key="cta" />
       </main>
       <FooterSection />
       <SoundToggle isMuted={isMuted} setIsMuted={setIsMuted} isVisible={isVideoSection} />

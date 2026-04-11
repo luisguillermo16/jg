@@ -3,10 +3,10 @@
    Usado en: CategoriesSection.tsx
    ============================================================ */
 
-/* ── Outer section: 400vh scroll range ── */
+/* ── Outer section: 400vh scroll range (intro + 3 categorías) ── */
 .cats-section {
   position: relative;
-  height: 500vh;
+  height: 400vh;
   background: #050607;
 }
 
@@ -20,6 +20,7 @@
 
 .cats-snap-stop {
   height: 100vh;
+  height: 100dvh; /* respeta la barra URL dinámica de iOS/Android */
   width: 100%;
   scroll-snap-align: start;
   scroll-snap-stop: always;
@@ -180,7 +181,7 @@
   text-transform: uppercase;
   letter-spacing: 0.22em;
   border: none;
-  border-radius: 100px;
+  border-radius: var(--btn-radius);
   cursor: pointer;
   overflow: hidden;
   font-family: 'Paloseco', sans-serif;
@@ -215,14 +216,12 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  /* ⚠️ NO definir transform aquí — Framer Motion controla x/y/scale/filter */
   z-index: 10;
   text-align: center;
   width: 100%;
   max-width: 1400px;
   padding: 0 24px;
-  /* Promover a layer de GPU para el zoom suave */
-  will-change: transform, opacity, filter;
   backface-visibility: hidden;
 }
 
@@ -371,7 +370,7 @@
 .cat-quick-chip {
   padding: 10px 24px;
   border: 1.5px solid rgba(255, 255, 255, 0.22);
-  border-radius: 100px;
+  border-radius: var(--btn-radius);
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(8px);
   color: rgba(255, 255, 255, 0.9);

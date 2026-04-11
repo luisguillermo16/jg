@@ -26,6 +26,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'InterHero';
+  /* Note: .ttc support varies by browser, but we prioritize the local collection file as requested */
+  src: url('./assets/fonts/Inter.ttc') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Playfair Display ahora cargada vía Google Fonts arriba */
 
 /* ── Design Tokens ── */
@@ -39,6 +48,7 @@
   --accent-soft: rgba(163, 255, 0, 0.15);
   --border: rgba(255, 255, 255, 0.05);
   --sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --btn-radius: 20px;
 }
 
 /* ── Reset base ── */
@@ -49,6 +59,7 @@ body {
   font-family: var(--sans);
   overflow-x: hidden;
 }
+
 
 #root {
   width: 100%;

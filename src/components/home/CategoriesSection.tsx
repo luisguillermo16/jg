@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import VolumeVideo from '../VolumeVideo';
 import './CategoriesSection.css';
 import { openContactModal } from '../../utils/modal';
@@ -16,44 +17,108 @@ interface Category {
 
 interface CategoriesSectionProps {
   categoriesRef: React.RefObject<HTMLDivElement | null>;
-  categories: Category[];
-  progress: number;
-  isMuted: boolean;
+  containerRef:  React.RefObject<HTMLDivElement | null>; // el .home-container scroll raíz
+  categories:    Category[];
+  progress:      number; // para las Capas Fantasma de video (hard-snap)
+  isMuted:       boolean;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Ghost Layer — Opacidad de cada capa de video.
+//
+//  REGLA CLAVE: El crossfade TERMINA en el snap point, nunca empieza en él.
+//  Así, cuando el usuario llega a un snap, el slide de llegada ya está al 100%.
+//
+//  Ventanas de transición (SLOT = 0.25, OVERLAP = 0.025):
+//    Snap 0 (Intro)       : full desde inicio → fade-out [0.20, 0.25]
+//    Snap 1 (Bodas)       : fade-in [0.20, 0.25] → full → fade-out [0.45, 0.50]
+//    Snap 2 (Sociales)    : fade-in [0.45, 0.50] → full → fade-out [0.70, 0.75]
+//    Snap 3 (Corporativos): fade-in [0.70, 0.75] → full → SIN fade-out (inmune)
+//
+//  En cada snap point, la capa que llega = opacity 1, la que sale = opacity 0.
+// ─────────────────────────────────────────────────────────────────────────────
+const mapRange = (val: number, in0: number, in1: number, out0: number, out1: number): number => {
+  const t = Math.max(0, Math.min(1, (val - in0) / (in1 - in0)));
+  return out0 + t * (out1 - out0);
+};
+
+const SLOT    = 0.25;
+const OVERLAP = 0.025; // 10% del SLOT → 5% de ventana a cada lado del snap
+
+const getCatLayerOpacity = (progress: number, slideIndex: number): number => {
+  const snapIn   = slideIndex * SLOT;         // progress donde ESTA capa llega al 100%
+  const snapNext = (slideIndex + 1) * SLOT;  // progress donde la SIGUIENTE llega al 100%
+
+  // Fade-in: TERMINA exactamente en el snap point de esta capa (completa al 100% al llegar)
+  const fadeIn = mapRange(progress, snapIn - 2 * OVERLAP, snapIn, 0, 1);
+
+  // Fade-out: TERMINA exactamente en el snap point del siguiente slide
+  // Corporativos (slideIndex=3): SIN fade-out — "Dwell Time" hasta salir de sección
+  const fadeOut = slideIndex === 3
+    ? 1
+    : mapRange(progress, snapNext - 2 * OVERLAP, snapNext, 1, 0);
+
+  return Math.min(fadeIn, fadeOut);
+};
+
+// Intro layer: fade-out completa JUSTO al llegar al snap de Bodas (progress = 0.25)
+const getIntroLayerOpacity = (progress: number): number =>
+  mapRange(progress, SLOT - 2 * OVERLAP, SLOT, 1, 0);
+//          ─────── [0.20, 0.25] ─────── → al llegar a Bodas, Intro ya desapareció completamente
+
 
 const CategoriesSection: FC<CategoriesSectionProps> = ({
   categoriesRef,
+  containerRef,
   categories,
   progress,
   isMuted,
 }) => {
-  const activeIndex = Math.min(3, Math.floor(progress * 5));
-  const activeCatIndex = activeIndex - 1; // -1 = intro, 0-2 = categories
-  const isIntroActive = activeIndex === 0;
 
-  // ── Lógica de Fluidez con Overlap ──
-  // Con LERP en Home.tsx, ahora podemos usar una ventana razonable para apreciar el zoom
-  const introExitStart = 0.02;
-  const introExitEnd = 0.16;
-  const rawExitNorm = Math.min(1, Math.max(0, (progress - introExitStart) / (introExitEnd - introExitStart)));
-  
-  // Curva de Fluidez Sedosa
-  const introExitNorm = Math.pow(rawExitNorm, 1.2); 
+  // ── 1. Capturamos el progreso real del scroll en el contenedor custom ──────
+  //    offset: ["start start", "end end"] → progress 0 cuando el top de la
+  //    sección llega al top del viewport, 1 cuando el bottom llega al bottom.
+  const { scrollYProgress } = useScroll({
+    target:    categoriesRef    as React.RefObject<HTMLElement>,
+    container: containerRef    as React.RefObject<HTMLElement>,
+    offset:    ['start start', 'end end'],
+  });
 
-  // Revelado del primer video (Overlap Fluido)
-  const slide1RevealStart = 0.06;
-  const slide1RevealEnd = 0.18;
-  const rawSvc1Norm = Math.min(1, Math.max(0, (progress - slide1RevealStart) / (slide1RevealEnd - slide1RevealStart)));
-  const slide1RevealNorm = Math.pow(rawSvc1Norm, 1.0);
+  // ── 2. Spring suavizado — elimina el jank del scroll de ratón (Windows) ───
+  //    stiffness/damping ajustados para sentirse "como mantequilla" en desktop
+  //    mientras que en móvil (touch) la respuesta es casi directa.
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping:   30,
+    restDelta: 0.001,
+  });
 
-  // Estilos dinámicos de salida para el contenido de la intro
-  const introContentStyles = {
-    opacity: 1 - Math.pow(introExitNorm, 1.8),
-    transform: `translate(-50%, -50%) scale(${1 - introExitNorm * 0.35})`,
-    filter: `blur(${introExitNorm * 12}px)`,
-    transition: 'none', // Sincronizado con el scroll
-    willChange: 'transform, opacity, filter',
-  };
+  // ── 3. Mapeo cinemático del efecto de salida de la Intro ──────────────────
+  //    Ventana: [SLOT - 2*OVERLAP, SLOT] = [0.20, 0.25]
+  //    Termina EXACTAMENTE en el snap point de Bodas → cuando el usuario llega,
+  //    la intro ya desapareció y Bodas está al 100% (sin solapamiento visible).
+
+  // Capa fantasma de la intro (el div que contiene todo el slide)
+  const introLayerOpacity = useTransform(
+    smoothProgress,
+    [SLOT - 2 * OVERLAP, SLOT], // [0.20, 0.25] — completa al llegar a snap 1
+    [1, 0],
+  );
+
+  // Texto: triple efecto "tunnel" — TERMINA en el snap de Bodas (0.25)
+  const introTextOpacity = useTransform(smoothProgress, [0.20, 0.25], [1,    0]);
+  const introTextScale   = useTransform(smoothProgress, [0.20, 0.25], [1, 0.65]);
+  const introBlurValue   = useTransform(smoothProgress, [0.20, 0.25], [0,   12]);
+  const introTextFilter  = useTransform(introBlurValue, (v) => `blur(${v}px)`);
+
+  // Fondo: zoom-in sutil y fade — también termina en 0.25
+  const bgScale   = useTransform(smoothProgress, [0.20, 0.25], [1,   1.10]);
+  const bgOpacity = useTransform(smoothProgress, [0.20, 0.25], [1,   0.40]);
+
+  // ── Hard-snap para animaciones de texto de los slides de video ───────────
+  const activeIndex    = Math.min(3, Math.floor(progress * 4)); // 0-intro 1-3 cats
+  const activeCatIndex = activeIndex - 1;
+  const isIntroActive  = activeIndex === 0;
 
   return (
     <section
@@ -61,79 +126,95 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
       ref={categoriesRef}
       className="cats-section"
     >
-      {/* ── Invisible snap markers — 4 × 100vh ── */}
+      {/* ── Invisible snap markers — 4 × 100dvh ── */}
       <div className="cats-snap-markers" aria-hidden="true">
-        {[0, 1, 2, 3, 4].map((i) => (
+        {[0, 1, 2, 3].map((i) => (
           <div key={i} className="cats-snap-stop" />
         ))}
       </div>
 
-      {/* ── Sticky viewport — stays fixed while user scrolls 400vh ── */}
+      {/* ── Sticky viewport ── */}
       <div className="cats-sticky">
 
-        {/* Layer base permanente — nunca muestra negro puro durante crossfade */}
+        {/* Capa base permanente */}
         <div className="cats-base-bg" aria-hidden="true" />
 
-        {/* ── SLIDE 0: Intro ── */}
-        <div
+        {/* ══════════════════════════════════════════════════════════
+            CAPA 0 — Intro "Nuestras Categorías"
+
+            Usamos motion.div en lugar de div normal para que Framer
+            Motion actualice la opacidad directamente en el DOM sin
+            pasar por el ciclo de re-render de React (0 jank).
+            ══════════════════════════════════════════════════════════ */}
+        <motion.div
           className="cats-slide"
           style={{
-            // La intro permanece visible hasta que el zoom de salida termina
-            opacity: progress < introExitEnd ? 1 : 0,
-            zIndex: progress < introExitEnd ? 10 : 1,
+            opacity:       introLayerOpacity, // MotionValue → DOM directo
+            zIndex:        10,
             pointerEvents: isIntroActive ? 'auto' : 'none',
-            // Solo animamos la opacidad total si no estamos en el rango de scroll controlado
-            transition: (progress > 0 && progress < introExitEnd) ? 'none' : 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         >
-          <div
+          {/* Fondo: Composite Layer en GPU con zoom-in y fade */}
+          <motion.div
             style={{
-              width: '100%',
-              height: '100%',
-              opacity: 1 - introExitNorm,
-              transform: `scale(${1 + introExitNorm * 0.1})`,
-              transition: 'none'
+              width:    '100%',
+              height:   '100%',
+              scale:    bgScale,    // GPU composite — sin repaint
+              opacity:  bgOpacity,
             }}
           >
             <CinematicBackground />
             <CinematicGlow />
-          </div>
+          </motion.div>
 
-          <div
-            className="cat-intro-content relative z-10"
-            style={introContentStyles}
+          {/* Texto: efecto "tunnel" completo — scale + blur + fade
+              x="-50%" y="-50%": Framer Motion compila esto en el mismo
+              transform que scale, evitando conflicto con el CSS.
+              willChange le avisa al browser ANTES de que empiece. */}
+          <motion.div
+            className="cat-intro-content"
+            style={{
+              x:          '-50%',
+              y:          '-50%',
+              opacity:    introTextOpacity,
+              scale:      introTextScale,
+              filter:     introTextFilter,
+              willChange: 'transform, opacity, filter', // GPU composite layer
+            }}
           >
             <h2 className={`cat-intro-title cat-intro-animate${isIntroActive ? ' is-visible' : ''}`}>
               Nuestras <br />
               Categorías
             </h2>
-
             <p className={`cat-intro-desc cat-intro-animate-desc${isIntroActive ? ' is-visible' : ''}`}>
               Especialistas en transformar la visión de cada cliente en una producción técnica sin precedentes.
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        {/* ════ SLIDES 1–3: Category videos ════ */}
+        {/* ══════════════════════════════════════════════════════════
+            CAPAS 1–3 — Bodas / Sociales / Corporativos
+            Siguen usando Ghost Layers manuales (mapRange) porque el
+            video corta en el canvas, no en el DOM — useTransform
+            aquí no añade ventaja sobre mapRange con RAF.
+            ══════════════════════════════════════════════════════════ */}
         {categories.map((cat, i) => {
-          const isActive = activeCatIndex === i;
-          const isSlide1 = i === 0;
-          const isVisible = isActive || (isSlide1 && progress > slide1RevealStart && progress < 0.4);
+          const layerOpacity   = getCatLayerOpacity(progress, i + 1);
+          const isLayerVisible = layerOpacity > 0.04;
+          const isActive       = activeCatIndex === i;
 
           return (
             <div
               key={cat.id}
               className="cats-slide"
               style={{
-                opacity: isSlide1
-                  ? (progress < 0.2 ? slide1RevealNorm : (isActive ? 1 : 0))
-                  : (isActive ? 1 : 0),
-                zIndex: isActive ? 5 : (isSlide1 && progress < 0.25 ? 2 : 1),
+                opacity:       layerOpacity,
+                zIndex:        i + 1,
                 pointerEvents: isActive ? 'auto' : 'none',
-                transition: isActive ? 'none' : (progress < 0.25 && isSlide1 ? 'none' : 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)'),
+                transition:    'none',
+                willChange:    'opacity',
               }}
             >
-              {/* Ken Burns background wrapper */}
               <div className="cats-bg-wrapper">
                 <VolumeVideo
                   src={cat.video}
@@ -141,58 +222,52 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                   loop
                   preload="metadata"
                   isMuted={isMuted}
-                  isVisible={isVisible}
+                  isVisible={isLayerVisible}
                   playsInline
                   className="cats-bg-video"
                   style={{
-                    // Ken Burns sutil y constante
-                    transform: (isActive && !isMobileDevice) ? 'scale(1.1)' : 'scale(1)',
+                    transform:  (isActive && !isMobileDevice) ? 'scale(1.06)' : 'scale(1)',
                     transition: (isActive && !isMobileDevice)
-                      ? 'transform 10s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                      ? 'transform 12s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
                       : 'none',
                     willChange: isActive ? 'transform' : 'auto',
                   }}
                 />
-                {/* Overlay 50% */}
                 <div className="cats-bg-overlay" />
               </div>
 
-              {/* Text content — bottom left, staggered reveal */}
               <div className="cats-content">
-                {/* Title */}
                 <h3
                   className="cat-title cats-reveal"
                   style={{
-                    transitionDelay: isActive ? '0.4s' : '0s',
-                    opacity: isActive ? 1 : 0,
-                    transform: isActive ? 'translateY(0)' : 'translateY(22px)',
-                    willChange: isActive ? 'opacity, transform' : 'auto',
+                    opacity:         isActive ? 1 : 0,
+                    transform:       isActive ? 'translateY(0)' : 'translateY(22px)',
+                    transitionDelay: isActive ? '0.35s' : '0s',
+                    willChange:      isActive ? 'opacity, transform' : 'auto',
                   }}
                 >
                   {cat.title}
                 </h3>
 
-                {/* Description */}
                 <p
                   className="cat-desc cats-reveal"
                   style={{
-                    transitionDelay: isActive ? '0.6s' : '0s',
-                    opacity: isActive ? 1 : 0,
-                    transform: isActive ? 'translateY(0)' : 'translateY(15px)',
-                    willChange: isActive ? 'opacity, transform' : 'auto',
+                    opacity:         isActive ? 1 : 0,
+                    transform:       isActive ? 'translateY(0)' : 'translateY(15px)',
+                    transitionDelay: isActive ? '0.55s' : '0s',
+                    willChange:      isActive ? 'opacity, transform' : 'auto',
                   }}
                 >
                   {cat.description}
                 </p>
 
-                {/* CTA */}
                 <div
                   className="cat-cta cats-reveal"
                   style={{
-                    transitionDelay: isActive ? '0.8s' : '0s',
-                    opacity: isActive ? 1 : 0,
-                    transform: isActive ? 'translateY(0)' : 'translateY(10px)',
-                    willChange: isActive ? 'opacity, transform' : 'auto',
+                    opacity:         isActive ? 1 : 0,
+                    transform:       isActive ? 'translateY(0)' : 'translateY(10px)',
+                    transitionDelay: isActive ? '0.75s' : '0s',
+                    willChange:      isActive ? 'opacity, transform' : 'auto',
                   }}
                 >
                   <button onClick={openContactModal} className="cat-btn">

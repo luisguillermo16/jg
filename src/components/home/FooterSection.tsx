@@ -18,13 +18,13 @@ const FooterSection: FC = () => {
           {/* Contact Column */}
           <div id="contact" className="flex flex-col items-center md:items-end">
             <h4 className="text-accent font-bold uppercase tracking-widest mb-8 text-sm">Contacto</h4>
-            <button 
+            <button
               onClick={openContactModal}
               className="group flex items-center gap-4 text-white hover:text-accent transition-all duration-300"
             >
               <span className="text-lg font-remixa font-bold text-right">WhatsApp Live</span>
               <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center group-hover:bg-accent group-hover:text-black transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
               </div>
             </button>
             <p className="mt-4 text-white/30 text-sm font-sans">Cartagena de Indias, Colombia</p>

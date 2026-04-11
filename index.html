@@ -6,7 +6,8 @@
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JG Producciones</title>
-  <meta name="description" content="Producción técnica para eventos: bodas, conciertos y eventos corporativos con pantallas LED, sonido e iluminación de alto nivel." />
+  <meta name="description"
+    content="Producción técnica para eventos: bodas, conciertos y eventos corporativos con pantallas LED, sonido e iluminación de alto nivel." />
 
   <!--
     ESTADO DE CARGA (antes de React)
@@ -23,9 +24,24 @@
   -->
   <style>
     /* Reset mínimo para el estado de carga */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; background: #050607; overflow: hidden; }
-    #root { width: 100%; height: 100%; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: #050607;
+      overflow: hidden;
+    }
+
+    #root {
+      width: 100%;
+      height: 100%;
+    }
 
     /* ── Loading screen: visible SOLO mientras React no ha montado ── */
     #root:empty {
@@ -53,7 +69,9 @@
     }
 
     @keyframes spin {
-      to { transform: translateX(-50%) rotate(360deg); }
+      to {
+        transform: translateX(-50%) rotate(360deg);
+      }
     }
   </style>
 </head>

@@ -23,11 +23,11 @@ const GallerySection: FC<GallerySectionProps> = ({ activeGal, galleryImages }) =
   }, [selectedImg]);
 
   return (
-    <section id="galeria" className="relative h-[400vh] bg-black">
-      {/* Snap Points to manage the two stages (Intro vs Grid) */}
+    <section id="galeria" className="relative h-[200vh] bg-black">
+      {/* Snap Points to manage the stages (Intro vs Grid) */}
       <div className="absolute inset-0 pointer-events-none z-[50]">
-        <div className="h-[200vh] w-full" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }} />
-        <div className="h-[200vh] w-full" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }} />
+        <div className="h-screen w-full" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }} />
+        <div className="h-screen w-full" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }} />
       </div>
 
       <div className="sticky top-0 h-screen w-full overflow-hidden">

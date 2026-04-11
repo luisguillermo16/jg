@@ -171,7 +171,7 @@ const Nosotros: FC = () => {
             whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(163,255,0,0.35)' }}
             whileTap={{ scale: 0.97 }}
             onClick={openContactModal}
-            className="px-12 py-5 bg-[#A3FF00] text-black font-black uppercase tracking-widest rounded-full hover:bg-white transition-colors duration-300 text-sm"
+            className="px-12 py-5 bg-[#A3FF00] text-black font-black uppercase tracking-widest rounded-[40px] hover:bg-white transition-colors duration-300 text-sm"
           >
             Hablemos de tu proyecto
           </motion.button>

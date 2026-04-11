@@ -24,6 +24,10 @@
   max-width: 800px;
 }
 
+.text-shadow-strong {
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9), 0 0 80px rgba(0, 0, 0, 0.6);
+}
+
 /* ============================================================
    STICKY WRAPPER — Promovido a compositor layer de GPU
    Esto es CRÍTICO para evitar el flash negro en scroll-snap móvil.

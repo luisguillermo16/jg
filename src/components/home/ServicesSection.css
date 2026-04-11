@@ -20,6 +20,7 @@
 
 .svc-snap-stop {
   height: 100vh;
+  height: 100dvh; /* respeta la barra URL dinámica de iOS/Android */
   width: 100%;
   scroll-snap-align: start;
   scroll-snap-stop: always;
@@ -125,6 +126,7 @@
   transform: translateY(60px) scale(0.9);
   will-change: opacity, transform;
 }
+
 .svc-intro-animate-desc {
   opacity: 0;
   transform: translateY(30px);
@@ -142,24 +144,26 @@
 }
 
 @keyframes svc-intro-rise {
-  from { 
-    opacity: 0; 
-    transform: translateY(60px) scale(0.9); 
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.9);
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0) scale(1); 
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
 @keyframes svc-intro-rise-desc {
-  from { 
-    opacity: 0; 
-    transform: translateY(30px); 
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -264,7 +268,7 @@
   text-transform: uppercase;
   letter-spacing: 0.22em;
   border: none;
-  border-radius: 100px;
+  border-radius: var(--btn-radius);
   cursor: pointer;
   overflow: hidden;
   font-family: 'Paloseco', sans-serif;

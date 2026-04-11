@@ -12,8 +12,7 @@ const NavLinks: FC<{
   isHome: boolean;
   activeSection: string;
   scrollToSection: (e: React.MouseEvent<HTMLAnchorElement>, id: string) => void;
-  onContactClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-}> = memo(({ isHome, activeSection, scrollToSection, onContactClick }) => {
+}> = memo(({ isHome, activeSection, scrollToSection }) => {
   const isActive = (id: string) => {
     if (!isHome) return false;
     if (id === 'hero' && activeSection.startsWith('hero')) return true;
@@ -54,16 +53,6 @@ const NavLinks: FC<{
         </a>
       </li>
 
-      {/* 5. Contáctanos — solid green CTA */}
-      <li>
-        <a
-          href="#contact"
-          onClick={onContactClick}
-          className="ml-2 px-6 py-2.5 rounded-full text-sm font-black bg-[#A3FF00] text-black transition-all duration-300 font-remixa inline-flex items-center hover:-translate-y-0.5 hover:brightness-110"
-        >
-          Contáctanos
-        </a>
-      </li>
     </>
   );
 });
@@ -152,11 +141,6 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
     return () => window.removeEventListener('open-contact-modal', handleOpenModal);
   }, []);
 
-  const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    setIsContactModalOpen(true);
-    setIsMenuOpen(false);
-  };
 
   const isHome = location.pathname === '/';
   const scrolled = scrollProgress > 0.02;
@@ -195,8 +179,8 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
 
         {/* ── CENTER: Navigation pill (desktop) ── */}
         <div
-          className={`hidden md:flex items-center transition-all duration-700 px-2 py-1.5 ${scrolled
-            ? 'bg-black/55 backdrop-blur-2xl rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
+          className={`hidden md:flex items-center transition-all duration-700 px-6 py-3 ${scrolled
+            ? 'bg-black/55 backdrop-blur-2xl rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
             : 'bg-transparent'
             }`}
         >
@@ -205,14 +189,19 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
               isHome={isHome}
               activeSection={activeSection}
               scrollToSection={scrollToSection}
-              onContactClick={handleContactClick}
             />
           </ul>
         </div>
 
         {/* ── RIGHT: CTA button (desktop) + mobile hamburger ── */}
-        <div className="flex items-center gap-3 flex-shrink-0">
-          {/* Desktop CTA inside pill is handled by NavLinks */}
+        <div className="flex items-center gap-4 flex-shrink-0">
+          <button
+            onClick={() => setIsContactModalOpen(true)}
+            className="hidden md:flex px-7 py-2.5 rounded-[12px] text-[13px] font-black bg-[#A3FF00] text-black transition-all duration-300 font-remixa items-center hover:-translate-y-0.5 hover:brightness-110 shadow-[0_8px_20px_rgba(163,255,0,0.2)]"
+          >
+            Contáctanos
+          </button>
+          
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle Menu"
@@ -235,13 +224,20 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
           className={`absolute inset-x-0 top-0 pt-28 pb-12 px-8 bg-gradient-to-b from-[#091800]/50 to-black border-b border-white/10 transition-all duration-500 transform ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'
             }`}
         >
-          <ul className="flex flex-col gap-6 m-0 p-0 list-none items-center">
+          <ul className="flex flex-col gap-8 m-0 p-0 list-none items-center">
             <NavLinks
               isHome={isHome}
               activeSection={activeSection}
               scrollToSection={scrollToSection}
-              onContactClick={handleContactClick}
             />
+            <li className="md:hidden w-full max-w-[200px] mt-4">
+              <button 
+                onClick={() => setIsContactModalOpen(true)}
+                className="w-full py-3.5 rounded-[12px] text-sm font-black bg-[#A3FF00] text-black transition-all duration-300 font-remixa flex items-center justify-center shadow-[0_10px_30px_rgba(163,255,0,0.3)]"
+              >
+                Contáctanos
+              </button>
+            </li>
           </ul>
         </div>
       </div>

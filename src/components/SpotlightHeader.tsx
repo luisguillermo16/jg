@@ -36,7 +36,7 @@ const SpotlightHeader: FC = () => {
                 </a>
                 <button 
                     onClick={openContactModal}
-                    className="ml-4 px-8 py-2.5 bg-accent text-black font-black uppercase text-xs tracking-widest rounded-full hover:scale-105 transition-all duration-300 shadow-[0_5px_20px_rgba(163,255,0,0.3)] font-remixa"
+                    className="ml-4 px-8 py-2.5 bg-accent text-black font-black uppercase text-xs tracking-widest rounded-[var(--btn-radius)] hover:scale-105 transition-all duration-300 shadow-[0_5px_20px_rgba(163,255,0,0.3)] font-remixa"
                 >
                     Contactar
                 </button>
@@ -46,7 +46,7 @@ const SpotlightHeader: FC = () => {
             <div className="md:hidden">
                 <button 
                     onClick={openContactModal}
-                    className="px-5 py-2 bg-accent text-black font-black uppercase text-[10px] tracking-widest rounded-full font-remixa"
+                    className="px-5 py-2 bg-accent text-black font-black uppercase text-[10px] tracking-widest rounded-[var(--btn-radius)] font-remixa"
                 >
                     WhatsApp
                 </button>
