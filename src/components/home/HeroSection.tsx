@@ -3,7 +3,8 @@ import './HeroSection.css';
 import VolumeVideo from '../VolumeVideo';
 import logo from '../../assets/brand/logo.webp';
 import heroImage from '../../assets/home/img/hero4.jpeg';
-import heroVideo from '../../assets/home/vids/hero.mp4';
+const heroVideo = 'https://luispineda.b-cdn.net/hero.mp4';
+
 
 
 interface HeroSectionProps {
