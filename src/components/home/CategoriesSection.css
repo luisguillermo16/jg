@@ -151,12 +151,12 @@
 /* ── Category title ── */
 .cat-title {
   font-family: 'Paloseco', sans-serif;
-  font-size: clamp(2.2rem, 5.5vw, 4.5rem);
+  font-size: clamp(1.8rem, 5.5vw, 4.5rem);
   font-weight: 900;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  line-height: 1.1;
+  line-height: 1.05;
   margin-bottom: 20px;
 }
 
@@ -225,8 +225,10 @@
   text-align: center;
   width: 100%;
   max-width: 1400px;
-  padding: 0 24px;
+  padding: 0 20px;
+  box-sizing: border-box;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .cat-intro-title {
@@ -313,7 +315,8 @@
   }
 
   .cat-intro-title {
-    font-size: clamp(3rem, 14vw, 5.5rem);
+    font-size: clamp(2.2rem, 12vw, 4.5rem);
+    line-height: 0.9;
   }
 
   /* Transiciones más cortas en móvil para mejor respuesta */

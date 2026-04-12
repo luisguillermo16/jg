@@ -128,7 +128,6 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
       id="categories"
       ref={categoriesRef}
       className="cats-section"
-      layoutScroll
     >
       {/* ── Overlay de carga cinemático ── */}
       <motion.div 
@@ -234,7 +233,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                   loop
                   playsInline
                   autoPlay
-                  className="cats-video"
+                  className="cats-bg-video"
                   onCanPlayThrough={() => setLoadedCount(prev => prev + 1)}
                   style={{
                     transform:  (isActive && !isMobileDevice && !shouldReduceMotion) ? 'scale(1.06)' : 'scale(1)',
