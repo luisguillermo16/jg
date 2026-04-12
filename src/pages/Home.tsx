@@ -29,7 +29,6 @@ if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
 }
 
 const Home: FC = () => {
-  const [heroIndex, setHeroIndex] = useState(0);
   const [catsProgress, setCatsProgress] = useState(0);
   const [svcsProgress, setSvcsProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('hero');
@@ -45,16 +44,14 @@ const Home: FC = () => {
   const smoothSvcsProgress = useRef(0);
   const rafId = useRef<number>(0);
   const rafFrame = useRef(0);
-  const [winHeight, setWinHeight] = useState(0);
-
-  // 1. Hydration & Resize Guard: Manejo de dimensiones en el cliente
-  useEffect(() => {
-    const handleResize = () => setWinHeight(window.innerHeight);
-    handleResize(); // Initial measurement
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const lastSectionRef = useRef('hero');
+  const lastGalRef = useRef(-1);
+  /** offsetTop cache — evita getElementById cada frame */
+  const sectionOffsets = useRef({
+    svcStart: 0,
+    galStart: 0,
+    nosotrosTop: Number.POSITIVE_INFINITY,
+  });
 
   // Advanced Scroll Reset logic
   useEffect(() => {
@@ -98,25 +95,35 @@ const Home: FC = () => {
     const LERP_FACTOR = 0.35; // Aumentado para que la animación siga el snap muy de cerca
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-    const windowHeight = window.innerHeight;
     const container = containerRef.current;
     if (!container) return;
 
-    const tick = () => {
-      rafFrame.current++;
-      // Reducido throttle en móvil para mantener fluidez del LERP
-      if (isMobileDevice && rafFrame.current % 1.5 !== 0) {
-        // rafId.current = requestAnimationFrame(tick);
-        // return;
-      }
-      const currentScroll = container.scrollTop;
-      const hHeight = winHeight || window.innerHeight;
-
-      // Measure section positions dynamically
+    const refreshSectionOffsets = () => {
+      const h = window.innerHeight;
       const svcEl = document.getElementById('servicios');
       const galEl = document.getElementById('galeria');
-      const svcStart = svcEl ? svcEl.offsetTop : hHeight * 8;
-      const galStart = galEl ? galEl.offsetTop : hHeight * 15;
+      const nosEl = document.getElementById('nosotros');
+      sectionOffsets.current = {
+        svcStart: svcEl ? svcEl.offsetTop : h * 8,
+        galStart: galEl ? galEl.offsetTop : h * 15,
+        nosotrosTop: nosEl ? nosEl.offsetTop : Number.POSITIVE_INFINITY,
+      };
+    };
+
+    const onResize = () => refreshSectionOffsets();
+    window.addEventListener('resize', onResize);
+    refreshSectionOffsets();
+
+    const tick = () => {
+      rafFrame.current++;
+      const windowHeight = window.innerHeight;
+      if (rafFrame.current % 12 === 0) {
+        refreshSectionOffsets();
+      }
+
+      const currentScroll = container.scrollTop;
+      const hHeight = window.innerHeight;
+      const { svcStart, galStart, nosotrosTop } = sectionOffsets.current;
 
       // ── Hero Progress (200vh) ──────────────────────────────────────────────
       const hProg = Math.min(2, currentScroll / hHeight);
@@ -133,13 +140,9 @@ const Home: FC = () => {
       const sProg = Math.max(0, Math.min(1, (currentScroll - svcStart) / sMax));
       container.style.setProperty('--svcs-progress', sProg.toFixed(4));
 
-      // 1. Hero Index Calculation (Static Hero)
-      const currentHeroIndex = 0;
-      if (currentHeroIndex !== heroIndex) setHeroIndex(currentHeroIndex);
-
       // 2. Categories progress — LERP interpolation for smooth tracking
       const cProgSmooth = lerp(smoothCatsProgress.current, cProg, LERP_FACTOR);
-      const cProgThreshold = isMobileDevice ? 0.0005 : 0.0001;
+      const cProgThreshold = isMobileDevice ? 0.001 : 0.0001;
       if (Math.abs(smoothCatsProgress.current - cProgSmooth) > cProgThreshold) {
         smoothCatsProgress.current = cProgSmooth;
         setCatsProgress(cProgSmooth);
@@ -147,42 +150,44 @@ const Home: FC = () => {
 
       // 3. Services smooth progress
       const sProgSmooth = lerp(smoothSvcsProgress.current, sProg, LERP_FACTOR);
-      const sProgThreshold = isMobileDevice ? 0.0005 : 0.0001;
+      const sProgThreshold = isMobileDevice ? 0.001 : 0.0001;
       if (Math.abs(smoothSvcsProgress.current - sProgSmooth) > sProgThreshold) {
         smoothSvcsProgress.current = sProgSmooth;
         setSvcsProgress(sProgSmooth);
       }
 
-      // 4. Section detection
+      // 4. Section detection — setState solo cuando cambia (menos renders)
+      let nextSection = lastSectionRef.current;
       if (currentScroll < catsStart - windowHeight / 2) {
-        setActiveSection('hero');
+        nextSection = 'hero';
       } else if (currentScroll < svcStart - windowHeight / 2) {
-        // Cada slide de categorías ocupa exactamente 1 página (100vh)
         const p = (currentScroll - catsStart) / windowHeight;
-        if (p < 1.0)       setActiveSection('categories-intro');
-        else if (p < 2.0)  setActiveSection('categories-1');    // Bodas
-        else if (p < 3.0)  setActiveSection('categories-2');    // Sociales
-        else               setActiveSection('categories-3');    // Corporativos
+        if (p < 1.0) nextSection = 'categories-intro';
+        else if (p < 2.0) nextSection = 'categories-1';
+        else if (p < 3.0) nextSection = 'categories-2';
+        else nextSection = 'categories-3';
       } else if (currentScroll < galStart - windowHeight / 2) {
-        const nosotrosEl = document.getElementById('nosotros');
-        const nosotrosTop = nosotrosEl ? nosotrosEl.offsetTop : Infinity;
         if (currentScroll >= nosotrosTop - windowHeight / 2) {
-          setActiveSection('nosotros');
+          nextSection = 'nosotros';
         } else {
-          setActiveSection('servicios');
+          nextSection = 'servicios';
         }
       } else if (currentScroll < galStart + windowHeight * 2) {
-        // Gallery: 200vh total (2 snap points × 100vh)
-        setActiveSection('galeria');
+        nextSection = 'galeria';
         const galScroll = currentScroll - galStart;
         const galP = galScroll / (windowHeight * 2);
-        if (galP < 0.5) {
-          setActiveGal(-1); // intro
-        } else {
-          setActiveGal(0);  // grid
+        const nextGal = galP < 0.5 ? -1 : 0;
+        if (nextGal !== lastGalRef.current) {
+          lastGalRef.current = nextGal;
+          setActiveGal(nextGal);
         }
       } else {
-        setActiveSection('contact');
+        nextSection = 'contact';
+      }
+
+      if (nextSection !== lastSectionRef.current) {
+        lastSectionRef.current = nextSection;
+        setActiveSection(nextSection);
       }
 
       rafId.current = requestAnimationFrame(tick);
@@ -202,6 +207,7 @@ const Home: FC = () => {
     document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
 
     return () => {
+      window.removeEventListener('resize', onResize);
       cancelAnimationFrame(rafId.current);
       observer.disconnect();
     };

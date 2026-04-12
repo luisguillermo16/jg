@@ -17,15 +17,34 @@ const ContactModal: FC<ContactModalProps> = ({ isOpen, onClose }) => {
     fechaEvento: '',
   });
 
-  // Prevent scroll when modal is open
+  // Bloquear scroll: body + .home-container (el scroll real de la SPA está ahí)
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+    if (!isOpen) return;
+
+    const bodyPrev = document.body.style.overflow;
+    const home = document.querySelector('.home-container') as HTMLElement | null;
+    const homePrev = home
+      ? {
+          overflow: home.style.overflow,
+          touchAction: home.style.touchAction,
+          overscrollBehavior: home.style.overscrollBehavior,
+        }
+      : null;
+
+    document.body.style.overflow = 'hidden';
+    if (home && homePrev) {
+      home.style.overflow = 'hidden';
+      home.style.touchAction = 'none';
+      home.style.overscrollBehavior = 'none';
     }
+
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = bodyPrev;
+      if (home && homePrev) {
+        home.style.overflow = homePrev.overflow;
+        home.style.touchAction = homePrev.touchAction;
+        home.style.overscrollBehavior = homePrev.overscrollBehavior;
+      }
     };
   }, [isOpen]);
 

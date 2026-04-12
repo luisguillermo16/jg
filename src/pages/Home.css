@@ -25,3 +25,18 @@
 .home-container main {
   display: contents;
 }
+
+/* Móvil / touch: snap menos agresivo (touchpad y dedo) */
+@media (max-width: 767px) {
+  .home-container {
+    scroll-snap-type: y proximity;
+    scroll-snap-stop: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-container {
+    scroll-snap-type: y proximity;
+    scroll-snap-stop: normal;
+  }
+}

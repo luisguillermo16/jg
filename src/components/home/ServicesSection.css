@@ -43,8 +43,14 @@
   -webkit-backface-visibility: hidden;
   background: #050607;
   contain: layout style;
-  /* Fuerza que el scroll se sienta más firme */
+  /* Desktop: suaviza; en móvil evita pelear con el snap del contenedor padre */
   scroll-behavior: smooth;
+}
+
+@media (max-width: 767px) {
+  .svc-sticky {
+    scroll-behavior: auto;
+  }
 }
 
 /* Layer base permanente — SIEMPRE visible, impide negro puro */
