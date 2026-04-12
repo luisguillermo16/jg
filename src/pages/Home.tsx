@@ -116,6 +116,11 @@ const Home: FC = () => {
 
     const tick = () => {
       rafFrame.current++;
+      if (document.visibilityState === 'hidden') {
+        rafId.current = requestAnimationFrame(tick);
+        return;
+      }
+
       const windowHeight = window.innerHeight;
       if (rafFrame.current % 12 === 0) {
         refreshSectionOffsets();

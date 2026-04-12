@@ -6,12 +6,14 @@ interface VolumeVideoProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
   fadeDuration?: number;
 }
 
-const VolumeVideo: React.FC<VolumeVideoProps> = ({ 
-  isVisible, 
-  isMuted, 
-  fadeDuration = 800, 
-  ...props 
+const VolumeVideo: React.FC<VolumeVideoProps> = ({
+  isVisible,
+  isMuted,
+  fadeDuration = 800,
+  preload: preloadProp,
+  ...props
 }) => {
+  const preload = preloadProp ?? (isVisible ? 'auto' : 'none');
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -72,11 +74,12 @@ const VolumeVideo: React.FC<VolumeVideoProps> = ({
   }, [isVisible, isMuted, fadeDuration]);
 
   return (
-    <video 
-      ref={videoRef} 
-      muted={isMuted} 
+    <video
+      ref={videoRef}
+      {...props}
+      muted={isMuted}
+      preload={preload}
       onCanPlayThrough={props.onCanPlayThrough}
-      {...props} 
     />
   );
 };

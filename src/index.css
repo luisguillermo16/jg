@@ -3,7 +3,7 @@
    Variables, fuentes, reset, body, #root, autofill
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+/* Google Fonts: enlaces en index.html (evita bloquear el parseo de este CSS) */
 @import './styles/animations.css';
 @tailwind base;
 @tailwind components;

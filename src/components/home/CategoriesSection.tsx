@@ -61,12 +61,6 @@ const getCatLayerOpacity = (progress: number, slideIndex: number): number => {
   return Math.min(fadeIn, fadeOut);
 };
 
-// Intro layer: fade-out completa JUSTO al llegar al snap de Bodas (progress = 0.25)
-const getIntroLayerOpacity = (progress: number): number =>
-  mapRange(progress, SLOT - 2 * OVERLAP, SLOT, 1, 0);
-//          ─────── [0.20, 0.25] ─────── → al llegar a Bodas, Intro ya desapareció completamente
-
-
 const CategoriesSection: FC<CategoriesSectionProps> = ({
   categoriesRef,
   containerRef,
@@ -76,7 +70,8 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
 }) => {
   const shouldReduceMotion = useReducedMotion();
   const [loadedCount, setLoadedCount] = useState(0);
-  const isAllLoaded = loadedCount >= categories.length;
+  /** En móvil un solo vídeo: no bloquear la UI esperando los 3 MP4 del desktop */
+  const isAllLoaded = isMobileDevice || loadedCount >= categories.length;
 
   // ── 1. Capturamos el progreso real del scroll en el contenedor custom ──────
   //    offset: ["start start", "end end"] → progress 0 cuando el top de la
@@ -90,11 +85,10 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
   // ── 2. Spring suavizado — elimina el jank del scroll de ratón (Windows) ───
   //    stiffness/damping ajustados para sentirse "como mantequilla" en desktop
   //    mientras que en móvil (touch) la respuesta es casi directa.
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping:   30,
-    restDelta: 0.001,
-  });
+  const smoothProgress = useSpring(scrollYProgress, isMobileDevice
+    ? { stiffness: 420, damping: 45, restDelta: 0.008 }
+    : { stiffness: 100, damping: 30, restDelta: 0.001 },
+  );
 
   // ── 3. Mapeo cinemático del efecto de salida de la Intro ──────────────────
   //    Ventana: [SLOT - 2*OVERLAP, SLOT] = [0.20, 0.25]
@@ -129,13 +123,15 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
       ref={categoriesRef}
       className="cats-section"
     >
-      {/* ── Overlay de carga cinemático ── */}
-      <motion.div 
-        className="absolute inset-0 z-[500] bg-black pointer-events-none"
-        initial={{ opacity: 1 }}
-        animate={{ opacity: isAllLoaded ? 0 : 1 }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
-      />
+      {/* Overlay de carga: solo desktop (tres vídeos en paralelo) */}
+      {!isMobileDevice && (
+        <motion.div
+          className="absolute inset-0 z-[500] bg-black pointer-events-none"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: isAllLoaded ? 0 : 1 }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
+        />
+      )}
       {/* ── Invisible snap markers — 4 × 100dvh ── */}
       <div className="cats-snap-markers" aria-hidden="true">
         {[0, 1, 2, 3].map((i) => (
@@ -208,87 +204,138 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
             video corta en el canvas, no en el DOM — useTransform
             aquí no añade ventaja sobre mapRange con RAF.
             ══════════════════════════════════════════════════════════ */}
-        {categories.map((cat, i) => {
-          const layerOpacity   = getCatLayerOpacity(progress, i + 1);
-          const isLayerVisible = layerOpacity > 0.04;
-          const isActive       = activeCatIndex === i;
-
-          return (
-            <div
-              key={cat.id}
-              className="cats-slide"
-              style={{
-                opacity:       layerOpacity,
-                zIndex:        i + 1,
-                pointerEvents: isActive ? 'auto' : 'none',
-                transition:    'none',
-                willChange:    'opacity',
-              }}
-            >
-              <div className="cats-bg-wrapper">
-                <VolumeVideo
-                  src={cat.video}
-                  isVisible={layerOpacity > 0.05}
-                  isMuted={isMuted}
-                  loop
-                  playsInline
-                  autoPlay
-                  className="cats-bg-video"
-                  onCanPlayThrough={() => setLoadedCount(prev => prev + 1)}
-                  style={{
-                    transform:  (isActive && !isMobileDevice && !shouldReduceMotion) ? 'scale(1.06)' : 'scale(1)',
-                    transition: (isActive && !isMobileDevice && !shouldReduceMotion)
-                      ? 'transform 12s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-                      : 'none',
-                    willChange: isActive ? 'transform' : 'auto',
-                  }}
-                />
-                <div className="cats-bg-overlay" />
-              </div>
-
-              <div className="cats-content">
-                <h3
-                  className="cat-title cats-reveal"
-                  style={{
-                    opacity:         isActive ? 1 : 0,
-                    transform:       isActive ? 'translateY(0)' : 'translateY(22px)',
-                    transitionDelay: isActive ? '0.35s' : '0s',
-                    willChange:      isActive ? 'opacity, transform' : 'auto',
-                  }}
-                >
-                  {cat.title}
-                </h3>
-
-                <p
-                  className="cat-desc cats-reveal"
-                  style={{
-                    opacity:         isActive ? 1 : 0,
-                    transform:       isActive ? 'translateY(0)' : 'translateY(15px)',
-                    transitionDelay: isActive ? '0.55s' : '0s',
-                    willChange:      isActive ? 'opacity, transform' : 'auto',
-                  }}
-                >
-                  {cat.description}
-                </p>
-
+        {isMobileDevice
+          ? activeCatIndex >= 0 &&
+            (() => {
+              const cat = categories[activeCatIndex];
+              return (
                 <div
-                  className="cat-cta cats-reveal"
+                  key={cat.id}
+                  className="cats-slide"
                   style={{
-                    opacity:         isActive ? 1 : 0,
-                    transform:       isActive ? 'translateY(0)' : 'translateY(10px)',
-                    transitionDelay: isActive ? '0.75s' : '0s',
-                    willChange:      isActive ? 'opacity, transform' : 'auto',
+                    opacity: 1,
+                    zIndex: 15,
+                    pointerEvents: 'auto',
+                    transition: 'none',
                   }}
                 >
-                  <button onClick={openContactModal} className="cat-btn">
-                    <span>Contactar</span>
-                    <div className="cat-btn-shine" />
-                  </button>
+                  <div className="cats-bg-wrapper">
+                    <VolumeVideo
+                      src={cat.video}
+                      isVisible
+                      isMuted={isMuted}
+                      loop
+                      playsInline
+                      autoPlay
+                      preload="auto"
+                      className="cats-bg-video"
+                      onCanPlayThrough={() => setLoadedCount((p) => p + 1)}
+                      style={{
+                        transform: 'scale(1)',
+                        transition: 'none',
+                        willChange: 'auto',
+                      }}
+                    />
+                    <div className="cats-bg-overlay" />
+                  </div>
+
+                  <div className="cats-content">
+                    <h3 className="cat-title cats-reveal" style={{ opacity: 1, transform: 'translateY(0)' }}>
+                      {cat.title}
+                    </h3>
+                    <p className="cat-desc cats-reveal" style={{ opacity: 1, transform: 'translateY(0)' }}>
+                      {cat.description}
+                    </p>
+                    <div className="cat-cta cats-reveal" style={{ opacity: 1, transform: 'translateY(0)' }}>
+                      <button type="button" onClick={openContactModal} className="cat-btn">
+                        <span>Contactar</span>
+                        <div className="cat-btn-shine" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          );
-        })}
+              );
+            })()
+          : categories.map((cat, i) => {
+              const layerOpacity = getCatLayerOpacity(progress, i + 1);
+              const isActive = activeCatIndex === i;
+
+              return (
+                <div
+                  key={cat.id}
+                  className="cats-slide"
+                  style={{
+                    opacity: layerOpacity,
+                    zIndex: i + 1,
+                    pointerEvents: isActive ? 'auto' : 'none',
+                    transition: 'none',
+                    willChange: 'opacity',
+                  }}
+                >
+                  <div className="cats-bg-wrapper">
+                    <VolumeVideo
+                      src={cat.video}
+                      isVisible={layerOpacity > 0.05}
+                      isMuted={isMuted}
+                      loop
+                      playsInline
+                      autoPlay
+                      className="cats-bg-video"
+                      onCanPlayThrough={() => setLoadedCount((p) => p + 1)}
+                      style={{
+                        transform: isActive && !shouldReduceMotion ? 'scale(1.06)' : 'scale(1)',
+                        transition: isActive && !shouldReduceMotion
+                          ? 'transform 12s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                          : 'none',
+                        willChange: isActive ? 'transform' : 'auto',
+                      }}
+                    />
+                    <div className="cats-bg-overlay" />
+                  </div>
+
+                  <div className="cats-content">
+                    <h3
+                      className="cat-title cats-reveal"
+                      style={{
+                        opacity: isActive ? 1 : 0,
+                        transform: isActive ? 'translateY(0)' : 'translateY(22px)',
+                        transitionDelay: isActive ? '0.35s' : '0s',
+                        willChange: isActive ? 'opacity, transform' : 'auto',
+                      }}
+                    >
+                      {cat.title}
+                    </h3>
+
+                    <p
+                      className="cat-desc cats-reveal"
+                      style={{
+                        opacity: isActive ? 1 : 0,
+                        transform: isActive ? 'translateY(0)' : 'translateY(15px)',
+                        transitionDelay: isActive ? '0.55s' : '0s',
+                        willChange: isActive ? 'opacity, transform' : 'auto',
+                      }}
+                    >
+                      {cat.description}
+                    </p>
+
+                    <div
+                      className="cat-cta cats-reveal"
+                      style={{
+                        opacity: isActive ? 1 : 0,
+                        transform: isActive ? 'translateY(0)' : 'translateY(10px)',
+                        transitionDelay: isActive ? '0.75s' : '0s',
+                        willChange: isActive ? 'opacity, transform' : 'auto',
+                      }}
+                    >
+                      <button type="button" onClick={openContactModal} className="cat-btn">
+                        <span>Contactar</span>
+                        <div className="cat-btn-shine" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
       </div>
     </section>
   );
