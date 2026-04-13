@@ -4,6 +4,7 @@ interface VolumeVideoProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
   isVisible: boolean;
   isMuted: boolean;
   fadeDuration?: number;
+  forceLoad?: boolean;
 }
 
 const VolumeVideo: React.FC<VolumeVideoProps> = ({
@@ -12,9 +13,10 @@ const VolumeVideo: React.FC<VolumeVideoProps> = ({
   fadeDuration = 800,
   preload: preloadProp,
   poster,
+  forceLoad = false,
   ...props
 }) => {
-  const [shouldLoad, setShouldLoad] = useState(false);
+  const [shouldLoad, setShouldLoad] = useState(forceLoad);
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -30,7 +32,7 @@ const VolumeVideo: React.FC<VolumeVideoProps> = ({
           observer.disconnect();
         }
       },
-      { rootMargin: '300px' } // Cargamos con un margen generoso
+      { rootMargin: '600px' } // Margen más generoso para evitar lag en redes móviles lentas
     );
 
     observer.observe(container);
@@ -111,6 +113,7 @@ const VolumeVideo: React.FC<VolumeVideoProps> = ({
           muted={isMuted}
           preload={preloadProp || 'auto'}
           className={`${props.className || ''} ${!isVisible ? 'pointer-events-none' : ''}`}
+          style={{ ...props.style, opacity: 1, border: '2px solid red' }}
         />
       )}
     </div>

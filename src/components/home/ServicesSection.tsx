@@ -1,9 +1,6 @@
 import { type FC } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import './ServicesSection.css';
 import { openContactModal } from '../../utils/modal';
-import CinematicGlow from '../CinematicGlow';
-import CinematicBackground from '../CinematicBackground';
+import './ServicesSection.css';
 
 interface Service {
   title: string;
@@ -14,200 +11,49 @@ interface Service {
 
 interface ServicesSectionProps {
   services: Service[];
-  progress: number;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Mapea un valor de un rango a otro, clampeado. Equivalente a useTransform.
-// ─────────────────────────────────────────────────────────────────────────────
-const mapRange = (val: number, in0: number, in1: number, out0: number, out1: number): number => {
-  const t = Math.max(0, Math.min(1, (val - in0) / (in1 - in0)));
-  return out0 + t * (out1 - out0);
-};
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Ghost Layer Opacity — Técnica de Capas Fantasma para ServicesSection
-//
-//  7 slides (progress 0→1, cada slot = 1/7 ≈ 0.1429):
-//    Slot 0 (Intro): [0.000 → 0.143]
-//    Slot 1–6 (Servicios): [0.143 → 1.00]
-//
-//  OVERLAP = 0.014 (10% del slot de 0.143)
-// ─────────────────────────────────────────────────────────────────────────────
-const SVC_SLOTS = 7;
-const SVC_SLOT  = 1 / SVC_SLOTS;           // ≈ 0.1429
-const SVC_OVR   = SVC_SLOT * 0.1;          // 10% de overlap
-
-const getSvcLayerOpacity = (progress: number, slotIndex: number): number => {
-  const snapIn   = slotIndex * SVC_SLOT;
-  const snapNext = (slotIndex + 1) * SVC_SLOT;
-
-  // Fade-in: TERMINA exactamente en el snap point del slide (Regla 6)
-  const fadeIn = mapRange(progress, snapIn - 2 * SVC_OVR, snapIn, 0, 1);
-
-  // Fade-out: TERMINA exactamente en el snap point del siguiente slide
-  // Dwell Time: El último slide (6) es inmune al fade-out
-  const fadeOut = slotIndex === 6
-    ? 1
-    : mapRange(progress, snapNext - 2 * SVC_OVR, snapNext, 1, 0);
-
-  return Math.min(fadeIn, fadeOut);
-};
-
-// Intro: fade-out puro al llegar al primer snap de servicio (Regla 6)
-const getSvcIntroOpacity = (progress: number): number =>
-  mapRange(progress, SVC_SLOT - 2 * SVC_OVR, SVC_SLOT, 1, 0);
-
-const ServicesSection: FC<ServicesSectionProps> = ({ services, progress }) => {
-  const shouldReduceMotion = useReducedMotion();
-  // ── Slide activo para animaciones de TEXTO (hard-snap) ──
-  const activeIndex   = Math.min(6, Math.floor(progress * SVC_SLOTS)); // 0=intro, 1-6=servicios
-  const isIntroActive = activeIndex === 0;
-
-  // ── Zoom-out cinemático de la intro ──
-  // Terminamos el efecto exactamente en el snap point (SVC_SLOT)
-  const introZoomNorm  = mapRange(progress, SVC_SLOT - 2 * SVC_OVR, SVC_SLOT, 0, 1);
-  const introOpacity   = getSvcIntroOpacity(progress);
-  const introContentStyles = {
-    opacity:    Math.max(0, 1 - Math.pow(introZoomNorm, 1.8)),
-    transform:  `translate(-50%, -50%) scale(${shouldReduceMotion ? 1 : 1 - introZoomNorm * 0.35})`,
-    filter:     shouldReduceMotion ? 'none' : `blur(${introZoomNorm * 12}px)`,
-    transition: 'none',
-    willChange: 'transform, opacity, filter',
-  };
-
+const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
   return (
-    <section id="servicios" className="svc-section" layoutScroll>
-      {/* ── Snap Markers — 7 × 100dvh ── */}
-      <div className="svc-snap-markers">
-        {[...Array(SVC_SLOTS)].map((_, i) => (
-          <div key={i} className="svc-snap-stop" />
-        ))}
-      </div>
-
-      <div className="svc-sticky">
-        {/* Capa base permanente — evita negro puro durante crossfades */}
-        <div className="svc-base-bg" aria-hidden="true" />
-
-        {/* ══════════════════════════════════════════════════════════
-            CAPA 0 — Intro: CinematicBackground + bienvenida
-            ══════════════════════════════════════════════════════════ */}
-        <div
-          className="svc-slide"
-          style={{
-            opacity:       introOpacity,
-            zIndex:        10,
-            pointerEvents: isIntroActive ? 'auto' : 'none',
-            transition:    'none',
-          }}
-        >
-          <div
-            style={{
-              width: '100%', height: '100%',
-              opacity:    Math.max(0, 1 - introZoomNorm * 0.6),
-              transform:  `scale(${1 + introZoomNorm * 0.15})`,
-              transition: 'none',
-            }}
-          >
-            <CinematicBackground />
-            <CinematicGlow />
-          </div>
-
-          <div className="svc-intro-content relative z-10" style={introContentStyles}>
-            <h2 className={`svc-intro-title svc-intro-animate${isIntroActive ? ' is-visible' : ''}`}>
-              Nuestros <br />
-              Servicios
-            </h2>
-            <p className={`svc-intro-desc svc-intro-animate-desc${isIntroActive ? ' is-visible' : ''}`}>
-              Soluciones integrales de producción AV con los más altos estándares de la industria cinematográfica.
-            </p>
-          </div>
+    <section id="servicios" className="bg-[#050607] py-32 px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-20">
+          <h2 className="text-5xl md:text-8xl font-black text-white uppercase font-paloseco mb-6">
+            Nuestros <br /> Servicios
+          </h2>
+          <p className="text-xl text-white/50 max-w-2xl">
+            Soluciones integrales de producción AV con los más altos estándares de la industria cinematográfica.
+          </p>
         </div>
 
-        {/* ══════════════════════════════════════════════════════════
-            CAPAS 1–6 — Servicios: Ghost Layer crossfade premium
-            Cadea imagen tiene opacity interpolada con 10% de overlap.
-            ══════════════════════════════════════════════════════════ */}
-        {services.map((svc, idx) => {
-          const slotIdx      = idx + 1;                          // slots 1-6
-          const layerOpacity = getSvcLayerOpacity(progress, slotIdx);
-          const isActive     = activeIndex === slotIdx;          // para texto
-
-          return (
-            <div
-              key={idx}
-              className="svc-slide"
-              style={{
-                opacity:       layerOpacity,
-                zIndex:        slotIdx,     // capas apiladas 1-6
-                pointerEvents: isActive ? 'auto' : 'none',
-                transition:    'none',      // 100% scroll-driven
-                willChange:    'opacity',
-              }}
-            >
-              <div className="svc-bg-wrapper">
-                <img
-                  src={svc.image}
-                  alt=""
-                  className="svc-bg-image"
-                  loading="eager"
-                  decoding="async"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((svc, idx) => (
+            <div key={idx} className="group relative bg-[#0a0c0e] border border-white/5 rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-500">
+              <div className="aspect-video overflow-hidden">
+                <img 
+                  src={svc.image} 
+                  alt={svc.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-70"
                 />
-                <div className="svc-bg-overlay" />
-                <div className="svc-bg-gradient" />
               </div>
-
-              <div className="svc-content">
-                <h3
-                  className="svc-title font-paloseco svc-reveal"
-                  style={{
-                    opacity:         isActive ? 1 : 0,
-                    transform:       isActive ? 'translateY(0)' : 'translateY(30px)',
-                    transitionDelay: isActive ? '0.4s' : '0s',
-                    willChange:      isActive ? 'opacity, transform' : 'auto',
-                  }}
-                >
+              <div className="p-8">
+                <span className="text-[#A3FF00] text-[10px] uppercase font-bold tracking-widest mb-4 block">
+                  {svc.tag}
+                </span>
+                <h3 className="text-2xl font-bold text-white mb-4 font-paloseco">
                   {svc.title}
                 </h3>
-
-                <p
-                  className="svc-desc svc-reveal"
-                  style={{
-                    opacity:         isActive ? 1 : 0,
-                    transform:       isActive ? 'translateY(0)' : 'translateY(22px)',
-                    transitionDelay: isActive ? '0.65s' : '0s',
-                    willChange:      isActive ? 'opacity, transform' : 'auto',
-                  }}
-                >
+                <p className="text-white/60 text-sm leading-relaxed mb-8">
                   {svc.desc}
                 </p>
-
-                <div
-                  className="svc-cta svc-reveal"
-                  style={{
-                    opacity:         isActive ? 1 : 0,
-                    transform:       isActive ? 'translateY(0)' : 'translateY(18px)',
-                    transitionDelay: isActive ? '0.9s' : '0s',
-                    willChange:      isActive ? 'opacity, transform' : 'auto',
-                  }}
+                <button 
+                  onClick={openContactModal}
+                  className="text-white text-xs font-bold uppercase tracking-widest border-b border-[#A3FF00] pb-1 hover:text-[#A3FF00] transition-colors"
                 >
-                  <button onClick={openContactModal} className="svc-btn font-paloseco">
-                    <span>Cotizar Ahora</span>
-                    <div className="svc-btn-shine" />
-                  </button>
-                </div>
+                  Saber más
+                </button>
               </div>
             </div>
-          );
-        })}
-
-        {/* Dots de progreso vertical */}
-        <div className="svc-progress-bar">
-          {[...Array(SVC_SLOTS)].map((_, i) => (
-            <div
-              key={i}
-              className={`svc-pip ${activeIndex === i ? 'active' : ''}`}
-            />
           ))}
         </div>
       </div>

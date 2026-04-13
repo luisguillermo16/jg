@@ -58,6 +58,7 @@ body {
   color: var(--text);
   font-family: var(--sans);
   overflow-x: hidden;
+  overflow-y: auto; /* Forzamos scroll nativo */
 }
 
 

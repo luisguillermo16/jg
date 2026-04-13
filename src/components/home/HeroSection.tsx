@@ -1,177 +1,54 @@
-import { type FC, useState, useEffect } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { type FC } from 'react';
 import './HeroSection.css';
-import VolumeVideo from '../VolumeVideo';
 import logo from '../../assets/brand/logo.webp';
-import CinematicBackground from '../CinematicBackground';
-import CinematicGlow from '../CinematicGlow';
-import { isMediaLite } from '../../utils/deviceUtils';
 
 const heroVideo = 'https://luispineda.b-cdn.net/hero.mp4';
 
-interface HeroSectionProps {
-  heroRef: React.RefObject<HTMLDivElement | null>;
-  containerRef: React.RefObject<HTMLDivElement | null>;
-}
-
-/** Fondo escena 2 en desktop: ~7MB JPEG solo se pide en chunk async, nunca en móvil/Data Saver */
-const HeroSection: FC<HeroSectionProps> = ({ heroRef }) => {
-  const shouldReduceMotion = useReducedMotion();
-  const [deskHeroUrl, setDeskHeroUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (isMediaLite) return;
-    let cancelled = false;
-    void import('../../assets/home/img/hero4.jpeg').then((m: { default: string }) => {
-      if (!cancelled) setDeskHeroUrl(m.default);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
+const HeroSection: FC = () => {
   const scrollToServices = () => {
-    const container = document.querySelector('.home-container');
     const el = document.getElementById('servicios');
-    if (container && el) {
-      const containerRect = container.getBoundingClientRect();
-      const elementRect = el.getBoundingClientRect();
-      const targetScroll = elementRect.top - containerRect.top + container.scrollTop;
-      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section id="hero-section" ref={heroRef} className="relative w-full h-[200vh] bg-black" layoutScroll>
-      <div className="absolute inset-0 pointer-events-none z-[100]">
-        <div id="hero" className="h-screen w-full" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }} />
-        <div id="hero-main-anchor" className="h-screen w-full" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }} />
+    <section id="hero-section" className="relative w-full h-screen bg-black">
+      <div className="absolute inset-0 z-0">
+        <video
+          src={heroVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover opacity-70"
+        />
+        <div className="absolute inset-0 bg-black/40" />
       </div>
 
-      <div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 transition-opacity duration-500"
-        style={{
-          opacity: `calc(1 - var(--hero-progress, 0) * 5)`,
-        }}
-      >
-        <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/70 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]">
-          Explorar experiencias
-        </span>
-      </div>
-
-      <div className="hero-sticky sticky top-0 w-full overflow-hidden bg-black flex items-center justify-center">
-        {/* ════ SCENE 1 ════ */}
-        <div
-          className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
-          style={{
-            opacity: `calc(min(1, max(0, 1 - var(--hero-progress, 0) * 2)))`,
-            transform: `scale(calc(1 - var(--hero-progress, 0) * 0.05))`,
-            visibility: `calc(var(--hero-progress, 0) > 0.6 ? 'hidden' : 'visible')`,
-          }}
-        >
-          <div className="absolute inset-0 bg-black/40 z-10" />
-          {isMediaLite ? (
-            <>
-              <CinematicBackground className="absolute inset-0" />
-              <CinematicGlow />
-            </>
-          ) : (
-            <VolumeVideo
-              src={heroVideo}
-              autoPlay
-              loop
-              muted
-              playsInline
-              isVisible
-              isMuted
-              preload="auto"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          )}
-
-          <div className="relative z-20 flex flex-col items-center justify-center gap-6 md:gap-12">
-            <img
-              src={logo}
-              alt="JG Logo"
-              className="hero-intro-logo h-32 md:h-56 w-auto brightness-200 drop-shadow-[0_0_100px_rgba(163,255,0,0.5)]"
-            />
-            <div className="flex flex-col items-center text-center">
-              <h2 className="hero-intro-text text-4xl md:text-[5.5rem] font-black text-white tracking-[0.05em] font-paloseco uppercase drop-shadow-[0_0_35px_rgba(255,255,255,0.2)]">
-                JG Producciones
-              </h2>
-            </div>
-          </div>
-        </div>
-
-        {/* ════ SCENE 2 ════ */}
-        <div className="absolute inset-0 z-20 overflow-hidden">
-          <div
-            className="absolute inset-0 w-full h-full"
-            style={{
-              opacity: `calc(min(1, max(0, var(--hero-progress, 0) * 2 - 0.8)))`,
-              transform: isMediaLite ? 'none' : `scale(calc(1.1 - (var(--hero-progress, 0) - 1) * 0.1))`,
-              filter: isMediaLite ? 'none' : `blur(calc(max(0, 1 - var(--hero-progress, 0)) * 20px))`,
-            }}
+      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+        <img
+          src={logo}
+          alt="JG Logo"
+          className="h-32 md:h-56 w-auto mb-12 brightness-200 drop-shadow-[0_0_50px_rgba(163,255,0,0.3)]"
+        />
+        <h1 className="text-4xl md:text-[6rem] font-black text-white leading-tight font-paloseco uppercase tracking-tight mb-8">
+          Producción <br /> Técnica para <br /> Eventos
+        </h1>
+        <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-12">
+          Diseñamos y ejecutamos bodas, conciertos y eventos corporativos con estándares técnicos de alto nivel.
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))}
+            className="px-10 py-5 bg-[#A3FF00] text-black font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform shadow-[0_15px_40px_rgba(163,255,0,0.3)]"
           >
-            {/* Móvil: gradiente liviano. Desktop: imagen pesada solo tras import() async */}
-            <div
-              className="absolute inset-0 bg-gradient-to-br from-[#1a1e24] via-[#0a0c0e] to-black"
-              aria-hidden
-            />
-            {deskHeroUrl ? (
-              <img
-                src={deskHeroUrl}
-                alt="Producción técnica para eventos"
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-              />
-            ) : null}
-            <div className="absolute inset-0 bg-black/50" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/80" />
-          </div>
-
-          <div
-            className="relative z-30 w-full h-full"
-            style={{
-              opacity: `calc(min(1, max(0, var(--hero-progress, 0) * 2 - 1)))`,
-              transform: `translateY(calc( (1 - min(1.5, max(1, var(--hero-progress, 0)))) * 40px ))`,
-              pointerEvents: `calc(var(--hero-progress, 0) > 1.2 ? 'auto' : 'none')`,
-            }}
+            Hablar con un experto
+          </button>
+          <button
+            onClick={scrollToServices}
+            className="px-8 py-5 border border-white/20 bg-white/5 backdrop-blur-xl text-white font-black uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all"
           >
-            <div className="absolute inset-0 flex flex-col items-center justify-center px-6 gap-8 md:gap-12">
-              <div className="relative z-10 flex flex-col items-center text-center gap-6 md:gap-8 max-w-full md:max-w-[80%]">
-                <h1 className="text-[32px] md:text-[5.5rem] font-black text-white leading-[1.05] font-paloseco uppercase tracking-tight text-shadow-strong">
-                  Producción
-                  <br />
-                  Técnica para
-                  <br />
-                  Eventos
-                </h1>
-                <p className="text-[0.95rem] md:text-[1.5rem] text-white/90 leading-snug font-remixa max-w-[95%] md:max-w-4xl">
-                  Diseñamos y ejecutamos bodas, conciertos y eventos corporativos integrando pantallas LED, sonido e
-                  iluminación con estándares técnicos de alto nivel.
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-4 mt-6 md:mt-8">
-                  <button
-                    type="button"
-                    onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))}
-                    className="group flex items-center gap-3 px-10 py-5 bg-[#A3FF00] text-black font-black uppercase tracking-widest rounded-[var(--btn-radius)] text-[11px] md:text-xs transition-all duration-300 hover:bg-white hover:scale-105 active:scale-95 shadow-[0_15px_40px_rgba(163,255,0,0.3)]"
-                  >
-                    Hablar con un experto
-                  </button>
-                  <button
-                    type="button"
-                    onClick={scrollToServices}
-                    className="px-8 py-3.5 border border-white/40 bg-white/10 backdrop-blur-xl text-white font-black text-[12px] md:text-[14px] uppercase tracking-widest rounded-[var(--btn-radius)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20 active:scale-[0.98]"
-                  >
-                    Nuestros Servicios
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+            Ver servicios
+          </button>
         </div>
       </div>
     </section>

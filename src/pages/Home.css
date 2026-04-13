@@ -5,17 +5,10 @@
 
 .home-container {
   background-color: var(--bg);
-  scroll-snap-type: y mandatory;
-  scroll-snap-stop: always;
-  overflow-y: scroll;
-  scroll-behavior: auto; /* Forzar auto para que el snap sea gestionado por el browser instantáneamente */
-  height: 100vh;
-  height: 100dvh; /* dvh: respeta la barra URL dinámica de iOS/Android */
-  scroll-padding-top: 0;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain; /* prevent iOS page bounce */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  /* Eliminamos height 100vh para usar scroll global del body */
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
 }
 
 .home-container::-webkit-scrollbar {
@@ -23,7 +16,7 @@
 }
 
 .home-container main {
-  display: contents;
+  display: block;
 }
 
 /* Móvil / touch: snap menos agresivo (touchpad y dedo) */

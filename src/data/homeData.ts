@@ -1,5 +1,5 @@
 const bodaVideo = 'https://luispineda.b-cdn.net/boda.mp4';
-const bodaMobileVideo = 'https://luispineda.b-cdn.net/bodaParaTelefono.mp4';
+const bodaMobileVideo = 'https://luispineda.b-cdn.net/boda%20telefonos.mp4';
 const socialVideo = 'https://luispineda.b-cdn.net/social.mp4';
 const corporativoVideo = 'https://luispineda.b-cdn.net/corporativo.mp4';
 // Usar CDN de Bunny.net para los videos

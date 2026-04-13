@@ -1,23 +1,22 @@
-import { type FC, useState, useEffect, useRef, memo, lazy, Suspense } from 'react';
+import { type FC, useState, useEffect, useRef, memo } from 'react';
 import { isMobileDevice } from '../utils/deviceUtils';
 import Navbar from '../components/Navbar';
 import { CATEGORIES, SERVICES, GALLERY_IMAGES } from '../data/homeData';
 
-// Critical Component (Direct Import)
+// Direct Imports (Removing Lazy loading for stability)
 import HeroSection from '../components/home/HeroSection';
-
-// Non-Critical Components (Lazy Load)
-const CategoriesSection   = lazy(() => import('../components/home/CategoriesSection'));
-const ServicesSection     = lazy(() => import('../components/home/ServicesSection'));
-const AboutSection        = lazy(() => import('../components/home/AboutSection'));
-const TestimonialsSection = lazy(() => import('../components/home/TestimonialsSection'));
-const GallerySection      = lazy(() => import('../components/home/GallerySection'));
-const CTASection          = lazy(() => import('../components/home/CTASection'));
-const SoundToggle         = lazy(() => import('../components/home/SoundToggle'));
-const FooterSection       = lazy(() => import('../components/home/FooterSection'));
+import CategoriesSection from '../components/home/CategoriesSection';
+import ServicesSection from '../components/home/ServicesSection';
+import AboutSection from '../components/home/AboutSection';
+import TestimonialsSection from '../components/home/TestimonialsSection';
+import GallerySection from '../components/home/GallerySection';
+import CTASection from '../components/home/CTASection';
+import SoundToggle from '../components/home/SoundToggle';
+import FooterSection from '../components/home/FooterSection';
 
 // Memoize critical section
 const MemoHero = memo(HeroSection);
+
 // Force manual scroll restoration at the module level to prevent browser jumps
 if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual';
@@ -41,6 +40,7 @@ const Home: FC = () => {
   const rafFrame = useRef(0);
   const lastSectionRef = useRef('hero');
   const lastGalRef = useRef(-1);
+  
   /** offsetTop cache — evita getElementById cada frame */
   const sectionOffsets = useRef({
     svcStart: 0,
@@ -48,50 +48,22 @@ const Home: FC = () => {
     nosotrosTop: Number.POSITIVE_INFINITY,
   });
 
-  // Advanced Scroll Reset logic
+  // Simplified Scroll Reset logic (Global)
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    // 1. Force the container to the top immediately
-    container.scrollTo(0, 0);
-
-    // 2. Temporarily disable scroll-snap to prevent the browser from snapping back to a previous section
-    const originalSnap = getComputedStyle(container).scrollSnapType;
-    container.style.scrollSnapType = 'none';
-
+    window.scrollTo(0, 0);
     const hash = window.location.hash;
-
     if (hash) {
       const id = hash.replace('#', '');
       const element = document.getElementById(id);
       if (element) {
-        // Wait for styles/layout to settle before scrolling to a hash
-        setTimeout(() => {
-          if (container) {
-            const containerRect = container.getBoundingClientRect();
-            const elementRect = element.getBoundingClientRect();
-            const targetScroll = elementRect.top - containerRect.top + container.scrollTop;
-            container.scrollTo({ top: targetScroll, behavior: 'smooth' });
-          }
-        }, 500);
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     }
-
-    // 3. Re-enable scroll-snap after a short delay
-    const timer = setTimeout(() => {
-      if (container) container.style.scrollSnapType = originalSnap || 'y mandatory';
-    }, 100);
-
-    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    const LERP_FACTOR = 0.35; // Aumentado para que la animación siga el snap muy de cerca
+    const LERP_FACTOR = 0.35;
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-
-    const container = containerRef.current;
-    if (!container) return;
 
     const refreshSectionOffsets = () => {
       const h = window.innerHeight;
@@ -121,53 +93,54 @@ const Home: FC = () => {
         refreshSectionOffsets();
       }
 
-      const currentScroll = container.scrollTop;
-      const hHeight = window.innerHeight;
+      // ── GLOBAL SCROLL ──────────────────────────────────────────────────────
+      const currentScroll = window.scrollY;
+      const hHeight = window.innerHeight || 1;
       const { svcStart, galStart, nosotrosTop } = sectionOffsets.current;
 
       // ── Hero Progress (200vh) ──────────────────────────────────────────────
       const hProg = Math.min(2, currentScroll / hHeight);
-      container.style.setProperty('--hero-progress', hProg.toFixed(4));
+      document.documentElement.style.setProperty('--hero-progress', hProg.toFixed(4));
 
       // ── Categories Progress (400vh) ────────────────────────────────────────
       const catsStart = hHeight * 2;
       const catsMax   = hHeight * 4;
       const cProg = Math.max(0, Math.min(1, (currentScroll - catsStart) / catsMax));
-      container.style.setProperty('--cats-progress', cProg.toFixed(4));
+      document.documentElement.style.setProperty('--cats-progress', cProg.toFixed(4));
 
-      // ── Services Progress (700vh, posición leída del DOM) ────────────────
-      const sMax  = windowHeight * 7;   // 7 slides × 100vh
+      // ── Services Progress (700vh) ────────────────────────────────────────
+      const sMax  = windowHeight * 7;
       const sProg = Math.max(0, Math.min(1, (currentScroll - svcStart) / sMax));
-      container.style.setProperty('--svcs-progress', sProg.toFixed(4));
+      document.documentElement.style.setProperty('--svcs-progress', sProg.toFixed(4));
 
-      // 2. Categories progress — LERP interpolation for smooth tracking
+      // 2. Categories progress
       const cProgSmooth = lerp(smoothCatsProgress.current, cProg, LERP_FACTOR);
-      const cProgThreshold = isMobileDevice ? 0.001 : 0.0001;
-      if (Math.abs(smoothCatsProgress.current - cProgSmooth) > cProgThreshold) {
+      if (Math.abs(smoothCatsProgress.current - cProgSmooth) > 0.0001) {
         smoothCatsProgress.current = cProgSmooth;
         setCatsProgress(cProgSmooth);
       }
 
       // 3. Services smooth progress
       const sProgSmooth = lerp(smoothSvcsProgress.current, sProg, LERP_FACTOR);
-      const sProgThreshold = isMobileDevice ? 0.001 : 0.0001;
-      if (Math.abs(smoothSvcsProgress.current - sProgSmooth) > sProgThreshold) {
+      if (Math.abs(smoothSvcsProgress.current - sProgSmooth) > 0.0001) {
         smoothSvcsProgress.current = sProgSmooth;
         setSvcsProgress(sProgSmooth);
       }
 
-      // 4. Section detection — setState solo cuando cambia (menos renders)
+      // 4. Section detection
       let nextSection = lastSectionRef.current;
-      if (currentScroll < catsStart - windowHeight / 2) {
+      const detectionMargin = windowHeight / 2;
+
+      if (currentScroll < catsStart - detectionMargin) {
         nextSection = 'hero';
-      } else if (currentScroll < svcStart - windowHeight / 2) {
+      } else if (currentScroll < svcStart - detectionMargin) {
         const p = (currentScroll - catsStart) / windowHeight;
         if (p < 1.0) nextSection = 'categories-intro';
         else if (p < 2.0) nextSection = 'categories-1';
         else if (p < 3.0) nextSection = 'categories-2';
         else nextSection = 'categories-3';
-      } else if (currentScroll < galStart - windowHeight / 2) {
-        if (currentScroll >= nosotrosTop - windowHeight / 2) {
+      } else if (currentScroll < galStart - detectionMargin) {
+        if (currentScroll >= nosotrosTop - detectionMargin) {
           nextSection = 'nosotros';
         } else {
           nextSection = 'servicios';
@@ -223,39 +196,36 @@ const Home: FC = () => {
   }, [isVideoSection, isMuted]);
 
   return (
-    <div ref={containerRef} className="home-container bg-black text-white selection:bg-accent selection:text-black">
+    <div className="home-container bg-black text-white selection:bg-accent selection:text-black">
       <Navbar activeSection={activeSection} />
 
       <main>
-        <MemoHero
-          heroRef={heroRef}
-          containerRef={containerRef}
-        />
-        <Suspense fallback={<div className="min-h-screen bg-black" />}>
+        <MemoHero />
+        
+        <div id="categorias">
           <CategoriesSection
-            categoriesRef={categoriesRef}
-            containerRef={containerRef}
             categories={CATEGORIES}
-            progress={catsProgress}
-            isMuted={isMuted}
           />
+        </div>
+
+        <div id="servicios">
           <ServicesSection
             services={SERVICES}
-            progress={svcsProgress}
           />
-          <AboutSection key="about" />
-          <TestimonialsSection key="testimonials" />
-          <GallerySection
-            activeGal={activeGal}
-            galleryImages={GALLERY_IMAGES}
-          />
-          <CTASection key="cta" />
-        </Suspense>
+        </div>
+
+        <AboutSection key="about" />
+        <TestimonialsSection key="testimonials" />
+        
+        <GallerySection
+          galleryImages={GALLERY_IMAGES}
+        />
+        
+        <CTASection key="cta" />
       </main>
-      <Suspense fallback={null}>
-        <FooterSection />
-        <SoundToggle isMuted={isMuted} setIsMuted={setIsMuted} isVisible={isVideoSection} />
-      </Suspense>
+
+      <FooterSection />
+      <SoundToggle isMuted={isMuted} setIsMuted={setIsMuted} isVisible={isVideoSection} />
     </div>
   );
 };

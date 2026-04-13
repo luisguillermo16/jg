@@ -68,20 +68,11 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
 
   useEffect(() => {
     let ticking = false;
-    const container = document.querySelector('.home-container');
-    const scrollTarget = container || window;
 
     const updateScrollProgress = () => {
-      let progress = 0;
-      if (container) {
-        const scrollY = container.scrollTop;
-        const totalHeight = container.scrollHeight - container.clientHeight;
-        progress = totalHeight > 0 ? scrollY / totalHeight : 0;
-      } else {
-        const scrollY = window.scrollY || document.documentElement.scrollTop;
-        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-        progress = totalHeight > 0 ? scrollY / totalHeight : 0;
-      }
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = totalHeight > 0 ? scrollY / totalHeight : 0;
       setScrollProgress(progress);
       ticking = false;
     };
@@ -93,9 +84,9 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
       }
     };
 
-    scrollTarget.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     updateScrollProgress();
-    return () => scrollTarget.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [location.pathname]);
 
   // Stroke Progress Math
@@ -114,24 +105,14 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
       return;
     }
 
-    const container = document.querySelector('.home-container');
-    if (!container) {
-      const element = document.getElementById(sectionId);
-      if (element) element.scrollIntoView({ behavior: 'smooth' });
-      return;
-    }
-
     if (id === '#' || id === 'hero') {
-      container.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
     const element = document.getElementById(sectionId);
     if (element) {
-      const containerRect = container.getBoundingClientRect();
-      const elementRect = element.getBoundingClientRect();
-      const targetScroll = elementRect.top - containerRect.top + container.scrollTop;
-      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
