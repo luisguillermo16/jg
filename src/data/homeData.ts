@@ -25,6 +25,7 @@ export const CATEGORIES = [
     title: 'Bodas',
     description: 'Capturamos la esencia de tu gran día con tecnología cinematográfica y una sensibilidad artística que transforma cada instante en un legado visual eterno.',
     video: bodaVideo,
+    videoMobile: socialVideo,
     tag: 'Elegancia y Romance'
   },
   {

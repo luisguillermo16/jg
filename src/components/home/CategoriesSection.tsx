@@ -12,6 +12,7 @@ interface Category {
   title: string;
   description: string;
   video: string;
+  videoMobile?: string;
   tag: string;
 }
 
@@ -221,7 +222,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                 >
                   <div className="cats-bg-wrapper">
                     <VolumeVideo
-                      src={cat.video}
+                      src={cat.videoMobile && isMobileDevice ? cat.videoMobile : cat.video}
                       isVisible
                       isMuted={isMuted}
                       loop
@@ -274,7 +275,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                 >
                   <div className="cats-bg-wrapper">
                     <VolumeVideo
-                      src={cat.video}
+                      src={cat.videoMobile && isMobileDevice ? cat.videoMobile : cat.video}
                       isVisible={layerOpacity > 0.05}
                       isMuted={isMuted}
                       loop
