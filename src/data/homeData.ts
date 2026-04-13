@@ -1,4 +1,5 @@
 const bodaVideo = 'https://luispineda.b-cdn.net/boda.mp4';
+const bodaMobileVideo = 'https://luispineda.b-cdn.net/boda%20telefonos.mp4';
 const socialVideo = 'https://luispineda.b-cdn.net/social.mp4';
 const corporativoVideo = 'https://luispineda.b-cdn.net/corporativo.mp4';
 // Usar CDN de Bunny.net para los videos
@@ -25,7 +26,7 @@ export const CATEGORIES = [
     title: 'Bodas',
     description: 'Capturamos la esencia de tu gran día con tecnología cinematográfica y una sensibilidad artística que transforma cada instante en un legado visual eterno.',
     video: bodaVideo,
-    videoMobile: socialVideo,
+    videoMobile: bodaMobileVideo,
     tag: 'Elegancia y Romance'
   },
   {
