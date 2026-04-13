@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 interface VolumeVideoProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
   isVisible: boolean;
@@ -11,17 +11,39 @@ const VolumeVideo: React.FC<VolumeVideoProps> = ({
   isMuted,
   fadeDuration = 800,
   preload: preloadProp,
+  poster,
   ...props
 }) => {
-  const preload = preloadProp ?? (isVisible ? 'auto' : 'none');
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // ── 1. Intersection Observer para carga bajo demanda ─────────────
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '300px' } // Cargamos con un margen generoso
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  // ── 2. Lógica de reproducción y volumen ──────────────────────────
+  useEffect(() => {
+    if (!shouldLoad) return;
     const video = videoRef.current;
     if (!video) return;
 
     if (!isVisible) {
-      // Silenciamos INSTANTÁNEAMENTE para evitar mezcla de audio
       video.volume = 0;
       video.muted = true;
       video.pause();
@@ -30,13 +52,11 @@ const VolumeVideo: React.FC<VolumeVideoProps> = ({
 
     const playVideo = async () => {
       try {
-        // Configuramos volumen inicial al entrar
         if (isMuted) {
           video.muted = true;
           video.volume = 0;
         } else {
           video.muted = false;
-          // Subida rápida de volumen para mayor nitidez sonora
           video.volume = 0;
         }
 
@@ -66,21 +86,34 @@ const VolumeVideo: React.FC<VolumeVideoProps> = ({
           requestAnimationFrame(animate);
         }
       } catch (err) {
-        console.warn("Video playback issue:", err);
+        // Ignoramos errores de autoplay bloqueados por el browser
       }
     };
 
     playVideo();
-  }, [isVisible, isMuted, fadeDuration]);
+  }, [isVisible, isMuted, fadeDuration, shouldLoad]);
 
   return (
-    <video
-      ref={videoRef}
-      {...props}
-      muted={isMuted}
-      preload={preload}
-      onCanPlayThrough={props.onCanPlayThrough}
-    />
+    <div ref={containerRef} className="video-lazy-container" style={{ width: '100%', height: '100%', position: 'relative' }}>
+      {!shouldLoad && poster && (
+        <img 
+          src={poster} 
+          alt="Preview" 
+          className="absolute inset-0 w-full h-full object-cover"
+          loading="lazy"
+        />
+      )}
+      {shouldLoad && (
+        <video
+          ref={videoRef}
+          {...props}
+          poster={poster}
+          muted={isMuted}
+          preload={preloadProp || 'auto'}
+          className={`${props.className || ''} ${!isVisible ? 'pointer-events-none' : ''}`}
+        />
+      )}
+    </div>
   );
 };
 

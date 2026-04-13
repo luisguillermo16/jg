@@ -109,8 +109,8 @@ const HeroSection: FC<HeroSectionProps> = ({ heroRef }) => {
             className="absolute inset-0 w-full h-full"
             style={{
               opacity: `calc(min(1, max(0, var(--hero-progress, 0) * 2 - 0.8)))`,
-              transform: shouldReduceMotion ? 'none' : `scale(calc(1.1 - (var(--hero-progress, 0) - 1) * 0.1))`,
-              filter: shouldReduceMotion ? 'none' : `blur(calc(max(0, 1 - var(--hero-progress, 0)) * 20px))`,
+              transform: isMediaLite ? 'none' : `scale(calc(1.1 - (var(--hero-progress, 0) - 1) * 0.1))`,
+              filter: isMediaLite ? 'none' : `blur(calc(max(0, 1 - var(--hero-progress, 0)) * 20px))`,
             }}
           >
             {/* Móvil: gradiente liviano. Desktop: imagen pesada solo tras import() async */}

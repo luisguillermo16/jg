@@ -1,28 +1,23 @@
-import { type FC, useState, useEffect, useRef, memo } from 'react';
+import { type FC, useState, useEffect, useRef, memo, lazy, Suspense } from 'react';
 import { isMobileDevice } from '../utils/deviceUtils';
 import Navbar from '../components/Navbar';
 import { CATEGORIES, SERVICES, GALLERY_IMAGES } from '../data/homeData';
 
-// Modularized Components
+// Critical Component (Direct Import)
 import HeroSection from '../components/home/HeroSection';
-import CategoriesSection from '../components/home/CategoriesSection';
-import ServicesSection from '../components/home/ServicesSection';
-import AboutSection from '../components/home/AboutSection';
 
-import TestimonialsSection from '../components/home/TestimonialsSection';
-import GallerySection from '../components/home/GallerySection';
-import CTASection from '../components/home/CTASection';
+// Non-Critical Components (Lazy Load)
+const CategoriesSection   = lazy(() => import('../components/home/CategoriesSection'));
+const ServicesSection     = lazy(() => import('../components/home/ServicesSection'));
+const AboutSection        = lazy(() => import('../components/home/AboutSection'));
+const TestimonialsSection = lazy(() => import('../components/home/TestimonialsSection'));
+const GallerySection      = lazy(() => import('../components/home/GallerySection'));
+const CTASection          = lazy(() => import('../components/home/CTASection'));
+const SoundToggle         = lazy(() => import('../components/home/SoundToggle'));
+const FooterSection       = lazy(() => import('../components/home/FooterSection'));
 
-import SoundToggle from '../components/home/SoundToggle';
-import FooterSection from '../components/home/FooterSection';
-
-import './Home.css';
-
-// Memoize sections to prevent unnecessary re-renders
+// Memoize critical section
 const MemoHero = memo(HeroSection);
-const MemoCategories = memo(CategoriesSection);
-const MemoServices = memo(ServicesSection);
-const MemoGallery = memo(GallerySection);
 // Force manual scroll restoration at the module level to prevent browser jumps
 if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual';
@@ -236,27 +231,31 @@ const Home: FC = () => {
           heroRef={heroRef}
           containerRef={containerRef}
         />
-        <MemoCategories
-          categoriesRef={categoriesRef}
-          containerRef={containerRef}
-          categories={CATEGORIES}
-          progress={catsProgress}
-          isMuted={isMuted}
-        />
-        <MemoServices
-          services={SERVICES}
-          progress={svcsProgress}
-        />
-        <AboutSection key="about" />
-        <TestimonialsSection key="testimonials" />
-        <MemoGallery
-          activeGal={activeGal}
-          galleryImages={GALLERY_IMAGES}
-        />
-        <CTASection key="cta" />
+        <Suspense fallback={<div className="min-h-screen bg-black" />}>
+          <CategoriesSection
+            categoriesRef={categoriesRef}
+            containerRef={containerRef}
+            categories={CATEGORIES}
+            progress={catsProgress}
+            isMuted={isMuted}
+          />
+          <ServicesSection
+            services={SERVICES}
+            progress={svcsProgress}
+          />
+          <AboutSection key="about" />
+          <TestimonialsSection key="testimonials" />
+          <GallerySection
+            activeGal={activeGal}
+            galleryImages={GALLERY_IMAGES}
+          />
+          <CTASection key="cta" />
+        </Suspense>
       </main>
-      <FooterSection />
-      <SoundToggle isMuted={isMuted} setIsMuted={setIsMuted} isVisible={isVideoSection} />
+      <Suspense fallback={null}>
+        <FooterSection />
+        <SoundToggle isMuted={isMuted} setIsMuted={setIsMuted} isVisible={isVideoSection} />
+      </Suspense>
     </div>
   );
 };

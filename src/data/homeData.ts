@@ -20,6 +20,10 @@ import gal10 from '../assets/gallery/MRW09474.webp';
 import gal11 from '../assets/gallery/MRW09758.webp';
 import gal12 from '../assets/gallery/MRW09772.webp';
 
+import hero1 from '../assets/home/img/hero1.webp';
+import hero2 from '../assets/home/img/hero 2.webp';
+import hero3 from '../assets/home/img/hero 3.webp';
+
 export const CATEGORIES = [
   {
     id: 'bodas',
@@ -27,6 +31,7 @@ export const CATEGORIES = [
     description: 'Capturamos la esencia de tu gran día con tecnología cinematográfica y una sensibilidad artística que transforma cada instante en un legado visual eterno.',
     video: bodaVideo,
     videoMobile: bodaMobileVideo,
+    poster: hero1,
     tag: 'Elegancia y Romance'
   },
   {
@@ -34,6 +39,7 @@ export const CATEGORIES = [
     title: 'Eventos Sociales',
     description: 'Desde celebraciones vibrantes hasta reuniones íntimas, elevamos la energía y el diseño estético para crear ambientes memorables y llenos de vida.',
     video: socialVideo,
+    poster: hero2,
     tag: 'Energía y Estilo'
   },
   {
@@ -41,6 +47,7 @@ export const CATEGORIES = [
     title: 'Corporativos',
     description: 'Puntualidad, respaldo técnico y excelencia operativa para lanzamientos de marca, conferencias y eventos empresariales de alto impacto. Sin errores, sin improvisación.',
     video: corporativoVideo,
+    poster: hero3,
     tag: 'Precisión y Confianza'
   }
 ];

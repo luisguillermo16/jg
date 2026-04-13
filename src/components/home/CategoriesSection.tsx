@@ -5,7 +5,7 @@ import './CategoriesSection.css';
 import { openContactModal } from '../../utils/modal';
 import CinematicGlow from '../CinematicGlow';
 import CinematicBackground from '../CinematicBackground';
-import { isMobileDevice } from '../../utils/deviceUtils';
+import { isMobileDevice, isMediaLite } from '../../utils/deviceUtils';
 
 interface Category {
   id: string;
@@ -13,6 +13,7 @@ interface Category {
   description: string;
   video: string;
   videoMobile?: string;
+  poster?: string;
   tag: string;
 }
 
@@ -72,7 +73,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
   const shouldReduceMotion = useReducedMotion();
   const [loadedCount, setLoadedCount] = useState(0);
   /** En móvil un solo vídeo: no bloquear la UI esperando los 3 MP4 del desktop */
-  const isAllLoaded = isMobileDevice || loadedCount >= categories.length;
+  const isAllLoaded = isMediaLite || loadedCount >= categories.length;
 
   // ── 1. Capturamos el progreso real del scroll en el contenedor custom ──────
   //    offset: ["start start", "end end"] → progress 0 cuando el top de la
@@ -86,7 +87,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
   // ── 2. Spring suavizado — elimina el jank del scroll de ratón (Windows) ───
   //    stiffness/damping ajustados para sentirse "como mantequilla" en desktop
   //    mientras que en móvil (touch) la respuesta es casi directa.
-  const smoothProgress = useSpring(scrollYProgress, isMobileDevice
+  const smoothProgress = useSpring(scrollYProgress, isMediaLite
     ? { stiffness: 420, damping: 45, restDelta: 0.008 }
     : { stiffness: 100, damping: 30, restDelta: 0.001 },
   );
@@ -124,15 +125,6 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
       ref={categoriesRef}
       className="cats-section"
     >
-      {/* Overlay de carga: solo desktop (tres vídeos en paralelo) */}
-      {!isMobileDevice && (
-        <motion.div
-          className="absolute inset-0 z-[500] bg-black pointer-events-none"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: isAllLoaded ? 0 : 1 }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
-        />
-      )}
       {/* ── Invisible snap markers — 4 × 100dvh ── */}
       <div className="cats-snap-markers" aria-hidden="true">
         {[0, 1, 2, 3].map((i) => (
@@ -223,6 +215,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                   <div className="cats-bg-wrapper">
                     <VolumeVideo
                       src={cat.videoMobile && isMobileDevice ? cat.videoMobile : cat.video}
+                      poster={cat.poster}
                       isVisible
                       isMuted={isMuted}
                       loop
@@ -276,6 +269,7 @@ const CategoriesSection: FC<CategoriesSectionProps> = ({
                   <div className="cats-bg-wrapper">
                     <VolumeVideo
                       src={cat.videoMobile && isMobileDevice ? cat.videoMobile : cat.video}
+                      poster={cat.poster}
                       isVisible={layerOpacity > 0.05}
                       isMuted={isMuted}
                       loop
