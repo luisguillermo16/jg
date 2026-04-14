@@ -70,29 +70,53 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
     let ticking = false;
 
     const updateScrollProgress = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = totalHeight > 0 ? scrollY / totalHeight : 0;
+      // Cálculo ultra-robusto del scroll actual
+      const scrollY = window.pageYOffset || 
+                     window.scrollY || 
+                     document.documentElement.scrollTop || 
+                     document.body.scrollTop || 0;
+
+      // Cálculo ultra-robusto de la altura total del documento
+      const scrollHeight = Math.max(
+        document.body.scrollHeight, document.documentElement.scrollHeight,
+        document.body.offsetHeight, document.documentElement.offsetHeight,
+        document.body.clientHeight, document.documentElement.clientHeight
+      );
+      const windowHeight = window.innerHeight || 
+                          document.documentElement.clientHeight || 
+                          document.body.clientHeight;
+      const totalHeight = scrollHeight - windowHeight;
+      
+      const progress = totalHeight > 0 ? Math.min(1, Math.max(0, scrollY / totalHeight)) : 0;
       setScrollProgress(progress);
       ticking = false;
     };
 
     const handleScroll = () => {
       if (!ticking) {
-        requestAnimationFrame(updateScrollProgress);
+        window.requestAnimationFrame(updateScrollProgress);
         ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', updateScrollProgress, { passive: true });
+    
+    // Forzamos actualizaciones después de que el contenido se cargue
+    const timer = setInterval(updateScrollProgress, 1000); 
     updateScrollProgress();
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateScrollProgress);
+      clearInterval(timer);
+    };
   }, [location.pathname]);
 
-  // Stroke Progress Math
-  const radius = 30;
+  // Stroke Progress Math (Aseguramos que sean números exactos)
+  const radius = 28; // Reducimos un poco para dar margen al resplandor (glow)
   const circumference = 2 * Math.PI * radius;
-  const dashOffset = circumference - scrollProgress * circumference;
+  const dashOffset = Math.max(0, circumference - (scrollProgress * circumference));
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -138,13 +162,19 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
         >
           <div className="relative flex items-center justify-center w-12 h-12 flex-shrink-0">
             <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 64 64">
-              <circle cx="32" cy="32" r={radius} className="fill-none stroke-white/10 stroke-[2.5]" />
+              {/* Círculo de fondo tenue */}
+              <circle cx="32" cy="32" r={radius} className="fill-none stroke-white/5 stroke-[2.5]" />
+              {/* Círculo de progreso con brillo verde neón intenso */}
               <circle
                 cx="32" cy="32" r={radius}
-                className="fill-none stroke-[#a3ff00] stroke-[3] ease-out transition-[stroke-dashoffset] duration-300"
+                className="fill-none stroke-[#a3ff00] stroke-[3.5]"
                 strokeDasharray={circumference}
                 strokeDashoffset={dashOffset}
-                style={{ strokeLinecap: 'round' }}
+                style={{ 
+                  strokeLinecap: 'round',
+                  filter: 'drop-shadow(0 0 5px rgba(163, 255, 0, 0.8))',
+                  transition: 'none' // Respuesta instantánea al scroll
+                }}
               />
             </svg>
             <img
@@ -182,7 +212,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
           >
             Contáctanos
           </button>
-          
+
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle Menu"
@@ -212,7 +242,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
               scrollToSection={scrollToSection}
             />
             <li className="md:hidden w-full max-w-[200px] mt-4">
-              <button 
+              <button
                 onClick={() => setIsContactModalOpen(true)}
                 className="w-full py-3.5 rounded-[12px] text-sm font-black bg-[#A3FF00] text-black transition-all duration-300 font-remixa flex items-center justify-center shadow-[0_10px_30px_rgba(163,255,0,0.3)]"
               >
