@@ -1,7 +1,9 @@
 import { type FC } from 'react';
+import { isMobileDevice } from '../../../utils/deviceUtils';
 import './HeroSection.css';
 
 const heroVideo = 'https://luispineda.b-cdn.net/hero.mp4';
+const heroMobileVideo = 'https://luispineda.b-cdn.net/heroTelefono.mp4';
 
 const HeroSection: FC = () => {
   const scrollToServices = () => {
@@ -13,7 +15,7 @@ const HeroSection: FC = () => {
     <section id="hero-section" className="relative w-full h-full bg-[#030d05]">
       <div className="absolute inset-0 z-0">
         <video
-          src={heroVideo}
+          src={isMobileDevice ? heroMobileVideo : heroVideo}
           autoPlay
           loop
           muted

@@ -71,14 +71,16 @@ export const CATEGORIES = [
     title: 'Corporativo',
     tag: 'Impacto Empresarial',
     desc: 'Elevamos la imagen de tu marca con lanzamientos y convenciones que proyectan innovación y profesionalismo.',
-    video: 'https://luispineda.b-cdn.net/corporativo.mp4'
+    video: 'https://luispineda.b-cdn.net/corporativo.mp4',
+    videoMobile: 'https://luispineda.b-cdn.net/corprativoTelefono.mp4'
   },
   {
     id: 'social',
     title: 'Eventos Sociales',
     tag: 'Momentos Épicos',
     desc: 'Desde aniversarios hasta grandes celebraciones, creamos el escenario perfecto para tus mejores recuerdos.',
-    video: 'https://luispineda.b-cdn.net/social.mp4'
+    video: 'https://luispineda.b-cdn.net/social.mp4',
+    videoMobile: 'https://luispineda.b-cdn.net/solcialTelefono.mp4'
   }
 ];
 
