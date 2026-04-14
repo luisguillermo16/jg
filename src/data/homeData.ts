@@ -61,7 +61,7 @@ export const CATEGORIES = [
   {
     id: 'bodas',
     title: 'Bodas',
-    tag: 'Eternizando Historias',
+    tag: 'Categoría',
     desc: 'Capturamos la esencia del día más importante de tu vida con una producción audiovisual de nivel cinematográfico.',
     video: 'https://luispineda.b-cdn.net/boda.mp4',
     videoMobile: 'https://luispineda.b-cdn.net/bodaParaTelefono.mp4'
@@ -69,7 +69,7 @@ export const CATEGORIES = [
   {
     id: 'corporativo',
     title: 'Corporativo',
-    tag: 'Impacto Empresarial',
+    tag: 'Categoría',
     desc: 'Elevamos la imagen de tu marca con lanzamientos y convenciones que proyectan innovación y profesionalismo.',
     video: 'https://luispineda.b-cdn.net/corporativo.mp4',
     videoMobile: 'https://luispineda.b-cdn.net/corprativoTelefono.mp4'
@@ -77,7 +77,7 @@ export const CATEGORIES = [
   {
     id: 'social',
     title: 'Eventos Sociales',
-    tag: 'Momentos Épicos',
+    tag: 'Categoría',
     desc: 'Desde aniversarios hasta grandes celebraciones, creamos el escenario perfecto para tus mejores recuerdos.',
     video: 'https://luispineda.b-cdn.net/social.mp4',
     videoMobile: 'https://luispineda.b-cdn.net/solcialTelefono.mp4'

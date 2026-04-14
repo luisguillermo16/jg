@@ -20,7 +20,7 @@ const NavLinks: FC<{
   };
 
   const linkClass = (id: string) =>
-    `px-4 py-2 text-sm font-semibold transition-all duration-300 font-remixa ${isActive(id) ? 'text-[#A3FF00]' : 'text-white/60 hover:text-white'
+    `px-4 py-2 text-sm font-semibold transition-all duration-300 font-remixa ${isActive(id) ? 'text-[#A3FF00]' : 'text-white'
     }`;
 
   return (
