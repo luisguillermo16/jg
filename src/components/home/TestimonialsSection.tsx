@@ -27,9 +27,9 @@ const TESTIMONIALS = [
 ];
 
 const TestimonialsSection: FC = () => (
-  <section className="relative bg-[#050607] h-screen px-6 md:px-12 overflow-hidden flex flex-col justify-center" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
-    {/* Radial glow center */}
-    <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_60%,rgba(163,255,0,0.04),transparent)] pointer-events-none" />
+  <section className="relative bg-[#030500] h-screen px-6 md:px-12 overflow-hidden flex flex-col justify-center" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+    {/* Radial glow center cinemático */}
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_60%,rgba(163,255,0,0.06),transparent)] pointer-events-none" />
 
     <div className="max-w-7xl mx-auto">
 

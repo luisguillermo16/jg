@@ -153,7 +153,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
               className="relative z-10 h-[14px] w-auto object-contain brightness-200 transition-all duration-500"
             />
           </div>
-          <span className="block sm:hidden text-white font-paloseco font-black text-[14px] uppercase tracking-[0.02em] drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-all duration-500 whitespace-nowrap translate-y-[1px]">
+          <span className="block text-white font-paloseco font-black text-[14px] uppercase tracking-[0.02em] drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-all duration-500 whitespace-nowrap translate-y-[1px]">
             Producciones
           </span>
         </Link>

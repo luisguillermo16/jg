@@ -1,17 +1,14 @@
 import { type FC, useState, useEffect, useRef, memo } from 'react';
-import { isMobileDevice } from '../utils/deviceUtils';
 import Navbar from '../components/Navbar';
-import { CATEGORIES, SERVICES, GALLERY_IMAGES } from '../data/homeData';
+import { SERVICES, GALLERY_IMAGES } from '../data/homeData';
 
 // Direct Imports (Removing Lazy loading for stability)
 import HeroSection from '../components/home/HeroSection';
-import CategoriesSection from '../components/home/CategoriesSection';
 import ServicesSection from '../components/home/ServicesSection';
 import AboutSection from '../components/home/AboutSection';
 import TestimonialsSection from '../components/home/TestimonialsSection';
 import GallerySection from '../components/home/GallerySection';
 import CTASection from '../components/home/CTASection';
-import SoundToggle from '../components/home/SoundToggle';
 import FooterSection from '../components/home/FooterSection';
 
 // Memoize critical section
@@ -23,24 +20,17 @@ if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
 }
 
 const Home: FC = () => {
-  const [catsProgress, setCatsProgress] = useState(0);
   const [svcsProgress, setSvcsProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('hero');
   const [activeGal, setActiveGal] = useState(-1);
-  const [isMuted, setIsMuted] = useState(true);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const categoriesRef = useRef<HTMLDivElement>(null);
 
   // LERP Tracking Refs
-  const smoothCatsProgress = useRef(0);
   const smoothSvcsProgress = useRef(0);
   const rafId = useRef<number>(0);
   const rafFrame = useRef(0);
   const lastSectionRef = useRef('hero');
   const lastGalRef = useRef(-1);
-  
+
   /** offsetTop cache — evita getElementById cada frame */
   const sectionOffsets = useRef({
     svcStart: 0,
@@ -71,8 +61,8 @@ const Home: FC = () => {
       const galEl = document.getElementById('galeria');
       const nosEl = document.getElementById('nosotros');
       sectionOffsets.current = {
-        svcStart: svcEl ? svcEl.offsetTop : h * 8,
-        galStart: galEl ? galEl.offsetTop : h * 15,
+        svcStart: svcEl ? svcEl.offsetTop : h * 4,
+        galStart: galEl ? galEl.offsetTop : h * 11,
         nosotrosTop: nosEl ? nosEl.offsetTop : Number.POSITIVE_INFINITY,
       };
     };
@@ -93,52 +83,30 @@ const Home: FC = () => {
         refreshSectionOffsets();
       }
 
-      // ── GLOBAL SCROLL ──────────────────────────────────────────────────────
       const currentScroll = window.scrollY;
-      const hHeight = window.innerHeight || 1;
       const { svcStart, galStart, nosotrosTop } = sectionOffsets.current;
 
-      // ── Hero Progress (200vh) ──────────────────────────────────────────────
-      const hProg = Math.min(2, currentScroll / hHeight);
+      // ── Hero Progress (100vh) ──────────────────────────────────────────────
+      const hProg = Math.min(1, currentScroll / (windowHeight || 1));
       document.documentElement.style.setProperty('--hero-progress', hProg.toFixed(4));
 
-      // ── Categories Progress (400vh) ────────────────────────────────────────
-      const catsStart = hHeight * 2;
-      const catsMax   = hHeight * 4;
-      const cProg = Math.max(0, Math.min(1, (currentScroll - catsStart) / catsMax));
-      document.documentElement.style.setProperty('--cats-progress', cProg.toFixed(4));
-
-      // ── Services Progress (700vh) ────────────────────────────────────────
-      const sMax  = windowHeight * 7;
+      // ── Services Progress (700vh) ─────────────────────────────────────────
+      const sMax = windowHeight * 7;
       const sProg = Math.max(0, Math.min(1, (currentScroll - svcStart) / sMax));
       document.documentElement.style.setProperty('--svcs-progress', sProg.toFixed(4));
 
-      // 2. Categories progress
-      const cProgSmooth = lerp(smoothCatsProgress.current, cProg, LERP_FACTOR);
-      if (Math.abs(smoothCatsProgress.current - cProgSmooth) > 0.0001) {
-        smoothCatsProgress.current = cProgSmooth;
-        setCatsProgress(cProgSmooth);
-      }
-
-      // 3. Services smooth progress
       const sProgSmooth = lerp(smoothSvcsProgress.current, sProg, LERP_FACTOR);
       if (Math.abs(smoothSvcsProgress.current - sProgSmooth) > 0.0001) {
         smoothSvcsProgress.current = sProgSmooth;
         setSvcsProgress(sProgSmooth);
       }
 
-      // 4. Section detection
+      // ── Section detection ─────────────────────────────────────────────────
       let nextSection = lastSectionRef.current;
       const detectionMargin = windowHeight / 2;
 
-      if (currentScroll < catsStart - detectionMargin) {
+      if (currentScroll < svcStart - detectionMargin) {
         nextSection = 'hero';
-      } else if (currentScroll < svcStart - detectionMargin) {
-        const p = (currentScroll - catsStart) / windowHeight;
-        if (p < 1.0) nextSection = 'categories-intro';
-        else if (p < 2.0) nextSection = 'categories-1';
-        else if (p < 3.0) nextSection = 'categories-2';
-        else nextSection = 'categories-3';
       } else if (currentScroll < galStart - detectionMargin) {
         if (currentScroll >= nosotrosTop - detectionMargin) {
           nextSection = 'nosotros';
@@ -186,27 +154,14 @@ const Home: FC = () => {
     };
   }, []);
 
-  // Auto-mute logic and SoundToggle visibility condition
-  const isVideoSection = activeSection.startsWith('categories');
-
-  useEffect(() => {
-    if (!isVideoSection && !isMuted) {
-      setIsMuted(true);
-    }
-  }, [isVideoSection, isMuted]);
-
   return (
-    <div className="home-container bg-black text-white selection:bg-accent selection:text-black">
+    <div className="home-container bg-[#030500] text-white selection:bg-accent selection:text-black">
       <Navbar activeSection={activeSection} />
 
       <main>
         <MemoHero />
-        
-        <div id="categorias">
-          <CategoriesSection
-            categories={CATEGORIES}
-          />
-        </div>
+
+        <AboutSection key="about" />
 
         <div id="servicios">
           <ServicesSection
@@ -214,18 +169,16 @@ const Home: FC = () => {
           />
         </div>
 
-        <AboutSection key="about" />
         <TestimonialsSection key="testimonials" />
-        
+
         <GallerySection
           galleryImages={GALLERY_IMAGES}
         />
-        
+
         <CTASection key="cta" />
       </main>
 
       <FooterSection />
-      <SoundToggle isMuted={isMuted} setIsMuted={setIsMuted} isVisible={isVideoSection} />
     </div>
   );
 };

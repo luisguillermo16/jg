@@ -1,9 +1,3 @@
-const bodaVideo = 'https://luispineda.b-cdn.net/boda.mp4';
-const bodaMobileVideo = 'https://luispineda.b-cdn.net/boda%20telefonos.mp4';
-const socialVideo = 'https://luispineda.b-cdn.net/social.mp4';
-const corporativoVideo = 'https://luispineda.b-cdn.net/corporativo.mp4';
-// Usar CDN de Bunny.net para los videos
-
 import serviceAudio from '../assets/home/icons/service_audio.webp';
 import serviceLighting from '../assets/home/icons/service_lighting.webp';
 import serviceLed from '../assets/home/icons/service_led.webp';
@@ -19,38 +13,6 @@ import gal9 from '../assets/gallery/MRW09447.webp';
 import gal10 from '../assets/gallery/MRW09474.webp';
 import gal11 from '../assets/gallery/MRW09758.webp';
 import gal12 from '../assets/gallery/MRW09772.webp';
-
-import hero1 from '../assets/home/img/hero1.webp';
-import hero2 from '../assets/home/img/hero 2.webp';
-import hero3 from '../assets/home/img/hero 3.webp';
-
-export const CATEGORIES = [
-  {
-    id: 'bodas',
-    title: 'Bodas',
-    description: 'Capturamos la esencia de tu gran día con tecnología cinematográfica y una sensibilidad artística que transforma cada instante en un legado visual eterno.',
-    video: bodaVideo,
-    videoMobile: bodaMobileVideo,
-    poster: hero1,
-    tag: 'Elegancia y Romance'
-  },
-  {
-    id: 'sociales',
-    title: 'Eventos Sociales',
-    description: 'Desde celebraciones vibrantes hasta reuniones íntimas, elevamos la energía y el diseño estético para crear ambientes memorables y llenos de vida.',
-    video: socialVideo,
-    poster: hero2,
-    tag: 'Energía y Estilo'
-  },
-  {
-    id: 'corporativos',
-    title: 'Corporativos',
-    description: 'Puntualidad, respaldo técnico y excelencia operativa para lanzamientos de marca, conferencias y eventos empresariales de alto impacto. Sin errores, sin improvisación.',
-    video: corporativoVideo,
-    poster: hero3,
-    tag: 'Precisión y Confianza'
-  }
-];
 
 export const SERVICES = [
   {
@@ -97,7 +59,6 @@ export const GALLERY_IMAGES = [
 
 export const SECTIONS = [
   { id: 'hero', label: 'Inicio' },
-  { id: 'categories', label: 'Categorías' },
   { id: 'servicios', label: 'Servicios' },
   { id: 'galeria', label: 'Galería' }
 ];

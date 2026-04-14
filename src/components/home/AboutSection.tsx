@@ -33,14 +33,14 @@ const BENEFITS = [
 const AboutSection: FC = () => (
   <section
     id="nosotros"
-    className="relative bg-[#050607] h-screen px-6 md:px-12 lg:px-24 overflow-hidden flex flex-col justify-center"
+    className="relative bg-[#030500] h-screen px-6 md:px-12 lg:px-24 overflow-hidden flex flex-col justify-center z-0"
     style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
   >
     {/* Top accent line */}
     <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#A3FF00]/25 to-transparent" />
 
-    {/* Background glow */}
-    <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[30%] h-[60%] bg-[#A3FF00]/4 rounded-full blur-[120px] pointer-events-none" />
+    {/* Background glow cinemático */}
+    <div className="absolute top-1/2 -translate-y-1/2 -left-20 w-[600px] h-[600px] bg-[#A3FF00]/10 rounded-full blur-[150px] pointer-events-none z-0" />
 
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 

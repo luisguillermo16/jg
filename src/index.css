@@ -41,7 +41,7 @@
 :root {
   --text: #94A3B8;
   --text-h: #F8FAFC;
-  --bg: #030712;
+  --bg: #030500;
   /* Extreme dark blue/black tone */
   --accent: #A3FF00;
   /* JG Neon Green */
@@ -85,7 +85,7 @@ input:-webkit-autofill:active {
 .video-lazy-container {
   aspect-ratio: 16 / 9;
   width: 100%;
-  background: #050607;
+  background: #030500;
   overflow: hidden;
 }
 

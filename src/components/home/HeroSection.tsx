@@ -1,6 +1,5 @@
 import { type FC } from 'react';
 import './HeroSection.css';
-import logo from '../../assets/brand/logo.webp';
 
 const heroVideo = 'https://luispineda.b-cdn.net/hero.mp4';
 
@@ -11,7 +10,7 @@ const HeroSection: FC = () => {
   };
 
   return (
-    <section id="hero-section" className="relative w-full h-screen bg-black">
+    <section id="hero-section" className="relative w-full h-full bg-black">
       <div className="absolute inset-0 z-0">
         <video
           src={heroVideo}
@@ -19,33 +18,30 @@ const HeroSection: FC = () => {
           loop
           muted
           playsInline
-          className="w-full h-full object-cover opacity-70"
+          className="w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#030500]/60 via-[#030500]/30 to-[#030500]/90" />
       </div>
 
-      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
-        <img
-          src={logo}
-          alt="JG Logo"
-          className="h-32 md:h-56 w-auto mb-12 brightness-200 drop-shadow-[0_0_50px_rgba(163,255,0,0.3)]"
-        />
-        <h1 className="text-4xl md:text-[6rem] font-black text-white leading-tight font-paloseco uppercase tracking-tight mb-8">
-          Producción <br /> Técnica para <br /> Eventos
+      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 max-w-6xl mx-auto">
+        <h1 className="hero-animate-1 text-4xl md:text-[5.5rem] font-black text-white leading-[0.95] font-paloseco uppercase tracking-tighter mb-6">
+          Producción <br className="hidden md:block" /> Técnica para <br className="hidden md:block" /> Eventos
         </h1>
-        <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-12">
+
+        <p className="hero-animate-2 text-base md:text-xl text-white/90 max-w-2xl mx-auto mb-10 font-medium leading-relaxed px-4">
           Diseñamos y ejecutamos bodas, conciertos y eventos corporativos con estándares técnicos de alto nivel.
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-4">
+
+        <div className="hero-animate-3 flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))}
-            className="px-10 py-5 bg-[#A3FF00] text-black font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform shadow-[0_15px_40px_rgba(163,255,0,0.3)]"
+            className="w-full sm:w-auto px-8 py-4 bg-[#A3FF00] text-black font-black uppercase tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all shadow-[0_12px_40px_rgba(163,255,0,0.3)] text-sm md:text-base"
           >
             Hablar con un experto
           </button>
           <button
             onClick={scrollToServices}
-            className="px-8 py-5 border border-white/20 bg-white/5 backdrop-blur-xl text-white font-black uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all"
+            className="w-full sm:w-auto px-8 py-4 border-2 border-white/20 bg-white/5 backdrop-blur-2xl text-white font-black uppercase tracking-wider rounded-xl hover:bg-white/10 active:scale-95 transition-all text-sm md:text-base"
           >
             Ver servicios
           </button>
