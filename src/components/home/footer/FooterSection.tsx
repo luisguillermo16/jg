@@ -4,7 +4,7 @@ import { openContactModal } from '../../../utils/modal';
 
 const FooterSection: FC = () => {
   return (
-    <footer className="relative z-10 w-full bg-[#030d05] py-24 px-6 border-t border-white/5" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+    <footer className="relative z-10 w-full bg-[#21201E] py-24 px-6 border-t border-white/5" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-20">
           {/* Brand Column */}
@@ -17,30 +17,21 @@ const FooterSection: FC = () => {
 
           {/* Contact Column */}
           <div id="contact" className="flex flex-col items-center md:items-end">
-            <h4 className="text-accent font-bold uppercase tracking-widest mb-8 text-sm">Contacto</h4>
+            <h4 className="text-[#63D72A] font-bold uppercase tracking-widest mb-8 text-sm">Contacto</h4>
             <button
               onClick={openContactModal}
-              className="group flex items-center gap-4 text-white hover:text-accent transition-all duration-300"
+              className="group flex items-center gap-4 text-[#F9F8F6] hover:text-[#63D72A] transition-all duration-300"
             >
               <span className="text-lg font-remixa font-bold text-right">WhatsApp Live</span>
-              <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center group-hover:bg-accent group-hover:text-black transition-all">
+              <div className="w-10 h-10 rounded-full bg-[#63D72A]/20 flex items-center justify-center group-hover:bg-[#63D72A] group-hover:text-[#21201E] transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
               </div>
             </button>
-            <p className="mt-4 text-white/30 text-sm font-sans">Cartagena de Indias, Colombia</p>
+            <p className="mt-4 text-[#F9F8F6]/30 text-sm font-sans">Cartagena de Indias, Colombia</p>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-between pt-12 border-t border-white/5 gap-6">
-          <span className="text-white/20 text-xs font-remixa tracking-[0.2em]">© 2026 JG PREMIUM EXPERIENCE. ALL RIGHTS RESERVED.</span>
-          <div className="flex gap-8">
-            {['Instagram', 'Facebook', 'Vimeo'].map((social) => (
-              <a key={social} href="#" className="text-white/30 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest">
-                {social}
-              </a>
-            ))}
-          </div>
-        </div>
+
       </div>
     </footer>
   );

@@ -46,7 +46,7 @@ const Nosotros: FC = () => {
   }, []);
 
   return (
-    <div className="relative bg-[#030d05] text-white selection:bg-[#A3FF00] selection:text-black min-h-screen overflow-x-hidden font-sans">
+    <div className="relative bg-[#21201E] text-[#F9F8F6] selection:bg-[#63D72A] selection:text-[#21201E] min-h-screen font-sans">
       <Navbar />
 
       {/* ── HERO ── */}
@@ -56,7 +56,7 @@ const Nosotros: FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-[#A3FF00] font-black tracking-[0.5em] text-xs md:text-sm uppercase mb-6 block"
+            className="text-[#63D72A] font-black tracking-[0.5em] text-xs md:text-sm uppercase mb-6 block"
           >
             JG Producciones
           </motion.span>
@@ -72,7 +72,7 @@ const Nosotros: FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.7 }}
-            className="text-white/40 text-base md:text-lg mt-6 max-w-md mx-auto leading-relaxed"
+            className="text-[#F9F8F6]/40 text-base md:text-lg mt-6 max-w-md mx-auto leading-relaxed"
           >
             Especialistas en transformar visiones en producciones técnicas de vanguardia.
           </motion.p>
@@ -100,8 +100,8 @@ const Nosotros: FC = () => {
       </section>
 
       {/* ── NUESTRA ESENCIA ── */}
-      <section className="relative py-32 px-6 md:px-12 lg:px-24 bg-[#050607] overflow-hidden">
-        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[35%] h-[55%] bg-[#A3FF00]/4 rounded-full blur-[120px] pointer-events-none" />
+      <section className="relative py-32 px-6 md:px-12 lg:px-24 bg-[#1a1b1c] overflow-hidden">
+        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[35%] h-[55%] bg-[#63D72A]/4 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
@@ -112,22 +112,22 @@ const Nosotros: FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className="text-[#A3FF00] text-[10px] font-black uppercase tracking-[0.5em] mb-6 block">
+            <span className="text-[#63D72A] text-[10px] font-black uppercase tracking-[0.5em] mb-6 block">
               Nuestra Esencia
             </span>
-            <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter font-paloseco leading-[0.85] mb-8 text-white">
+            <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter font-paloseco leading-[0.85] mb-8 text-[#F9F8F6]">
               No<br />
               Organizamos<br />
               Eventos.<br />
-              <span className="text-[#A3FF00]">Creamos</span><br />
+              <span className="text-[#63D72A]">Creamos</span><br />
               Hitos.
             </h2>
-            <p className="text-white/45 text-base md:text-lg leading-relaxed max-w-md">
+            <p className="text-[#F9F8F6]/45 text-base md:text-lg leading-relaxed max-w-md">
               Fusionamos precisión técnica y creatividad audiovisual para entregar
               producciones que superan expectativas. Cada evento es una obra maestra
               ejecutada hasta el último detalle en Cartagena y toda Colombia.
             </p>
-            <div className="h-px w-20 bg-[#A3FF00]/40 mt-10" />
+            <div className="h-px w-20 bg-[#63D72A]/40 mt-10" />
           </motion.div>
 
           {/* Right: Benefit cards */}
@@ -139,11 +139,11 @@ const Nosotros: FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.8 }}
-                className="p-6 rounded-2xl bg-white/[0.04] border border-white/[0.07] hover:bg-white/[0.08] hover:border-[#A3FF00]/20 transition-all duration-500 group"
+                className="p-6 rounded-2xl bg-white/[0.04] border border-white/[0.07] hover:bg-white/[0.08] hover:border-[#63D72A]/20 transition-all duration-500 group"
               >
-                <Icon className="w-7 h-7 text-[#A3FF00] mb-4 group-hover:scale-110 transition-transform duration-300" />
-                <h3 className="text-white text-sm font-black uppercase tracking-tight mb-2">{title}</h3>
-                <p className="text-white/40 text-sm leading-relaxed">{desc}</p>
+                <Icon className="w-7 h-7 text-[#63D72A] mb-4 group-hover:scale-110 transition-transform duration-300" />
+                <h3 className="text-[#F9F8F6] text-sm font-black uppercase tracking-tight mb-2">{title}</h3>
+                <p className="text-[#F9F8F6]/40 text-sm leading-relaxed">{desc}</p>
               </motion.div>
             ))}
           </div>
@@ -151,7 +151,7 @@ const Nosotros: FC = () => {
       </section>
 
       {/* ── CALL TO ACTION ── */}
-      <section className="py-40 px-6 text-center bg-[#030d05] relative overflow-hidden">
+      <section className="py-40 px-6 text-center bg-[#21201E] relative overflow-hidden">
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -160,18 +160,18 @@ const Nosotros: FC = () => {
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-3xl mx-auto"
         >
-          <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter mb-8 font-paloseco text-white leading-[0.85]">
+          <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter mb-8 font-paloseco text-[#F9F8F6] leading-[0.85]">
             ¿Listo para el<br />
-            <span className="text-[#A3FF00]">siguiente nivel?</span>
+            <span className="text-[#63D72A]">siguiente nivel?</span>
           </h2>
-          <p className="text-white/40 text-base md:text-lg leading-relaxed mb-12 max-w-xl mx-auto">
+          <p className="text-[#F9F8F6]/40 text-base md:text-lg leading-relaxed mb-12 max-w-xl mx-auto">
             Cuéntanos tu visión y la convertimos en una producción que tus invitados recordarán para siempre.
           </p>
           <motion.button
-            whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(163,255,0,0.35)' }}
+            whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(99, 215, 42, 0.35)' }}
             whileTap={{ scale: 0.97 }}
             onClick={openContactModal}
-            className="px-12 py-5 bg-[#A3FF00] text-black font-black uppercase tracking-widest rounded-[40px] hover:bg-white transition-colors duration-300 text-sm"
+            className="px-12 py-5 bg-[#63D72A] text-[#21201E] font-black uppercase tracking-widest rounded-[40px] hover:bg-white transition-colors duration-300 text-sm"
           >
             Hablemos de tu proyecto
           </motion.button>

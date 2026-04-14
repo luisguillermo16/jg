@@ -20,11 +20,11 @@ const CharacterProfile: FC<ProfileProps> = ({
   const isEven = index % 2 === 0;
 
   return (
-    <section className={`relative min-h-[90vh] flex items-center justify-center overflow-hidden py-20 px-6 md:px-12 lg:px-24 bg-[#030d05]/40 backdrop-blur-sm`}>
+    <section className={`relative min-h-[90vh] flex items-center justify-center overflow-hidden py-20 px-6 md:px-12 lg:px-24 bg-[#21201E]/40 backdrop-blur-sm`}>
       {/* Dynamic Background Aura */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div 
-          className={`absolute ${isEven ? 'top-[-20%] right-[-10%]' : 'bottom-[-20%] left-[-10%]'} w-[60%] h-[60%] bg-[#A3FF00]/10 rounded-full blur-[140px] opacity-40`}
+          className={`absolute ${isEven ? 'top-[-20%] right-[-10%]' : 'bottom-[-20%] left-[-10%]'} w-[60%] h-[60%] bg-[#63D72A]/10 rounded-full blur-[140px] opacity-40`}
         />
       </div>
 
@@ -39,7 +39,7 @@ const CharacterProfile: FC<ProfileProps> = ({
           className="w-full md:w-5/12 aspect-[4/5] relative rounded-[2rem] overflow-hidden group"
         >
           {/* Subtle Rim Light */}
-          <div className="absolute inset-0 group-hover:border-[#A3FF00]/30 transition-colors duration-1000 z-20 pointer-events-none rounded-[2rem]" />
+          <div className="absolute inset-0 group-hover:border-[#63D72A]/30 transition-colors duration-1000 z-20 pointer-events-none rounded-[2rem]" />
           
           <img
             src={imageSrc}
@@ -59,7 +59,7 @@ const CharacterProfile: FC<ProfileProps> = ({
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           >
-            <span className="text-[#A3FF00] font-black uppercase tracking-[0.5em] text-[10px] md:text-xs mb-4 block opacity-80">
+            <span className="text-[#63D72A] font-black uppercase tracking-[0.5em] text-[10px] md:text-xs mb-4 block opacity-80">
               {role}
             </span>
             
@@ -69,9 +69,9 @@ const CharacterProfile: FC<ProfileProps> = ({
               ))}
             </h2>
 
-            <div className="h-0.5 w-16 bg-[#A3FF00] mb-8 opacity-60" />
+            <div className="h-0.5 w-16 bg-[#63D72A] mb-8 opacity-60" />
 
-            <p className="text-white/50 text-base md:text-xl lg:text-2xl leading-relaxed font-light tracking-tight font-sans max-w-xl">
+            <p className="text-[#F9F8F6]/50 text-base md:text-xl lg:text-2xl leading-relaxed font-light tracking-tight font-sans max-w-xl">
               {description}
             </p>
           </motion.div>

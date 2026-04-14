@@ -5,7 +5,7 @@
 .cats-section {
   position: relative;
   height: 300vh;
-  background: #030d05;
+  background: #21201E;
   /* Ensure smooth transitions in Safari/iOS */
   transform-style: preserve-3d;
 }
@@ -16,7 +16,7 @@
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  background: #030d05;
+  background: #21201E;
 }
 
 /* ── Invisible Triggers for Scroll detection ── */
@@ -59,7 +59,7 @@
   opacity: 1; /* Eliminado dim cinematográfico */
 }
 
-/* ── Gradients to blend into Negro Verdoso (#030d05) ── */
+/* ── Gradients to blend into Dark Charcoal (#21201E) ── */
 .cats-mask {
   display: none; /* Quitamos el degradado oscuro superior/inferior */
 }
@@ -84,7 +84,7 @@
 .cats-tag {
   font-size: clamp(0.7rem, 1.2vw, 0.9rem);
   font-weight: 900;
-  color: #A3FF00;
+  color: #63D72A;
   text-transform: uppercase;
   letter-spacing: 0.5em;
   margin-bottom: 1.5rem;
@@ -126,14 +126,14 @@
 .cats-dot {
   width: 2px;
   height: 20px;
-  background: rgba(163, 255, 0, 0.2);
+  background: rgba(99, 215, 42, 0.2);
   transition: all 0.4s ease;
 }
 
 .cats-dot.active {
-  background: #A3FF00;
+  background: #63D72A;
   transform: scaleY(1.5);
-  box-shadow: 0 0 10px rgba(163, 255, 0, 0.5);
+  box-shadow: 0 0 10px rgba(99, 215, 42, 0.5);
 }
 
 /* ── Responsive ── */

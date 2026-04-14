@@ -1,5 +1,6 @@
 import { type FC, useState, useEffect, memo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import logo from '../assets/brand/logo.webp';
 import ContactModal from './ContactModal';
 
@@ -7,7 +8,7 @@ interface NavbarProps {
   activeSection?: string;
 }
 
-// Only the section links — no CTA button here
+// Subcomponente para los links de navegación con animación stagger
 const NavLinks: FC<{
   isHome: boolean;
   activeSection: string;
@@ -19,40 +20,33 @@ const NavLinks: FC<{
     return activeSection === id;
   };
 
-  const linkClass = (id: string) =>
-    `px-4 py-2 text-sm font-semibold transition-all duration-300 font-remixa ${isActive(id) ? 'text-[#A3FF00]' : 'text-white'
-    }`;
+  const navItems = [
+    { id: 'hero', label: 'Home', href: '/' },
+    { id: 'servicios', label: 'Servicios', href: '#servicios' },
+    { id: 'nosotros', label: 'Nosotros', href: '#nosotros' },
+    { id: 'galeria', label: 'Galería', href: '#galeria' },
+  ];
 
   return (
     <>
-      {/* 1. Home */}
-      <li>
-        <a href="/" onClick={(e) => scrollToSection(e, 'hero')} className={linkClass('hero')}>
-          Home
-        </a>
-      </li>
-
-      {/* 2. Servicios */}
-      <li>
-        <a href="#servicios" onClick={(e) => scrollToSection(e, '#servicios')} className={linkClass('servicios')}>
-          Servicios
-        </a>
-      </li>
-
-      {/* 3. Nosotros */}
-      <li>
-        <a href="#nosotros" onClick={(e) => scrollToSection(e, '#nosotros')} className={linkClass('nosotros')}>
-          Nosotros
-        </a>
-      </li>
-
-      {/* 4. Galería */}
-      <li>
-        <a href="#galeria" onClick={(e) => scrollToSection(e, '#galeria')} className={linkClass('galeria')}>
-          Galería
-        </a>
-      </li>
-
+      {navItems.map((item, i) => (
+        <motion.li
+          key={item.id}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 + (i * 0.1), duration: 0.5 }}
+        >
+          <a
+            href={item.href}
+            onClick={(e) => scrollToSection(e, item.id === 'hero' ? 'hero' : `#${item.id}`)}
+            className={`px-4 py-2 text-sm font-semibold transition-all duration-300 font-remixa ${
+              isActive(item.id) ? 'text-[#63D72A]' : 'text-[#F9F8F6]'
+            }`}
+          >
+            {item.label}
+          </a>
+        </motion.li>
+      ))}
     </>
   );
 });
@@ -67,61 +61,30 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   useEffect(() => {
-    let ticking = false;
-
     const updateScrollProgress = () => {
-      // Cálculo ultra-robusto del scroll actual
-      const scrollY = window.pageYOffset || 
-                     window.scrollY || 
-                     document.documentElement.scrollTop || 
-                     document.body.scrollTop || 0;
-
-      // Cálculo ultra-robusto de la altura total del documento
-      const scrollHeight = Math.max(
-        document.body.scrollHeight, document.documentElement.scrollHeight,
-        document.body.offsetHeight, document.documentElement.offsetHeight,
-        document.body.clientHeight, document.documentElement.clientHeight
-      );
-      const windowHeight = window.innerHeight || 
-                          document.documentElement.clientHeight || 
-                          document.body.clientHeight;
-      const totalHeight = scrollHeight - windowHeight;
-      
-      const progress = totalHeight > 0 ? Math.min(1, Math.max(0, scrollY / totalHeight)) : 0;
+      const scrollY = window.scrollY;
+      const totalScrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = totalScrollable > 0 ? Math.min(1, scrollY / totalScrollable) : 0;
       setScrollProgress(progress);
-      ticking = false;
     };
 
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateScrollProgress);
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
     window.addEventListener('resize', updateScrollProgress, { passive: true });
-    
-    // Forzamos actualizaciones después de que el contenido se cargue
-    const timer = setInterval(updateScrollProgress, 1000); 
     updateScrollProgress();
-    
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', updateScrollProgress);
       window.removeEventListener('resize', updateScrollProgress);
-      clearInterval(timer);
     };
   }, [location.pathname]);
 
-  // Stroke Progress Math (Aseguramos que sean números exactos)
-  const radius = 28; // Reducimos un poco para dar margen al resplandor (glow)
+  const radius = 28;
   const circumference = 2 * Math.PI * radius;
   const dashOffset = Math.max(0, circumference - (scrollProgress * circumference));
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     setIsMenuOpen(false);
-
     const sectionId = id.startsWith('#') ? id.slice(1) : id;
 
     if (location.pathname !== '/') {
@@ -146,112 +109,103 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
     return () => window.removeEventListener('open-contact-modal', handleOpenModal);
   }, []);
 
-
   const isHome = location.pathname === '/';
-  const scrolled = scrollProgress > 0.02;
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-6 md:px-10 py-5 md:py-6 transition-all duration-500">
-
-        {/* ── LEFT: Logo + progress ring + name ── */}
+      <motion.nav
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-6 md:px-10 py-5 md:py-6 transition-all duration-500"
+      >
+        {/* LEFT: Logo + progress ring */}
         <Link
           to="/"
-          className="group flex items-center gap-3 w-auto flex-shrink-0"
+          className="group flex items-center gap-3 w-auto flex-shrink-0 bg-[#21201E]/50 backdrop-blur-2xl rounded-[12px] px-3 py-1.5 border border-white/5 transition-all duration-300 hover:bg-[#21201E]/70"
           onClick={(e) => scrollToSection(e, 'hero')}
         >
-          <div className="relative flex items-center justify-center w-12 h-12 flex-shrink-0">
+          <div className="relative flex items-center justify-center w-10 h-10 md:w-11 md:h-11 flex-shrink-0">
             <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 64 64">
-              {/* Círculo de fondo tenue */}
-              <circle cx="32" cy="32" r={radius} className="fill-none stroke-white/5 stroke-[2.5]" />
-              {/* Círculo de progreso con brillo verde neón intenso */}
+              <circle cx="32" cy="32" r={radius} fill="none" stroke="#63D72A" strokeWidth="2.5" />
               <circle
                 cx="32" cy="32" r={radius}
-                className="fill-none stroke-[#a3ff00] stroke-[3.5]"
+                fill="none"
+                stroke="#63D72A"
+                strokeWidth="4"
+                strokeLinecap="round"
                 strokeDasharray={circumference}
                 strokeDashoffset={dashOffset}
-                style={{ 
-                  strokeLinecap: 'round',
-                  filter: 'drop-shadow(0 0 5px rgba(163, 255, 0, 0.8))',
-                  transition: 'none' // Respuesta instantánea al scroll
-                }}
+                style={{ filter: 'drop-shadow(0 0 15px rgba(99, 215, 42, 0.7))' }}
               />
             </svg>
-            <img
-              src={logo}
-              alt="JG Producciones"
-              className="relative z-10 h-[14px] w-auto object-contain brightness-200 transition-all duration-500"
-            />
+            <img src={logo} alt="Logo" className="relative z-10 h-[12px] md:h-[13px] w-auto brightness-200" />
           </div>
-          <span className="block text-white font-paloseco font-black text-[14px] uppercase tracking-[0.02em] drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-all duration-500 whitespace-nowrap translate-y-[1px]">
+          <span className={`block font-remixa font-semibold text-[13px] md:text-[14px] uppercase tracking-[0.05em] group-hover:scale-105 transition-all duration-500 ${
+            isHome && (activeSection === 'hero' || activeSection === '') ? 'text-[#63D72A]' : 'text-[#F9F8F6]'
+          }`}>
             Producciones
           </span>
         </Link>
 
-        {/* ── CENTER: Navigation pill (desktop) ── */}
-        <div
-          className={`hidden md:flex items-center transition-all duration-700 px-6 py-3 ${scrolled
-            ? 'bg-[#030d05]/55 backdrop-blur-2xl rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
-            : 'bg-transparent'
-            }`}
-        >
-          <ul className="flex gap-0.5 m-0 p-0 list-none items-center">
-            <NavLinks
-              isHome={isHome}
-              activeSection={activeSection}
-              scrollToSection={scrollToSection}
-            />
+        {/* CENTER: Navigation (desktop) */}
+        <div className="hidden md:flex items-center">
+          <ul className="flex gap-0.5 m-0 p-0 list-none items-center bg-[#21201E]/50 backdrop-blur-2xl rounded-[12px] px-2 py-1.5">
+            <NavLinks isHome={isHome} activeSection={activeSection} scrollToSection={scrollToSection} />
           </ul>
         </div>
 
-        {/* ── RIGHT: CTA button (desktop) + mobile hamburger ── */}
+        {/* RIGHT: CTA + Burger */}
         <div className="flex items-center gap-4 flex-shrink-0">
           <button
             onClick={() => setIsContactModalOpen(true)}
-            className="hidden md:flex px-7 py-2.5 rounded-[12px] text-[13px] font-black bg-[#A3FF00] text-black transition-all duration-300 font-remixa items-center hover:-translate-y-0.5 hover:brightness-110 shadow-[0_8px_20px_rgba(163,255,0,0.2)]"
+            className="hidden md:flex px-7 py-2.5 rounded-[12px] text-[13px] font-black bg-[#63D72A] text-[#21201E] transition-all duration-300 font-remixa hover:-translate-y-0.5"
           >
             Contáctanos
           </button>
 
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle Menu"
             className="flex md:hidden w-12 h-12 flex-col items-center justify-center gap-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full z-[1100]"
           >
-            <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-            <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
-            <span className={`w-5 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+            <span className={`w-5 h-0.5 bg-white transition-all ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+            <span className={`w-5 h-0.5 bg-white transition-all ${isMenuOpen ? 'opacity-0' : ''}`} />
+            <span className={`w-5 h-0.5 bg-white transition-all ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
-      {/* ── Mobile Menu Overlay ── */}
-      <div
-        className={`fixed inset-0 z-[900] md:hidden transition-all duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-          }`}
-      >
-        <div className="absolute inset-0 bg-[#030d05]/90 backdrop-blur-2xl" onClick={() => setIsMenuOpen(false)} />
-        <div
-          className={`absolute inset-x-0 top-0 pt-28 pb-12 px-8 bg-gradient-to-b from-[#091800]/50 to-black border-b border-white/10 transition-all duration-500 transform ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'
-            }`}
-        >
-          <ul className="flex flex-col gap-8 m-0 p-0 list-none items-center">
-            <NavLinks
-              isHome={isHome}
-              activeSection={activeSection}
-              scrollToSection={scrollToSection}
-            />
-            <li className="md:hidden w-full max-w-[200px] mt-4">
-              <button
-                onClick={() => setIsContactModalOpen(true)}
-                className="w-full py-3.5 rounded-[12px] text-sm font-black bg-[#A3FF00] text-black transition-all duration-300 font-remixa flex items-center justify-center shadow-[0_10px_30px_rgba(163,255,0,0.3)]"
-              >
-                Contáctanos
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
+      {/* Mobile Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[900] md:hidden"
+          >
+            <div className="absolute inset-0 bg-[#21201E]/95 backdrop-blur-2xl" onClick={() => setIsMenuOpen(false)} />
+            <motion.div
+              initial={{ y: -100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -100, opacity: 0 }}
+              className="absolute inset-x-0 top-0 pt-28 pb-12 px-8 bg-gradient-to-b from-[#21201E] to-black border-b border-white/10"
+            >
+              <ul className="flex flex-col gap-8 list-none items-center">
+                <NavLinks isHome={isHome} activeSection={activeSection} scrollToSection={scrollToSection} />
+                <li className="w-full max-w-[200px] mt-4">
+                  <button
+                    onClick={() => setIsContactModalOpen(true)}
+                    className="w-full py-4 rounded-[12px] text-sm font-black bg-[#63D72A] text-[#21201E] font-remixa"
+                  >
+                    Contáctanos
+                  </button>
+                </li>
+              </ul>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
     </>

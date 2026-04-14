@@ -36,7 +36,7 @@ const Home: FC = () => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
-    
+
     window.scrollTo(0, 0);
     const hash = window.location.hash;
     if (hash) {
@@ -46,16 +46,16 @@ const Home: FC = () => {
   }, []);
 
   return (
-    <div className="bg-[#030d05] text-white selection:bg-accent selection:text-black">
+    <div className="bg-[#21201E] selection:bg-[#63D72A] selection:text-black min-h-screen font-sans">
       <Navbar activeSection={activeSection} />
 
       <main>
         <MemoHero />
         <CategoriesSection />
-        <AboutSection />
         <div id="servicios">
           <ServicesSection services={SERVICES} />
         </div>
+        <AboutSection />
         <TestimonialsSection />
         <GallerySection galleryImages={GALLERY_IMAGES} />
         <CTASection />

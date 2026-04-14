@@ -39,14 +39,15 @@
 
 /* ── Design Tokens ── */
 :root {
-  --text: #94A3B8;
+  --text: #F9F8F6;
   --text-h: #F8FAFC;
-  --bg: #030d05;        /* Negro verdoso profundo */
-  --accent: #A3FF00;    /* JG Neon Green */
-  --accent-soft: rgba(163, 255, 0, 0.15);
+  --bg: #21201E;        /* Dark Charcoal */
+  --accent: #63D72A;    /* JG Neon Green */
+  --accent-soft: rgba(99, 215, 42, 0.15);
+  --text-off-white: #F9F8F6;
   --border: rgba(255, 255, 255, 0.05);
   --sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --btn-radius: 20px;
+  --btn-radius: 12px;
 }
 
 /* ── Reset base ── */
