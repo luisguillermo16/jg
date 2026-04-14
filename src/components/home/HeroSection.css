@@ -1,6 +1,5 @@
 /* ============================================================
    HERO SECTION STYLES
-   Usado en: HeroSection.tsx, Navbar.tsx, FooterSection.tsx
    ============================================================ */
 
 #hero-section {
@@ -9,7 +8,6 @@
   height: 100vh;
   height: 100dvh;
   background: #030500;
-  /* GPU: Asegura subpixel-antialiased en todo el hero */
   -webkit-font-smoothing: subpixel-antialiased;
   overflow: hidden;
 }
@@ -23,53 +21,8 @@
   font-family: 'Paloseco', sans-serif;
 }
 
-/* Hero main title — Scene 2 de HeroSection */
-.hero-title {
-  font-family: 'Paloseco', sans-serif;
-  font-size: clamp(2.5rem, 5vw, 4.2rem);
-  line-height: 1.1;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 24px;
-  letter-spacing: -1.5px;
-  max-width: 800px;
-}
-
-.text-shadow-strong {
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9), 0 0 80px rgba(0, 0, 0, 0.6);
-}
-
 /* ============================================================
-   STICKY WRAPPER — Promovido a compositor layer de GPU
-   Esto es CRÍTICO para evitar el flash negro en scroll-snap móvil.
-   El compositor thread puede renderizar este layer en cada frame
-   de scroll SIN esperar al hilo principal de JS/Layout.
-   ============================================================ */
-.hero-sticky {
-  /* Promover a compositor layer ANTES de que empiece el scroll */
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-
-  /* 100dvh: respeta la barra URL dinámica en iOS/Android
-     Fallback a 100vh para browsers sin soporte dvh */
-  height: 100vh;
-  height: 100dvh;
-}
-
-/* ── Outer section: 400vh scroll range (intro + 3 categorías) ── */
-.cats-section {
-  position: relative;
-  height: 400vh;
-  min-height: 400vh; /* CLS Fix: Reserva el espacio en el layout */
-  background: #030500;
-  /* GPU Optimizations */
-  transform-style: preserve-3d;
-  -webkit-font-smoothing: subpixel-antialiased;
-}
-
-/* ============================================================
-   HERO ENTRANCE ANIMATIONS — Pure CSS (Sincronizado con Galería)
+   HERO ENTRANCE ANIMATIONS
    ============================================================ */
 
 @keyframes hero-rise {
@@ -83,18 +36,7 @@
   }
 }
 
-@keyframes hero-scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.8) translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateX(0);
-  }
-}
-
-/* animation-fill-mode: both → empieza en el estado "from" durante el delay */
+/* animation-fill-mode: both → empieza en estado "from" durante el delay */
 .hero-animate-1 {
   opacity: 0;
   animation: hero-rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
@@ -110,40 +52,18 @@
   animation: hero-rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
 }
 
-.hero-animate-logo {
-  opacity: 0;
-  animation: hero-scale-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
-}
-
-.hero-animate-logo-text {
-  opacity: 0;
-  animation: hero-rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
-}
-
-
-/* ── Optimizaciones móvil: duraciones más cortas ── */
+/* ── Optimizaciones móvil ── */
 @media (max-width: 768px) {
-  .hero-animate-1 {
-    animation-duration: 0.75s;
-    animation-delay: 0.02s;
-  }
-  .hero-animate-2 {
-    animation-duration: 0.75s;
-    animation-delay: 0.12s;
-  }
-  .hero-animate-3 {
-    animation-duration: 0.7s;
-    animation-delay: 0.22s;
-  }
+  .hero-animate-1 { animation-duration: 0.75s; animation-delay: 0.02s; }
+  .hero-animate-2 { animation-duration: 0.75s; animation-delay: 0.12s; }
+  .hero-animate-3 { animation-duration: 0.7s;  animation-delay: 0.22s; }
 }
 
-/* ── Accesibilidad: respetar preferencia "reduce motion" ── */
+/* ── Accesibilidad ── */
 @media (prefers-reduced-motion: reduce) {
   .hero-animate-1,
   .hero-animate-2,
-  .hero-animate-3,
-  .hero-animate-logo,
-  .hero-animate-logo-text {
+  .hero-animate-3 {
     animation: none;
     opacity: 1;
   }

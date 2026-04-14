@@ -80,23 +80,3 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: white !important;
   transition: background-color 5000s ease-in-out 0s;
 }
-
-/* ── Performance & CLS Fixes ── */
-.video-lazy-container {
-  aspect-ratio: 16 / 9;
-  width: 100%;
-  background: #030500;
-  overflow: hidden;
-}
-
-img, video {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-.cats-bg-wrapper img,
-.cats-bg-wrapper video {
-  height: 100% !important;
-  object-fit: cover;
-}
