@@ -33,7 +33,7 @@ const BENEFITS = [
 const AboutSection: FC = () => (
   <section
     id="nosotros"
-    className="relative bg-[#030d05] h-screen px-6 md:px-12 lg:px-24 overflow-hidden flex flex-col justify-center z-0"
+    className="relative bg-[#030d05] min-h-screen py-24 md:h-screen md:py-0 px-6 md:px-12 lg:px-24 flex flex-col justify-center z-0"
     style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
   >
     {/* Top accent line */}
