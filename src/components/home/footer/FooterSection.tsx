@@ -1,6 +1,6 @@
 import type { FC } from 'react';
-import logo from '../../assets/brand/logo.webp';
-import { openContactModal } from '../../utils/modal';
+import logo from '../../../assets/brand/logo.webp';
+import { openContactModal } from '../../../utils/modal';
 
 const FooterSection: FC = () => {
   return (

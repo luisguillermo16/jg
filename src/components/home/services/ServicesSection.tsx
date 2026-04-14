@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import { openContactModal } from '../../utils/modal';
+import { openContactModal } from '../../../utils/modal';
 import './ServicesSection.css';
 
 interface Service {

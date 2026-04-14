@@ -1,6 +1,6 @@
 import { type FC, useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CATEGORIES } from '../../data/homeData';
+import { CATEGORIES } from '../../../data/homeData';
 import './CategoriesSection.css';
 
 const CategoriesSection: FC = () => {
