@@ -9,27 +9,11 @@
   <meta name="description"
     content="Producción técnica para eventos: bodas, conciertos y eventos corporativos con pantallas LED, sonido e iluminación de alto nivel." />
 
-  <link rel="preload" as="image" href="/images/hero_new.webp" fetchpriority="high">
-  <link rel="preload" href="/src/assets/fonts/Paloseco-Medium.ttf" as="font" type="font/truetype" crossorigin>
-  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" />
 
-  <!--
-    ESTADO DE CARGA (antes de React)
-    ─────────────────────────────────
-    Cuando #root está vacío (React aún no montó), el pseudo-elemento ::before
-    muestra la imagen de fondo del hero instantáneamente — sin esperar JS/bundle.
-    Al montar React, #root ya no está vacío y el pseudo-elemento desaparece.
-    
-    Esto elimina el "negro 1-2 segundos" que el usuario ve mientras el bundle
-    de 414 kB descarga y parsea en móvil.
-    
-    La imagen hero1.webp (13 kB) debe estar en /public/images/ para tener
-    una URL estable (sin hash) navegable desde CSS en index.html.
-  -->
   <style>
     /* Reset mínimo para el estado de carga */
     * {
@@ -42,7 +26,7 @@
     body {
       width: 100%;
       height: 100%;
-      background: #050607;
+      background: #030d05;
       overflow: hidden;
     }
 
@@ -51,41 +35,105 @@
       height: 100%;
     }
 
-    /* ── Loading screen: visible SOLO mientras React no ha montado ── */
+    /* ── Skeleton Loading ── */
     #root:empty {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      background: #050607 url('/images/hero_new.webp') center / cover no-repeat;
-      height: 100vh;
-      height: 100dvh;
+      padding: 0 6% 0 6%;
+      background: #030d05;
     }
 
-    /* Spinner sutil centrado encima del hero */
-    #root:empty::after {
-      content: '';
-      width: 36px;
-      height: 36px;
-      border: 2.5px solid rgba(163, 255, 0, 0.2);
-      border-top-color: #a3ff00;
-      border-radius: 50%;
+    #root:empty .skeleton-content {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    #root:empty .sk-title {
+      height: 80px;
+      width: 70%;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #root:empty .sk-text {
+      height: 20px;
+      width: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #root:empty .sk-btns {
+      display: flex;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    #root:empty .sk-btn {
+      height: 50px;
+      width: 180px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Shimmer effect */
+    #root:empty .sk-title::after,
+    #root:empty .sk-text::after,
+    #root:empty .sk-btn::after {
+      content: "";
       position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: spin 0.8s linear infinite;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateX(-100%);
+      background-image: linear-gradient(
+        90deg,
+        transparent 0,
+        rgba(163, 255, 0, 0.04) 20%,
+        rgba(163, 255, 0, 0.08) 60%,
+        transparent 100%
+      );
+      animation: shimmer 2s infinite;
     }
 
-    @keyframes spin {
-      to {
-        transform: translateX(-50%) rotate(360deg);
+    @keyframes shimmer {
+      100% {
+        transform: translateX(100%);
       }
+    }
+
+    @media (max-width: 768px) {
+      #root:empty { padding: 0 24px; }
+      #root:empty .sk-title { height: 60px; width: 90%; }
+      #root:empty .sk-text { width: 80%; }
+      #root:empty .sk-btns { flex-direction: column; }
+      #root:empty .sk-btn { width: 100%; }
     }
   </style>
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <!-- El CSS cargará este esqueleto mientras el bundle de React se descarga -->
+    <div class="skeleton-content">
+      <div class="sk-title"></div>
+      <div class="sk-text"></div>
+      <div class="sk-text" style="width: 40%"></div>
+      <div class="sk-btns">
+        <div class="sk-btn"></div>
+        <div class="sk-btn"></div>
+      </div>
+    </div>
+  </div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 

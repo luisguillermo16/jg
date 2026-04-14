@@ -47,8 +47,6 @@ const CategoriesSection: FC = () => {
       </div>
 
       <div className="cats-sticky">
-        <div className="cats-mask" />
-        <div className="cats-vignette" />
 
         {/* ── Video Layers ── */}
         {CATEGORIES.map((cat, idx) => (
