@@ -41,10 +41,8 @@
 :root {
   --text: #94A3B8;
   --text-h: #F8FAFC;
-  --bg: #030500;
-  /* Extreme dark blue/black tone */
-  --accent: #A3FF00;
-  /* JG Neon Green */
+  --bg: #030d05;        /* Negro verdoso profundo */
+  --accent: #A3FF00;    /* JG Neon Green */
   --accent-soft: rgba(163, 255, 0, 0.15);
   --border: rgba(255, 255, 255, 0.05);
   --sans: 'Inter', system-ui, -apple-system, sans-serif;

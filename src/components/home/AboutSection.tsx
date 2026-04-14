@@ -33,7 +33,7 @@ const BENEFITS = [
 const AboutSection: FC = () => (
   <section
     id="nosotros"
-    className="relative bg-[#030500] h-screen px-6 md:px-12 lg:px-24 overflow-hidden flex flex-col justify-center z-0"
+    className="relative bg-[#030d05] h-screen px-6 md:px-12 lg:px-24 overflow-hidden flex flex-col justify-center z-0"
     style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
   >
     {/* Top accent line */}
@@ -82,9 +82,9 @@ const AboutSection: FC = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ delay: i * 0.12, duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-            className="p-6 rounded-2xl bg-white/[0.04] border border-white/[0.07] hover:bg-white/[0.08] hover:border-[#A3FF00]/20 transition-all duration-500 group cursor-default"
+            className="p-6 rounded-2xl bg-[#0a180c] border border-white/[0.07] transition-all duration-500 cursor-default"
           >
-            <Icon className="w-7 h-7 text-[#A3FF00] mb-4 group-hover:scale-110 transition-transform duration-300" />
+            <Icon className="w-7 h-7 text-[#A3FF00] mb-4 transition-transform duration-300" />
             <h3 className="text-white text-sm font-black uppercase tracking-tight mb-2">
               {title}
             </h3>

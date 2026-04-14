@@ -10,7 +10,7 @@ const HeroSection: FC = () => {
   };
 
   return (
-    <section id="hero-section" className="relative w-full h-full bg-black">
+    <section id="hero-section" className="relative w-full h-full bg-[#030d05]">
       <div className="absolute inset-0 z-0">
         <video
           src={heroVideo}
@@ -20,7 +20,7 @@ const HeroSection: FC = () => {
           playsInline
           className="w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#030500]/60 via-[#030500]/30 to-[#030500]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#030d05]/60 via-[#030d05]/30 to-[#030d05]/90" />
       </div>
 
       <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 max-w-6xl mx-auto">

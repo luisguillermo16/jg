@@ -46,7 +46,7 @@ const Nosotros: FC = () => {
   }, []);
 
   return (
-    <div className="relative bg-black text-white selection:bg-[#A3FF00] selection:text-black min-h-screen overflow-x-hidden font-sans">
+    <div className="relative bg-[#030d05] text-white selection:bg-[#A3FF00] selection:text-black min-h-screen overflow-x-hidden font-sans">
       <Navbar />
 
       {/* ── HERO ── */}
@@ -151,7 +151,7 @@ const Nosotros: FC = () => {
       </section>
 
       {/* ── CALL TO ACTION ── */}
-      <section className="py-40 px-6 text-center bg-black relative overflow-hidden">
+      <section className="py-40 px-6 text-center bg-[#030d05] relative overflow-hidden">
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}

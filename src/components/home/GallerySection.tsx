@@ -9,7 +9,7 @@ const GallerySection: FC<GallerySectionProps> = ({ galleryImages }) => {
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
 
   return (
-    <section id="galeria" className="bg-black py-32 px-6">
+    <section id="galeria" className="bg-[#030d05] py-32 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-24">
           <h2 className="text-5xl md:text-8xl font-black text-white uppercase font-paloseco mb-6">
@@ -30,7 +30,7 @@ const GallerySection: FC<GallerySectionProps> = ({ galleryImages }) => {
               <img 
                 src={src} 
                 alt={`Galería ${i}`} 
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 hover:opacity-100"
+                className="w-full h-full object-cover transition-transform duration-500 opacity-80 hover:opacity-100"
                 loading="lazy"
               />
             </div>
@@ -40,7 +40,7 @@ const GallerySection: FC<GallerySectionProps> = ({ galleryImages }) => {
 
       {selectedImg && (
         <div 
-          className="fixed inset-0 z-[2000] bg-black/95 flex items-center justify-center p-4 backdrop-blur-xl"
+          className="fixed inset-0 z-[2000] bg-[#030d05]/95 flex items-center justify-center p-4 backdrop-blur-xl"
           onClick={() => setSelectedImg(null)}
         >
           <img src={selectedImg} alt="Enlarged" className="max-h-full max-w-full object-contain" />

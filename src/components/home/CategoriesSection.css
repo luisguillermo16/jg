@@ -1,0 +1,166 @@
+/* ============================================================
+   CATEGORIES SECTION — Cinematic Sticky Scroll
+   ============================================================ */
+
+.cats-section {
+  position: relative;
+  height: 300vh;
+  background: #030d05;
+  /* Ensure smooth transitions in Safari/iOS */
+  transform-style: preserve-3d;
+}
+
+.cats-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #030d05;
+}
+
+/* ── Invisible Triggers for Scroll detection ── */
+.cats-triggers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50; /* Above everything but invisible */
+}
+
+.cats-trigger {
+  height: 100vh;
+  width: 100%;
+}
+
+/* ── Each slide within the sticky view ── */
+.cats-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+
+.cats-slide.active {
+  opacity: 1;
+}
+
+/* ── Background Video ── */
+.cats-video-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.cats-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6; /* Cinematic dim */
+}
+
+/* ── Gradients to blend into Negro Verdoso (#030d05) ── */
+.cats-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: linear-gradient(
+    to bottom,
+    #030d05 0%,
+    transparent 15%,
+    transparent 85%,
+    #030d05 100%
+  );
+  pointer-events: none;
+}
+
+.cats-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  background: radial-gradient(
+    circle at 50% 50%,
+    transparent 20%,
+    rgba(3, 13, 5, 0.4) 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Content Layout ── */
+.cats-content {
+  position: relative;
+  z-index: 20;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(3rem, 10vh, 8rem) clamp(1.5rem, 8vw, 8rem);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.cats-tag {
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  font-weight: 900;
+  color: #A3FF00;
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.cats-title {
+  font-family: 'Paloseco', sans-serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+}
+
+.cats-desc {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 500px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* ── Scroll Indicators ── */
+.cats-indicators {
+  position: absolute;
+  right: clamp(1.5rem, 4vw, 4rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: 30;
+}
+
+.cats-dot {
+  width: 2px;
+  height: 20px;
+  background: rgba(163, 255, 0, 0.2);
+  transition: all 0.4s ease;
+}
+
+.cats-dot.active {
+  background: #A3FF00;
+  transform: scaleY(1.5);
+  box-shadow: 0 0 10px rgba(163, 255, 0, 0.5);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .cats-content {
+    justify-content: center;
+    text-align: center;
+    padding-bottom: 6rem;
+  }
+  .cats-desc {
+    margin: 0 auto;
+  }
+}

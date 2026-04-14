@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import { SERVICES, GALLERY_IMAGES } from '../data/homeData';
 
 import HeroSection from '../components/home/HeroSection';
+import CategoriesSection from '../components/home/CategoriesSection';
 import ServicesSection from '../components/home/ServicesSection';
 import AboutSection from '../components/home/AboutSection';
 import TestimonialsSection from '../components/home/TestimonialsSection';
@@ -24,6 +25,7 @@ const Home: FC = () => {
   const lastSectionRef = useRef('hero');
 
   const sectionOffsets = useRef({
+    catsStart: 0,
     svcStart: 0,
     galStart: 0,
     nosotrosTop: Number.POSITIVE_INFINITY,
@@ -42,12 +44,14 @@ const Home: FC = () => {
   useEffect(() => {
     const refreshOffsets = () => {
       const h = window.innerHeight;
+      const catsEl = document.getElementById('categorias');
       const svcEl = document.getElementById('servicios');
       const galEl = document.getElementById('galeria');
       const nosEl = document.getElementById('nosotros');
       sectionOffsets.current = {
-        svcStart:    svcEl ? svcEl.offsetTop : h * 4,
-        galStart:    galEl ? galEl.offsetTop : h * 11,
+        catsStart:   catsEl ? catsEl.offsetTop : h,
+        svcStart:    svcEl ? svcEl.offsetTop : h * 5,
+        galStart:    galEl ? galEl.offsetTop : h * 12,
         nosotrosTop: nosEl ? nosEl.offsetTop : Number.POSITIVE_INFINITY,
       };
     };
@@ -62,14 +66,18 @@ const Home: FC = () => {
       if (document.visibilityState !== 'hidden') {
         const scroll = window.scrollY;
         const vh = window.innerHeight;
-        const { svcStart, galStart, nosotrosTop } = sectionOffsets.current;
+        const { catsStart, svcStart, galStart, nosotrosTop } = sectionOffsets.current;
         const margin = vh / 2;
 
         let next = lastSectionRef.current;
-        if (scroll < svcStart - margin) {
+        if (scroll < catsStart - margin) {
           next = 'hero';
+        } else if (scroll < nosotrosTop - margin) {
+          next = 'categorias';
+        } else if (scroll < svcStart - margin) {
+          next = 'nosotros';
         } else if (scroll < galStart - margin) {
-          next = scroll >= nosotrosTop - margin ? 'nosotros' : 'servicios';
+          next = 'servicios';
         } else if (scroll < galStart + vh * 2) {
           next = 'galeria';
         } else {
@@ -106,11 +114,12 @@ const Home: FC = () => {
   }, []);
 
   return (
-    <div className="bg-[#030500] text-white selection:bg-accent selection:text-black">
+    <div className="bg-[#030d05] text-white selection:bg-accent selection:text-black">
       <Navbar activeSection={activeSection} />
 
       <main>
         <MemoHero />
+        <CategoriesSection />
         <AboutSection />
         <div id="servicios">
           <ServicesSection services={SERVICES} />

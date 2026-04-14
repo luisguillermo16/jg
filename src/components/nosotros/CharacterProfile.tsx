@@ -20,7 +20,7 @@ const CharacterProfile: FC<ProfileProps> = ({
   const isEven = index % 2 === 0;
 
   return (
-    <section className={`relative min-h-[90vh] flex items-center justify-center overflow-hidden py-20 px-6 md:px-12 lg:px-24 bg-black/40 backdrop-blur-sm`}>
+    <section className={`relative min-h-[90vh] flex items-center justify-center overflow-hidden py-20 px-6 md:px-12 lg:px-24 bg-[#030d05]/40 backdrop-blur-sm`}>
       {/* Dynamic Background Aura */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div 

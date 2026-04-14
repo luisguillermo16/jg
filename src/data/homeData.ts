@@ -57,8 +57,34 @@ export const GALLERY_IMAGES = [
   gal1, gal2, gal3, gal4, gal5, gal6, gal7, gal8, gal9, gal10, gal11, gal12
 ];
 
+export const CATEGORIES = [
+  {
+    id: 'bodas',
+    title: 'Bodas',
+    tag: 'Eternizando Historias',
+    desc: 'Capturamos la esencia del día más importante de tu vida con una producción audiovisual de nivel cinematográfico.',
+    video: 'https://luispineda.b-cdn.net/boda.mp4',
+    videoMobile: 'https://luispineda.b-cdn.net/bodaParaTelefono.mp4'
+  },
+  {
+    id: 'corporativo',
+    title: 'Corporativo',
+    tag: 'Impacto Empresarial',
+    desc: 'Elevamos la imagen de tu marca con lanzamientos y convenciones que proyectan innovación y profesionalismo.',
+    video: 'https://luispineda.b-cdn.net/corporativo.mp4'
+  },
+  {
+    id: 'social',
+    title: 'Eventos Sociales',
+    tag: 'Momentos Épicos',
+    desc: 'Desde aniversarios hasta grandes celebraciones, creamos el escenario perfecto para tus mejores recuerdos.',
+    video: 'https://luispineda.b-cdn.net/social.mp4'
+  }
+];
+
 export const SECTIONS = [
   { id: 'hero', label: 'Inicio' },
+  { id: 'categorias', label: 'Categorías' },
   { id: 'servicios', label: 'Servicios' },
   { id: 'galeria', label: 'Galería' }
 ];

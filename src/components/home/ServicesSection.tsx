@@ -15,7 +15,7 @@ interface ServicesSectionProps {
 
 const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
   return (
-    <section id="servicios" className="bg-[#050607] py-32 px-6">
+    <section id="servicios" className="bg-[#030d05] py-32 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-20">
           <h2 className="text-5xl md:text-8xl font-black text-white uppercase font-paloseco mb-6">
@@ -28,12 +28,12 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((svc, idx) => (
-            <div key={idx} className="group relative bg-[#0a0c0e] border border-white/5 rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-500">
+            <div key={idx} className="group relative bg-[#0a180c] border border-white/5 rounded-2xl overflow-hidden transition-all duration-500">
               <div className="aspect-video overflow-hidden">
                 <img 
                   src={svc.image} 
                   alt={svc.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-70"
+                  className="w-full h-full object-cover transition-transform duration-700 opacity-70"
                 />
               </div>
               <div className="p-8">

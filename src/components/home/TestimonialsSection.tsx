@@ -27,7 +27,7 @@ const TESTIMONIALS = [
 ];
 
 const TestimonialsSection: FC = () => (
-  <section className="relative bg-[#030500] h-screen px-6 md:px-12 overflow-hidden flex flex-col justify-center" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+  <section className="relative bg-[#030d05] h-screen px-6 md:px-12 overflow-hidden flex flex-col justify-center" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
     {/* Radial glow center cinemático */}
     <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_60%,rgba(163,255,0,0.06),transparent)] pointer-events-none" />
 
@@ -59,11 +59,8 @@ const TestimonialsSection: FC = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ delay: i * 0.15, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex flex-col p-8 rounded-2xl bg-white/[0.04] border border-white/[0.07] hover:border-[#A3FF00]/20 hover:bg-white/[0.07] transition-all duration-500 group overflow-hidden"
+            className="relative flex flex-col p-8 rounded-2xl bg-[#0a180c] border border-white/[0.07] transition-all duration-500 overflow-hidden"
           >
-            {/* Subtle corner glow on hover */}
-            <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-[#A3FF00]/8 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-
             {/* Quote icon */}
             <ChatBubbleLeftRightIcon className="w-7 h-7 text-[#A3FF00]/50 mb-6 flex-shrink-0" />
 

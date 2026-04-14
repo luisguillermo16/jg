@@ -161,7 +161,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
         {/* ── CENTER: Navigation pill (desktop) ── */}
         <div
           className={`hidden md:flex items-center transition-all duration-700 px-6 py-3 ${scrolled
-            ? 'bg-black/55 backdrop-blur-2xl rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
+            ? 'bg-[#030d05]/55 backdrop-blur-2xl rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
             : 'bg-transparent'
             }`}
         >
@@ -200,7 +200,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
         className={`fixed inset-0 z-[900] md:hidden transition-all duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
           }`}
       >
-        <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl" onClick={() => setIsMenuOpen(false)} />
+        <div className="absolute inset-0 bg-[#030d05]/90 backdrop-blur-2xl" onClick={() => setIsMenuOpen(false)} />
         <div
           className={`absolute inset-x-0 top-0 pt-28 pb-12 px-8 bg-gradient-to-b from-[#091800]/50 to-black border-b border-white/10 transition-all duration-500 transform ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'
             }`}
