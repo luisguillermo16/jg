@@ -1,6 +1,10 @@
 import serviceAudio from '../assets/home/icons/service_audio.webp';
 import serviceLighting from '../assets/home/icons/service_lighting.webp';
 import serviceLed from '../assets/home/icons/service_led.webp';
+import bgBoda from '../assets/home/img/boda sevicios.jfif';
+import bgConcierto from '../assets/home/img/concierto servicios.jpg';
+import bgCorp from '../assets/home/img/corporativos servicios.jpg';
+import bgMarca from '../assets/home/img/marca servicios.jfif';
 import gal1 from '../assets/gallery/MRW01846.webp';
 import gal2 from '../assets/gallery/MRW03505.webp';
 import gal3 from '../assets/gallery/MRW03575.webp';
@@ -16,40 +20,28 @@ import gal12 from '../assets/gallery/MRW09772.webp';
 
 export const SERVICES = [
   {
-    title: "Acústica Impecable",
-    desc: "Cada palabra y cada nota llegan nítidas a toda la sala. Sistemas Line Array de alta fidelidad sin distorsión, sin zonas muertas.",
-    image: serviceAudio,
-
+    title: "Bodas & Eventos Sociales",
+    desc: "Tu día más especial merece una producción impecable.",
+    features: ["Iluminación", "Sonido", "Montaje", "Coordinación"],
+    image: bgBoda
   },
   {
-    title: "Escenarios que Impresionan",
-    desc: "Iluminación robótica inteligente que convierte cualquier espacio en una experiencia visual única e irrepetible.",
-    image: serviceLighting,
-
+    title: "Conciertos & Shows",
+    desc: "Producción técnica de alto nivel para shows en vivo. Escenarios y gestión completa del evento.",
+    features: ["Escenarios", "Rider técnico", "Visuales LED", "PA System"],
+    image: bgConcierto
   },
   {
-    title: "Visuales que Impactan",
-    desc: "Pantallas LED en alta definición que mantienen la atención de tus invitados y amplifican cada momento clave.",
-    image: serviceLed,
-
+    title: "Eventos Corporativos",
+    desc: "Conferencias y lanzamientos que transmiten el profesionalismo de tu empresa en cada evento.",
+    features: ["Conferencias", "A/V Profesional", "Streaming", "Ambientación"],
+    image: bgCorp
   },
   {
-    title: "Momentos Inolvidables",
-    desc: "Pirotecnia fría y niebla densa que generan reacciones espontáneas y convierten instantes ordinarios en escenas épicas.",
-    image: gal6,
-
-  },
-  {
-    title: "Escenarios a tu Medida",
-    desc: "Tarimas y estructuras truss seguras y personalizadas. Cada presentación con la presencia que merece.",
-    image: gal3,
-
-  },
-  {
-    title: "Nada se Pierde",
-    desc: "Cobertura multicámara y transmisión en vivo para que cada ángulo, cada emoción, quede inmortalizado.",
-    image: gal4,
-
+    title: "Lanzamientos de Marca",
+    desc: "Experiencias de marca que generan impacto y recordación en el centro del escenario.",
+    features: ["BTL", "Branding", "Experiencias"],
+    image: bgMarca
   }
 ];
 

@@ -3,11 +3,9 @@ import Navbar from '../components/Navbar';
 import { SERVICES, GALLERY_IMAGES } from '../data/homeData';
 
 import HeroSection from '../components/home/hero/HeroSection';
-import CategoriesSection from '../components/home/categories/CategoriesSection';
 import ServicesSection from '../components/home/services/ServicesSection';
 import AboutSection from '../components/home/about/AboutSection';
 import TestimonialsSection from '../components/home/testimonials/TestimonialsSection';
-import GallerySection from '../components/home/gallery/GallerySection';
 import CTASection from '../components/home/cta/CTASection';
 import FooterSection from '../components/home/footer/FooterSection';
 
@@ -20,9 +18,9 @@ const Home: FC = () => {
   // 1. Detección de sección activa (ScrollSpy) optimizada con IntersectionObserver
   const activeSection = useScrollSpy([
     'hero-section',
+    'servicios',
     'categorias',
     'nosotros',
-    'servicios',
     'galeria',
     'contact'
   ]);
@@ -51,13 +49,11 @@ const Home: FC = () => {
 
       <main>
         <MemoHero />
-        <CategoriesSection />
         <div id="servicios">
           <ServicesSection services={SERVICES} />
         </div>
         <AboutSection />
         <TestimonialsSection />
-        <GallerySection galleryImages={GALLERY_IMAGES} />
         <CTASection />
       </main>
 

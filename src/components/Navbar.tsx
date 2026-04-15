@@ -24,7 +24,7 @@ const NavLinks: FC<{
     { id: 'hero', label: 'Home', href: '/' },
     { id: 'servicios', label: 'Servicios', href: '#servicios' },
     { id: 'nosotros', label: 'Nosotros', href: '#nosotros' },
-    { id: 'galeria', label: 'Galería', href: '#galeria' },
+    { id: 'portafolio', label: 'Portafolio', href: '/portafolio' },
   ];
 
   return (
@@ -36,15 +36,30 @@ const NavLinks: FC<{
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 + (i * 0.1), duration: 0.5 }}
         >
-          <a
-            href={item.href}
-            onClick={(e) => scrollToSection(e, item.id === 'hero' ? 'hero' : `#${item.id}`)}
-            className={`px-4 py-2 text-sm font-semibold transition-all duration-300 font-remixa ${
-              isActive(item.id) ? 'text-[#63D72A]' : 'text-[#F9F8F6]'
-            }`}
-          >
-            {item.label}
-          </a>
+          {item.href.startsWith('/') ? (
+            <Link
+              to={item.href}
+              className={`px-4 py-2 text-sm font-semibold transition-all duration-300 font-remixa ${
+                (item.href === '/' && isHome && (activeSection === 'hero' || activeSection === '')) || 
+                (location.pathname === item.href)
+                  ? 'text-[#63D72A]' 
+                  : 'text-[#F9F8F6]'
+              }`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {item.label}
+            </Link>
+          ) : (
+            <a
+              href={item.href}
+              onClick={(e) => scrollToSection(e, item.id === 'hero' ? 'hero' : `#${item.id}`)}
+              className={`px-4 py-2 text-sm font-semibold transition-all duration-300 font-remixa ${
+                isActive(item.id) ? 'text-[#63D72A]' : 'text-[#F9F8F6]'
+              }`}
+            >
+              {item.label}
+            </a>
+          )}
         </motion.li>
       ))}
     </>
@@ -189,7 +204,8 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
               initial={{ y: -100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -100, opacity: 0 }}
-              className="absolute inset-x-0 top-0 pt-28 pb-12 px-8 bg-gradient-to-b from-[#21201E] to-black border-b border-white/10"
+              style={{ maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)' }}
+              className="absolute inset-x-0 top-0 pt-28 pb-16 px-8 bg-gradient-to-b from-[#21201E] via-[#21201E] to-[#21201E]/80 backdrop-blur-3xl"
             >
               <ul className="flex flex-col gap-8 list-none items-center">
                 <NavLinks isHome={isHome} activeSection={activeSection} scrollToSection={scrollToSection} />

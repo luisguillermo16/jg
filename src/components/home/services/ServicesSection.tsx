@@ -6,8 +6,9 @@ import './ServicesSection.css';
 interface Service {
   title: string;
   desc: string;
-  image: string;
   tag: string;
+  image?: string;
+  features?: string[];
 }
 
 interface ServicesSectionProps {
@@ -39,64 +40,83 @@ const itemVariants = {
 
 const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
   return (
-    <section id="servicios" className="bg-[#F9F8F6] pt-32 pb-0 px-6">
+    <section id="servicios" className="bg-[#F9F8F6] pt-20 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Header con animación */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10% 0px" }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-20"
+          className="mb-12"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#21201E] uppercase font-paloseco mb-6">
-            Nuestros <br /> Servicios
+          <span className="text-[#63D72A] text-[16px] uppercase font-bold tracking-widest mb-3 block">
+            Lo que hacemos
+          </span>
+          <h2 className="text-4xl md:text-5xl lg:text-5xl font-black text-[#21201E] uppercase font-paloseco mb-4">
+            Nuestros Servicios
           </h2>
-          <p className="text-xl text-[#21201E]/60 max-w-2xl">
-            Soluciones integrales de producción AV con los más altos estándares de la industria cinematográfica.
-          </p>
+
         </motion.div>
 
         {/* Grid de servicios con Stagger Effect */}
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-10% 0px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
         >
           {services.map((svc, idx) => (
-            <motion.div 
-              key={idx} 
+            <motion.div
+              key={idx}
               variants={itemVariants}
-              className="group relative bg-white border border-[#21201E]/[0.05] rounded-[32px] overflow-hidden shadow-sm transition-all duration-500 p-4 hover:shadow-xl hover:border-[#63D72A]/20"
+              className={`group relative h-[420px] rounded-[24px] overflow-hidden shadow-xl ${svc.image ? 'bg-black' : 'bg-white border border-[#21201E]/[0.05]'
+                }`}
             >
-              <div className="aspect-video overflow-hidden rounded-[24px]">
-                <img
-                  src={svc.image}
-                  alt={svc.title}
-                  className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
-                />
-              </div>
-              <div className="px-4 py-6">
+              {svc.image && (
+                <>
+                  {/* Background Image */}
+                  <img
+                    src={svc.image}
+                    alt={svc.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+
+                  {/* Overlay (solo hasta la mitad) */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 via-50% to-transparent z-10" />
+                </>
+              )}
+
+              {/* Content */}
+              <div className="relative z-20 h-full flex flex-col justify-end p-8">
                 {svc.tag && (
-                  <span className="text-[#4DA820] text-[10px] uppercase font-bold tracking-widest mb-4 block">
+                  <span className={`${svc.image ? 'text-[#63D72A]' : 'text-[#4DA820]'} text-[10px] uppercase font-bold tracking-widest mb-4 block`}>
                     {svc.tag}
                   </span>
                 )}
-                <h3 className="text-xl font-bold text-[#21201E] mb-3 font-paloseco tracking-tight">
-                   {svc.title}
+                <h3 className={`text-2xl font-bold mb-3 font-paloseco tracking-tight ${svc.image ? 'text-white' : 'text-[#21201E]'}`}>
+                  {svc.title}
                 </h3>
-                <p className="text-[#21201E]/60 text-sm leading-relaxed mb-6">
+                <p className={`text-sm leading-relaxed mb-6 ${svc.image ? 'text-white/70' : 'text-[#21201E]/60'}`}>
                   {svc.desc}
                 </p>
-                <button
-                  onClick={openContactModal}
-                  className="text-[#21201E] text-xs font-bold uppercase tracking-widest border-b border-transparent hover:border-[#63D72A] transition-colors pb-1"
-                >
-                  Saber más
-                </button>
+                {svc.features && (
+                  <div className="flex flex-wrap gap-1.5 mb-2">
+                    {svc.features.map((feature, fIdx) => (
+                      <span
+                        key={fIdx}
+                        className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-lg border ${svc.image
+                          ? 'bg-white/10 backdrop-blur-md text-white/80 border-white/10'
+                          : 'bg-[#F9F8F6] text-[#21201E]/60 border-[#21201E]/[0.03]'
+                          }`}
+                      >
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}

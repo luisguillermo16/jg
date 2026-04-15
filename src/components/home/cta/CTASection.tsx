@@ -19,7 +19,7 @@ const CTASection: FC = () => (
         Siguiente paso
       </motion.span>
 
-      <motion.h2 
+      <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-10%" }}
@@ -31,7 +31,7 @@ const CTASection: FC = () => (
         nivel?
       </motion.h2>
 
-      <motion.p 
+      <motion.p
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-10%" }}
@@ -42,7 +42,7 @@ const CTASection: FC = () => (
         una experiencia cinematográfica que tus invitados recordarán para siempre.
       </motion.p>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: "-10%" }}
@@ -63,10 +63,10 @@ const CTASection: FC = () => (
         {/* Secondary CTA */}
         <motion.a
           whileHover={{ scale: 1.03 }}
-          href="#galeria"
+          href="/portafolio"
           className="px-10 py-5 border border-white/15 text-[#F9F8F6]/70 font-bold uppercase tracking-widest rounded-[var(--btn-radius)] text-sm hover:border-[#63D72A]/40 hover:text-[#63D72A] transition-all duration-300"
         >
-          Ver Galería
+          Ver Portafolio
         </motion.a>
       </motion.div>
     </div>

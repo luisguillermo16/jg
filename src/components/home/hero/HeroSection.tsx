@@ -27,25 +27,25 @@ const HeroSection: FC = () => {
       </div>
 
       <div className="relative z-10 h-full flex flex-col items-center md:items-start justify-end pb-20 md:pb-0 md:justify-center text-center md:text-left px-6 md:px-24 max-w-7xl">
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="text-4xl md:text-[5.5rem] font-black text-white leading-[0.95] font-paloseco uppercase tracking-tighter mb-6"
         >
-          Producción <br className="hidden md:block" /> Técnica para <br className="hidden md:block" /> Eventos
+          Creamos <br className="hidden md:block" /> Experiencias <br className="hidden md:block" /> que se recuerdan
         </motion.h1>
 
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="text-base md:text-xl text-white/90 max-w-2xl mb-10 font-medium leading-relaxed"
         >
-          Diseñamos y ejecutamos bodas, conciertos y eventos corporativos con estándares técnicos de alto nivel.
+          Bodas, conciertos, presentaciones de marca y eventos corporativos. Cada detalle, perfectamente producido.
         </motion.p>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -55,13 +55,13 @@ const HeroSection: FC = () => {
             onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))}
             className="w-full sm:w-auto px-8 py-4 bg-[#63D72A] text-[#21201E] font-bold tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all text-sm md:text-base border border-[#63D72A] hover:bg-transparent hover:text-[#63D72A]"
           >
-            Hablar con un experto
+            Cotiza tu evento
           </button>
           <button
             onClick={scrollToServices}
             className="w-full sm:w-auto px-8 py-4 bg-[#262626]/50 backdrop-blur-md text-white/90 font-medium tracking-wide rounded-2xl hover:bg-[#333] active:scale-95 transition-all text-[13px] md:text-[15px] border border-white/10"
           >
-            Nuestros servicios
+            Ver nuestro trabajo
           </button>
         </motion.div>
       </div>

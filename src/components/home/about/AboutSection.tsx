@@ -34,8 +34,7 @@ const BENEFITS = [
 const AboutSection: FC = () => (
   <section
     id="nosotros"
-    className="relative bg-[#F9F8F6] min-h-screen pt-8 md:pt-12 pb-24 md:pb-32 px-6 md:px-12 lg:px-24 flex flex-col items-center justify-center z-0"
-    style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+    className="relative bg-[#F9F8F6] pt-24 pb-24 md:pb-32 px-6 md:px-12 lg:px-24 flex flex-col items-center z-0"
   >
     {/* Radial glow sutil para fondo claro verdoso */}
     <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#63D72A]/5 rounded-full blur-[150px] pointer-events-none z-0" />
