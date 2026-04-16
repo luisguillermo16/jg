@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import './HeroSection.css';
-import heroImg from '../../../assets/images/hero/hero-bg.webp';
+import heroImg from '../../../assets/home/img/hero-desktop.webp';
 
 const HeroSection: FC = () => {
   return (
