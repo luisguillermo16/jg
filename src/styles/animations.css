@@ -32,10 +32,13 @@
   transform: translateY(0) !important;
 }
 
-/* En móvil, transiciones más rápidas y simples para evitar lag en scroll rápido */
+/* En móvil, las animaciones son instantáneas para evitar bugs de renderizado (puntos negros) */
 @media (max-width: 768px) {
   .reveal-on-scroll {
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
   }
 }
 
