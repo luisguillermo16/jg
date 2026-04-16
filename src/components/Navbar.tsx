@@ -210,14 +210,14 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
         </div>
       </motion.nav>
 
-      {/* Mobile Overlay */}
+      {/* Mobile Overlay — Con bloqueo total para evitar "menús fantasma" */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[900] md:hidden"
+            className={`fixed inset-0 z-[900] md:hidden ${!isMenuOpen ? 'hidden' : ''}`}
           >
             <div className="absolute inset-0 bg-[#21201E]/95 backdrop-blur-2xl" onClick={() => setIsMenuOpen(false)} />
             <motion.div
