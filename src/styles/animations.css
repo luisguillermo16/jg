@@ -9,12 +9,34 @@
   transform: translateY(40px);
   transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
     transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Solo mientras está pendiente de aparecer */
+.reveal-on-scroll:not(.active) {
   will-change: opacity, transform;
 }
 
 .reveal-on-scroll.active {
   opacity: 1 !important;
   transform: translateY(0) !important;
+  will-change: auto; /* Libera memoria GPU al terminar */
+}
+
+/* En móvil, transiciones más rápidas y simples para evitar lag en scroll rápido */
+@media (max-width: 768px) {
+  .reveal-on-scroll {
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out !important;
+  }
+}
+
+/* Accesibilidad y Ahorro de Energía */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
 }
 
 /* Mouse Scroll Indicator — HeroSection */

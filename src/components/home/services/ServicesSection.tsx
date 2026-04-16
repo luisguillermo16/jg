@@ -46,7 +46,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10% 0px" }}
+          viewport={{ once: true, margin: "-5% 0px", amount: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="mb-12 text-center"
         >
@@ -64,7 +64,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-10% 0px" }}
+          viewport={{ once: true, margin: "-5% 0px", amount: 0 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
         >
           {services.map((svc, idx) => (
