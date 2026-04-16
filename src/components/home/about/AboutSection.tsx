@@ -1,35 +1,6 @@
 import { type FC } from 'react';
 import { motion } from 'framer-motion';
-import {
-  BoltIcon,
-  SparklesIcon,
-  StarIcon,
-  RocketLaunchIcon,
-} from '@heroicons/react/24/outline';
 import nosotrosImg from '../../../assets/home/img/nosotros.webp';
-
-const BENEFITS = [
-  {
-    Icon: BoltIcon,
-    title: 'Excelencia Técnica',
-    desc: 'Audio e iluminación de última generación para una fidelidad absoluta.',
-  },
-  {
-    Icon: SparklesIcon,
-    title: 'Soluciones Inmersivas',
-    desc: 'Efectos visuales y lumínicos que cautivan cada sentido de tu audiencia.',
-  },
-  {
-    Icon: StarIcon,
-    title: 'Compromiso Premium',
-    desc: 'Atención personalizada desde el primer contacto hasta el cierre.',
-  },
-  {
-    Icon: RocketLaunchIcon,
-    title: 'Innovación Constante',
-    desc: 'Siempre a la vanguardia de las tendencias de producción global.',
-  },
-];
 
 const AboutSection: FC = () => (
   <section
@@ -86,25 +57,6 @@ const AboutSection: FC = () => (
             ejecutada hasta el último detalle en Cartagena y toda Colombia.
           </p>
         </div>
-      </div>
-
-      {/* BLOQUE INFERIOR: Fila de Tarjetas (4 columnas en Desktop) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full lg:-mt-16">
-        {BENEFITS.map(({ title, desc }, i) => (
-          <motion.div
-            key={title}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-10%" }}
-            transition={{ delay: i * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="p-6 rounded-3xl bg-white border border-[#21201E]/[0.05] shadow-sm transition-all duration-500 cursor-default hover:shadow-md hover:border-[#63D72A]/30 text-center flex flex-col items-center"
-          >
-            <h3 className="text-[#21201E] text-xs font-black uppercase tracking-tight mb-2">
-              {title}
-            </h3>
-            <p className="text-[#21201E]/60 text-[11px] leading-relaxed">{desc}</p>
-          </motion.div>
-        ))}
       </div>
 
     </div>

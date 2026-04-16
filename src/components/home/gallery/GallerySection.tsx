@@ -41,7 +41,7 @@ const GallerySection: FC<GallerySectionProps> = ({ galleryImages }) => {
                 duration: 0.6, 
                 ease: "easeOut" 
               }}
-              className="relative aspect-square bg-[#e5e5e5] overflow-hidden cursor-zoom-in group"
+              className="relative aspect-square bg-[#1a1a1a] overflow-hidden cursor-zoom-in group"
               onClick={() => setSelectedImg(src)}
             >
               <img
