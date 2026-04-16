@@ -34,106 +34,11 @@
       width: 100%;
       height: 100%;
     }
-
-    /* ── Skeleton Loading ── */
-    #root:empty {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 0 6% 0 6%;
-      background: #030d05;
-    }
-
-    #root:empty .skeleton-content {
-      max-width: 800px;
-      width: 100%;
-    }
-
-    #root:empty .sk-title {
-      height: 80px;
-      width: 70%;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 12px;
-      margin-bottom: 24px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    #root:empty .sk-text {
-      height: 20px;
-      width: 50%;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 4px;
-      margin-bottom: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    #root:empty .sk-btns {
-      display: flex;
-      gap: 16px;
-      margin-top: 40px;
-    }
-
-    #root:empty .sk-btn {
-      height: 50px;
-      width: 180px;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Shimmer effect */
-    #root:empty .sk-title::after,
-    #root:empty .sk-text::after,
-    #root:empty .sk-btn::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      transform: translateX(-100%);
-      background-image: linear-gradient(
-        90deg,
-        transparent 0,
-        rgba(163, 255, 0, 0.04) 20%,
-        rgba(163, 255, 0, 0.08) 60%,
-        transparent 100%
-      );
-      animation: shimmer 2s infinite;
-    }
-
-    @keyframes shimmer {
-      100% {
-        transform: translateX(100%);
-      }
-    }
-
-    @media (max-width: 768px) {
-      #root:empty { padding: 0 24px; }
-      #root:empty .sk-title { height: 60px; width: 90%; }
-      #root:empty .sk-text { width: 80%; }
-      #root:empty .sk-btns { flex-direction: column; }
-      #root:empty .sk-btn { width: 100%; }
-    }
   </style>
 </head>
 
 <body>
-  <div id="root">
-    <!-- El CSS cargará este esqueleto mientras el bundle de React se descarga -->
-    <div class="skeleton-content">
-      <div class="sk-title"></div>
-      <div class="sk-text"></div>
-      <div class="sk-text" style="width: 40%"></div>
-      <div class="sk-btns">
-        <div class="sk-btn"></div>
-        <div class="sk-btn"></div>
-      </div>
-    </div>
-  </div>
+  <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 
