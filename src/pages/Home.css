@@ -1,35 +1,10 @@
 /* ============================================================
-   HOME PAGE — Home.css
-   Estilos del contenedor principal de la página Home
+   HOME PAGE CONTAINER
    ============================================================ */
 
 .home-container {
-  background-color: var(--bg);
-  /* Eliminamos height 100vh para usar scroll global del body */
   width: 100%;
-  min-height: 100vh;
   position: relative;
-}
-
-.home-container::-webkit-scrollbar {
-  display: none;
-}
-
-.home-container main {
-  display: block;
-}
-
-/* Móvil / touch: snap menos agresivo (touchpad y dedo) */
-@media (max-width: 767px) {
-  .home-container {
-    scroll-snap-type: y proximity;
-    scroll-snap-stop: normal;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-container {
-    scroll-snap-type: y proximity;
-    scroll-snap-stop: normal;
-  }
+  /* Eliminado scroll-snap que causaba bloques negros en móvil */
+  overflow: visible;
 }

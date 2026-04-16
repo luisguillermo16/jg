@@ -4,7 +4,7 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { openContactModal } from '../../../utils/modal';
 
 const CTASection: FC = () => (
-  <section id="contact" className="relative min-h-screen py-24 md:h-screen md:py-0 px-6 bg-[#21201E] flex flex-col justify-center overflow-hidden" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+  <section id="contact" className="relative min-h-screen py-24 px-6 bg-[#21201E] flex flex-col justify-center overflow-hidden">
     {/* Radial green spotlight */}
     <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(99,215,42,0.08),transparent)] pointer-events-none" />
 

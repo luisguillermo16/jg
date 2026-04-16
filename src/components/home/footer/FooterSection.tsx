@@ -4,7 +4,7 @@ import { openContactModal } from '../../../utils/modal';
 
 const FooterSection: FC = () => {
   return (
-    <footer className="relative z-10 w-full bg-[#21201E] py-24 px-6 border-t border-white/5" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+    <footer className="relative z-10 w-full bg-[#21201E] py-24 px-6 border-t border-white/5">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-20">
           {/* Brand Column */}

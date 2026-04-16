@@ -27,7 +27,7 @@ const TESTIMONIALS = [
 ];
 
 const TestimonialsSection: FC = () => (
-  <section id="testimonios" className="relative bg-[#F9F8F6] min-h-screen py-24 md:h-screen md:py-0 px-6 md:px-12 flex flex-col justify-center" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+  <section id="testimonios" className="relative bg-[#F9F8F6] min-h-screen py-24 px-6 md:px-12 flex flex-col justify-center">
     {/* Radial glow sutil para secciones claras */}
     <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_60%,rgba(99,215,42,0.03),transparent)] pointer-events-none" />
 
