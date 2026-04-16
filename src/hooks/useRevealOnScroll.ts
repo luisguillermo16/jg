@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
 /**
- * useRevealOnScroll - Versión Ultra-Optimizada
- * Combina IntersectionObserver (asíncrono/perf) con un scroll listener (síncrono/seguridad)
- * y requestAnimationFrame para asegurar que NADA se quede sin aparecer durante un scroll rápido.
+ * useRevealOnScroll - Versión Ultra-Segura
+ * Combina IntersectionObserver con un listener síncrono y rAF.
+ * Incluye lógica para activar automáticamente elementos que el usuario ya pasó ("Above the fold").
  */
 export const useRevealOnScroll = () => {
   useEffect(() => {
@@ -12,20 +12,19 @@ export const useRevealOnScroll = () => {
 
     let ticking = false;
 
-    // Función principal de activación sincronizada con el refresco de pantalla
     const activateVisible = () => {
       if (ticking) return;
       
       requestAnimationFrame(() => {
         elements.forEach(el => {
-          // Si ya está activo, no gastar CPU en calcular rect
           if (el.classList.contains('active')) return;
           
           const rect = el.getBoundingClientRect();
-          // Condición de visibilidad: está entre el tope y el fondo del viewport
-          const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
           
-          if (isVisible) {
+          // ✅ Lógica agresiva: activar si ya pasó el viewport O si está al 90% de entrar
+          const isPassedOrVisible = rect.bottom < window.innerHeight || rect.top < window.innerHeight * 0.95;
+          
+          if (isPassedOrVisible) {
             el.classList.add('active');
           }
         });
@@ -35,10 +34,10 @@ export const useRevealOnScroll = () => {
       ticking = true;
     };
 
-    // 1. Activar los que ya están visibles al montar (sin espera)
+    // 1. Ejecución inmediata al montar
     activateVisible();
 
-    // 2. Observer para el comportamiento estándar (más eficiente para triggers lejanos)
+    // 2. Observer (Eficiencia para triggers estándar)
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -57,7 +56,7 @@ export const useRevealOnScroll = () => {
       }
     });
 
-    // 3. Scroll Listener de seguridad para "atrapas los fallos" del observer en scroll rápido
+    // 3. Listener síncrono para scroll rápido y resize
     window.addEventListener('scroll', activateVisible, { passive: true });
     window.addEventListener('resize', activateVisible, { passive: true });
 
