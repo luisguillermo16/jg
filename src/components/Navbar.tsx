@@ -11,9 +11,11 @@ interface NavbarProps {
 // Subcomponente para los links de navegación con animación stagger
 const NavLinks: FC<{
   isHome: boolean;
+  currentPath: string;
   activeSection: string;
+  onItemClick: () => void;
   scrollToSection: (e: React.MouseEvent<HTMLAnchorElement>, id: string) => void;
-}> = memo(({ isHome, activeSection, scrollToSection }) => {
+}> = memo(({ isHome, currentPath, activeSection, onItemClick, scrollToSection }) => {
   const isActive = (id: string) => {
     if (!isHome) return false;
     if (id === 'hero' && activeSection.startsWith('hero')) return true;
@@ -41,11 +43,11 @@ const NavLinks: FC<{
               to={item.href}
               className={`px-4 py-2 text-sm font-semibold transition-all duration-300 font-remixa ${
                 (item.href === '/' && isHome && (activeSection === 'hero' || activeSection === '')) || 
-                (location.pathname === item.href)
+                (currentPath === item.href)
                   ? 'text-[#63D72A]' 
                   : 'text-[#F9F8F6]'
               }`}
-              onClick={() => setIsMenuOpen(false)}
+              onClick={onItemClick}
             >
               {item.label}
             </Link>
@@ -125,6 +127,10 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
   }, []);
 
   const isHome = location.pathname === '/';
+  const isPortfolio = location.pathname === '/portafolio';
+  const isOnHero = isHome && (activeSection === '' || activeSection.startsWith('hero'));
+  const isOnPortfolioVideos = isPortfolio && activeSection === 'categorias';
+  const shouldUseTransparentNav = isOnHero || isOnPortfolioVideos;
 
   return (
     <>
@@ -132,15 +138,19 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-6 md:px-10 py-5 md:py-6 transition-all duration-500"
+        className={`fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-6 md:px-10 py-3 md:py-3.5 transition-all duration-500 ${
+          shouldUseTransparentNav
+            ? 'bg-transparent border-b border-transparent backdrop-blur-0'
+            : 'bg-[#21201E]/65 backdrop-blur-xl border-b border-white/10'
+        }`}
       >
         {/* LEFT: Logo + progress ring */}
         <Link
           to="/"
-          className="group flex items-center gap-3 w-auto flex-shrink-0 bg-[#21201E]/50 backdrop-blur-2xl rounded-[12px] px-3 py-1.5 border border-white/5 transition-all duration-300 hover:bg-[#21201E]/70"
+          className="group flex items-center gap-2.5 w-auto flex-shrink-0 px-2 py-1 transition-all duration-300"
           onClick={(e) => scrollToSection(e, 'hero')}
         >
-          <div className="relative flex items-center justify-center w-10 h-10 md:w-11 md:h-11 flex-shrink-0">
+          <div className="relative flex items-center justify-center w-9 h-9 md:w-10 md:h-10 flex-shrink-0">
             <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 64 64">
               <circle cx="32" cy="32" r={radius} fill="none" stroke="#63D72A" strokeWidth="2.5" />
               <circle
@@ -156,17 +166,21 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
             </svg>
             <img src={logo} alt="Logo" className="relative z-10 h-[12px] md:h-[13px] w-auto brightness-200" />
           </div>
-          <span className={`block font-remixa font-semibold text-[13px] md:text-[14px] uppercase tracking-[0.05em] group-hover:scale-105 transition-all duration-500 ${
-            isHome && (activeSection === 'hero' || activeSection === '') ? 'text-[#63D72A]' : 'text-[#F9F8F6]'
-          }`}>
+          <span className="block font-remixa font-semibold text-[13px] md:text-[14px] uppercase tracking-[0.05em] text-[#F9F8F6] group-hover:scale-105 transition-all duration-500">
             Producciones
           </span>
         </Link>
 
         {/* CENTER: Navigation (desktop) */}
         <div className="hidden md:flex items-center">
-          <ul className="flex gap-0.5 m-0 p-0 list-none items-center bg-[#21201E]/50 backdrop-blur-2xl rounded-[12px] px-2 py-1.5">
-            <NavLinks isHome={isHome} activeSection={activeSection} scrollToSection={scrollToSection} />
+          <ul className="flex gap-0.5 m-0 p-0 list-none items-center px-2 py-1.5">
+            <NavLinks
+              isHome={isHome}
+              currentPath={location.pathname}
+              activeSection={activeSection}
+              onItemClick={() => setIsMenuOpen(false)}
+              scrollToSection={scrollToSection}
+            />
           </ul>
         </div>
 
@@ -174,7 +188,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
         <div className="flex items-center gap-4 flex-shrink-0">
           <button
             onClick={() => setIsContactModalOpen(true)}
-            className="hidden md:flex px-7 py-2.5 rounded-[12px] text-[13px] font-black bg-[#63D72A] text-[#21201E] transition-all duration-300 font-remixa hover:-translate-y-0.5"
+            className="hidden md:flex px-6 py-2 rounded-[12px] text-[13px] font-black bg-[#63D72A] text-[#21201E] transition-all duration-300 font-remixa hover:-translate-y-0.5"
           >
             Contáctanos
           </button>
@@ -208,7 +222,13 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
               className="absolute inset-x-0 top-0 pt-28 pb-16 px-8 bg-gradient-to-b from-[#21201E] via-[#21201E] to-[#21201E]/80 backdrop-blur-3xl"
             >
               <ul className="flex flex-col gap-8 list-none items-center">
-                <NavLinks isHome={isHome} activeSection={activeSection} scrollToSection={scrollToSection} />
+                <NavLinks
+                  isHome={isHome}
+                  currentPath={location.pathname}
+                  activeSection={activeSection}
+                  onItemClick={() => setIsMenuOpen(false)}
+                  scrollToSection={scrollToSection}
+                />
                 <li className="w-full max-w-[200px] mt-4">
                   <button
                     onClick={() => setIsContactModalOpen(true)}

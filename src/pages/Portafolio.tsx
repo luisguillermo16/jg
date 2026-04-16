@@ -5,8 +5,11 @@ import CategoriesSection from '../components/home/categories/CategoriesSection';
 import GallerySection from '../components/home/gallery/GallerySection';
 import FooterSection from '../components/home/footer/FooterSection';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
+import { useScrollSpy } from '../hooks/useScrollSpy';
 
 const Portafolio: FC = () => {
+  const activeSection = useScrollSpy(['categorias', 'galeria'], '-20% 0px -65% 0px');
+
   // Animaciones de aparición
   useRevealOnScroll();
 
@@ -16,7 +19,7 @@ const Portafolio: FC = () => {
 
   return (
     <div className="bg-[#21201E] selection:bg-[#63D72A] selection:text-black min-h-screen font-sans">
-      <Navbar />
+      <Navbar activeSection={activeSection} />
 
       <main >
         {/* Espacio inicial para que el Navbar no tape el contenido */}
@@ -32,3 +35,4 @@ const Portafolio: FC = () => {
 };
 
 export default Portafolio;
+ 

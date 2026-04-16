@@ -1,6 +1,5 @@
 import { type FC } from 'react';
 import { motion } from 'framer-motion';
-import { isMobileDevice } from '../../../utils/deviceUtils';
 import './HeroSection.css';
 import heroImg from '../../../assets/home/img/hero-desktop.webp';
 import heroMobileImg from '../../../assets/home/img/hero-mobile.webp';
@@ -18,16 +17,20 @@ const HeroSection: FC = () => {
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          src={isMobileDevice ? heroMobileImg : heroImg}
-          alt="Hero Background"
-          width={isMobileDevice ? 960 : 1920}
-          height={isMobileDevice ? 1706 : 1280}
+          src={heroImg}
+          srcSet={`${heroMobileImg} 960w, ${heroImg} 1920w`}
+          sizes="(max-width: 768px) 100vw, 100vw"
+          alt=""
+          aria-hidden="true"
+          width={1920}
+          height={1280}
           fetchPriority="high"
           decoding="async"
           className="w-full h-full object-cover"
         />
-        {/* Filtro oscuro responsivo */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#21201E] via-[#21201E]/60 to-transparent md:inset-y-0 md:left-0 md:w-3/4 md:bg-gradient-to-r md:from-[#21201E] md:via-[#21201E]/40 md:to-transparent pointer-events-none" />
+        {/* Overlay en dos capas para sostener contraste en zonas claras */}
+        <div className="absolute inset-0 bg-black/35 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/55 to-black/20 pointer-events-none" />
       </div>
 
       <div className="relative z-10 h-full flex flex-col items-center md:items-start justify-end pb-20 md:pb-0 md:justify-center text-center md:text-left px-6 md:px-24 max-w-7xl">
@@ -63,7 +66,7 @@ const HeroSection: FC = () => {
           </button>
           <button
             onClick={scrollToServices}
-            className="w-full sm:w-auto px-8 py-4 bg-[#262626]/50 backdrop-blur-md text-white/90 font-medium tracking-wide rounded-2xl hover:bg-[#333] active:scale-95 transition-all text-[13px] md:text-[15px] border border-white/10"
+            className="w-full sm:w-auto px-8 py-4 bg-[#1f1f1f]/80 backdrop-blur-md text-white font-semibold tracking-wide rounded-2xl hover:bg-[#2a2a2a] active:scale-95 transition-all text-[13px] md:text-[15px] border border-white/40 shadow-[0_0_0_1px_rgba(0,0,0,0.35)]"
           >
             Ver nuestro trabajo
           </button>
