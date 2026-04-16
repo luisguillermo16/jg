@@ -1,18 +1,44 @@
 import { useEffect } from 'react';
 
 /**
- * useRevealOnScroll
- * Observa elementos con la clase .reveal-on-scroll y les añade la clase .active
- * cuando entran en el viewport. Optimizado para carga inicial y móvil.
+ * useRevealOnScroll - Versión Ultra-Optimizada
+ * Combina IntersectionObserver (asíncrono/perf) con un scroll listener (síncrono/seguridad)
+ * y requestAnimationFrame para asegurar que NADA se quede sin aparecer durante un scroll rápido.
  */
-export const useRevealOnScroll = (defaultThreshold: number = 0.15) => {
+export const useRevealOnScroll = () => {
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
     const elements = document.querySelectorAll('.reveal-on-scroll');
-    
-    // Solo usamos IntersectionObserver si hay elementos que observar
     if (elements.length === 0) return;
 
+    let ticking = false;
+
+    // Función principal de activación sincronizada con el refresco de pantalla
+    const activateVisible = () => {
+      if (ticking) return;
+      
+      requestAnimationFrame(() => {
+        elements.forEach(el => {
+          // Si ya está activo, no gastar CPU en calcular rect
+          if (el.classList.contains('active')) return;
+          
+          const rect = el.getBoundingClientRect();
+          // Condición de visibilidad: está entre el tope y el fondo del viewport
+          const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+          
+          if (isVisible) {
+            el.classList.add('active');
+          }
+        });
+        ticking = false;
+      });
+      
+      ticking = true;
+    };
+
+    // 1. Activar los que ya están visibles al montar (sin espera)
+    activateVisible();
+
+    // 2. Observer para el comportamiento estándar (más eficiente para triggers lejanos)
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -22,29 +48,25 @@ export const useRevealOnScroll = (defaultThreshold: number = 0.15) => {
           }
         });
       },
-      {
-        threshold: isMobile ? 0 : defaultThreshold,
-        rootMargin: isMobile ? '0px' : '0px 0px -50px 0px',
-      }
+      { threshold: 0.1 }
     );
 
     elements.forEach((el) => {
-      // ✅ CLAVE: Si el elemento ya está visible al montar, actívalo inmediatamente
-      // Esto evita que el contenido se quede invisible si el usuario scrolleó rápido o ya estaba ahí.
-      const rect = el.getBoundingClientRect();
-      const alreadyVisible = rect.top < window.innerHeight && rect.bottom > 0;
-      
-      if (alreadyVisible) {
-        el.classList.add('active');
-      } else {
+      if (!el.classList.contains('active')) {
         observer.observe(el);
       }
     });
 
+    // 3. Scroll Listener de seguridad para "atrapas los fallos" del observer en scroll rápido
+    window.addEventListener('scroll', activateVisible, { passive: true });
+    window.addEventListener('resize', activateVisible, { passive: true });
+
     return () => {
       observer.disconnect();
+      window.removeEventListener('scroll', activateVisible);
+      window.removeEventListener('resize', activateVisible);
     };
-  }, [defaultThreshold]);
+  }, []);
 };
 
 export default useRevealOnScroll;

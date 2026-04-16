@@ -92,14 +92,29 @@ Para componentes complejos (como el Hero o Grids), usamos **Framer Motion** con 
 
 En dispositivos móviles, los usuarios tienden a hacer scroll muy rápido. Para evitar que el contenido se quede "atascado" en transparente, aplicamos estas reglas:
 
-### A. Verificación de Visibilidad Inicial
-En el hook `useRevealOnScroll`, comprobamos si el elemento ya es visible al momento de montar el componente usando `getBoundingClientRect()`. Si ya está en pantalla, se activa inmediatamente sin esperar al observer.
+### A. Estrategia Híbrida (Hybrid Sync)
+El problema real de los sitios modernos es el scroll rápido. Si el usuario baja a toda velocidad, el `IntersectionObserver` (que es asíncrono) puede tardar un frame de más y el elemento se queda invisible.
 
-### B. Ajustes de Threshold y Margin
-- **Desktop**: Usamos un `threshold` de 0.15 y un `rootMargin` negativo para que la animación se dispare cuando el elemento está bien entrado en pantalla.
-- **Mobile**: Bajamos el `threshold` a **0** y eliminamos los márgenes negativos. La animación se dispara apenas asoma el primer píxel.
+Para solucionar esto, usamos un sistema de doble seguridad:
+1. **IntersectionObserver**: Para eficiencia estándar.
+2. **Scroll Listener Síncrono**: Un detector de respaldo que revisa si hay elementos "perdidos" en cada movimiento de scroll.
+
+### B. Optimización con requestAnimationFrame
+Para que el scroll listener no afecte el rendimiento (evitando el *Layout Thrashing*), envolvemos la lógica de detección en un `requestAnimationFrame`. Esto asegura que los cálculos de posición solo ocurran cuando el navegador está listo para pintar, manteniendo 60fps sólidos.
+
+```tsx
+const activateVisible = () => {
+  if (ticking) return;
+  requestAnimationFrame(() => {
+    // Lógica de detección aquí
+    ticking = false;
+  });
+  ticking = true;
+};
+```
 
 ### C. Timings Snappier en CSS
+... (resto del contenido) ...
 En móviles, reducimos la duración de la transición para que el sitio se sienta más ágil:
 
 ```css
