@@ -15,12 +15,8 @@ const AboutSection: FC = () => (
       {/* BLOQUE SUPERIOR: Título (Izquierda) + Imagen/Párrafo (Derecha) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-center">
         {/* ── Left: Headline ── */}
-        <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        >
+        {/* Headline con animación ultra-segura para móvil */}
+        <div className="reveal-on-scroll">
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter font-paloseco leading-[0.85] mb-8 text-[#21201E]">
             En JG PRODUCCIONES<br />
             No<br />
@@ -29,7 +25,7 @@ const AboutSection: FC = () => (
             <span className="text-[#63D72A] [text-shadow:0_0_2px_rgba(0,0,0,0.05)]">Creamos</span><br />
             Hitos.
           </h2>
-        </motion.div>
+        </div>
 
         {/* ── Right: Image + Paragraph ── */}
         <div className="flex flex-col gap-8 items-center lg:items-start lg:-mt-20">

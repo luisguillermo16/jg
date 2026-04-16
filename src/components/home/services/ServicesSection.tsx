@@ -43,13 +43,8 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
       <div className="max-w-7xl mx-auto">
 
         {/* Header con animación */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-5% 0px", amount: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-12 text-center"
-        >
+        {/* Header con animación ultra-segura para evitar huecos negros en móvil */}
+        <div className="mb-12 text-center reveal-on-scroll">
           <span className="text-[#63D72A] text-[16px] uppercase font-bold tracking-widest mb-3 block">
             Lo que hacemos
           </span>
@@ -57,7 +52,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
             Nuestros Servicios
           </h2>
 
-        </motion.div>
+        </div>
 
         {/* Grid de servicios con Stagger Effect */}
         <motion.div
