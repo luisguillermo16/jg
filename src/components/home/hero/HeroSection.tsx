@@ -28,9 +28,8 @@ const HeroSection: FC = () => {
           decoding="async"
           className="w-full h-full object-cover"
         />
-        {/* Overlay en dos capas para sostener contraste en zonas claras */}
-        <div className="absolute inset-0 bg-black/35 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/55 to-black/20 pointer-events-none" />
+      {/* Overlay — Simplificado para evitar bugs de GPU en móvil */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-[#21201E] pointer-events-none z-[1]" />
       </div>
 
       <div className="relative z-10 h-full flex flex-col items-center md:items-start justify-end pb-20 md:pb-0 md:justify-center text-center md:text-left px-6 md:px-24 max-w-7xl">

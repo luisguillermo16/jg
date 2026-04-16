@@ -146,8 +146,8 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-6 md:px-10 py-3 md:py-3.5 transition-all duration-500 ${
           shouldUseTransparentNav
-            ? 'bg-transparent border-b border-transparent backdrop-blur-0'
-            : 'bg-[#21201E]/65 backdrop-blur-xl border-b border-white/10'
+            ? 'bg-transparent border-b border-transparent'
+            : 'bg-[#21201E]/90 md:backdrop-blur-xl border-b border-white/10'
         }`}
       >
         {/* LEFT: Logo + progress ring */}
