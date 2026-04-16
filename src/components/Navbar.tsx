@@ -80,6 +80,12 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
   useEffect(() => {
     const updateScrollProgress = () => {
       const scrollY = window.scrollY;
+
+      // Cerrar menú móvil si se hace scroll (Previene bloque negro atascado)
+      if (isMenuOpen && scrollY > 50) {
+        setIsMenuOpen(false);
+      }
+
       const totalScrollable = document.documentElement.scrollHeight - window.innerHeight;
       const progress = totalScrollable > 0 ? Math.min(1, scrollY / totalScrollable) : 0;
       setScrollProgress(progress);
@@ -93,7 +99,7 @@ const Navbar: FC<NavbarProps> = ({ activeSection = '' }) => {
       window.removeEventListener('scroll', updateScrollProgress);
       window.removeEventListener('resize', updateScrollProgress);
     };
-  }, [location.pathname]);
+  }, [location.pathname, isMenuOpen]);
 
   const radius = 28;
   const circumference = 2 * Math.PI * radius;

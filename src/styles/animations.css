@@ -23,14 +23,13 @@
 
 /* Solo mientras está pendiente de aparecer */
 .reveal-on-scroll:not(.active) {
-  will-change: opacity, transform;
+  /* Eliminado will-change para evitar bugs de capas en móvil */
 }
 
 .reveal-on-scroll.active {
-  animation: none !important; /* Cancela el fallback si ya se activó */
+  animation: none !important;
   opacity: 1 !important;
   transform: translateY(0) !important;
-  will-change: auto; /* Libera memoria GPU al terminar */
 }
 
 /* En móvil, transiciones más rápidas y simples para evitar lag en scroll rápido */

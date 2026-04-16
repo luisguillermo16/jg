@@ -11,7 +11,7 @@ const HeroSection: FC = () => {
   };
 
   return (
-    <section id="hero-section" className="relative w-full h-full bg-[#21201E] overflow-hidden">
+    <section id="hero-section" className="relative w-full h-screen min-h-screen bg-[#21201E] overflow-hidden">
       <div className="absolute inset-0 z-0">
         <motion.img
           initial={{ scale: 1.1, opacity: 0 }}
