@@ -12,7 +12,6 @@ import FooterSection from '../components/home/footer/FooterSection';
 import { useScrollSpy } from '../hooks/useScrollSpy';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
-const MemoHero = memo(HeroSection);
 
 const Home: FC = () => {
   // 1. Detección de sección activa (ScrollSpy) optimizada con IntersectionObserver
@@ -44,14 +43,12 @@ const Home: FC = () => {
   }, []);
 
   return (
-    <div className="bg-[#21201E] selection:bg-[#63D72A] selection:text-black min-h-screen font-sans">
+    <div className="bg-[#F9F8F6] selection:bg-[#63D72A] selection:text-black min-h-screen font-sans">
       <Navbar activeSection={activeSection} />
 
       <main>
-        <MemoHero />
-        <div id="servicios">
-          <ServicesSection services={SERVICES} />
-        </div>
+        <HeroSection />
+        <ServicesSection services={SERVICES} />
         <AboutSection />
         <TestimonialsSection />
         <CTASection />

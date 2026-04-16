@@ -1,75 +1,55 @@
 import { type FC } from 'react';
-import { motion } from 'framer-motion';
 import './HeroSection.css';
-import heroImg from '../../../assets/home/img/hero-desktop.webp';
-import heroMobileImg from '../../../assets/home/img/hero-mobile.webp';
+import heroImg from '../../../assets/images/hero/hero-bg.webp';
 
 const HeroSection: FC = () => {
-  const scrollToServices = () => {
-    const el = document.getElementById('servicios');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <section id="hero-section" className="relative w-full h-screen min-h-screen bg-[#21201E] overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <motion.img
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+    <section id="hero-section" className="relative w-full h-screen min-h-screen bg-[#1a1a1a] overflow-hidden">
+      {/* Background — CSS Nativo para máxima estabilidad */}
+      <div className="absolute inset-0 z-0 opacity-100 transition-opacity duration-1000">
+        <img
           src={heroImg}
-          srcSet={`${heroMobileImg} 960w, ${heroImg} 1920w`}
-          sizes="(max-width: 768px) 100vw, 100vw"
-          alt=""
-          aria-hidden="true"
-          width={1920}
-          height={1280}
-          fetchPriority="high"
-          decoding="async"
+          alt="JG Producciones Hero"
+          loading="eager"
+          decoding="sync"
           className="w-full h-full object-cover"
         />
-      {/* Overlay — Simplificado para evitar bugs de GPU en móvil */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-[#21201E] pointer-events-none z-[1]" />
+        {/* Overlay — Simplificado para GPU */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-[#21201E]/40 pointer-events-none z-[1]" />
       </div>
 
-      <div className="relative z-10 h-full flex flex-col items-center md:items-start justify-end pb-20 md:pb-0 md:justify-center text-center md:text-left px-6 md:px-24 max-w-7xl">
-        <motion.h1
-          initial={{ opacity: window.innerWidth < 768 ? 1 : 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-4xl md:text-[5.5rem] font-black text-white leading-[0.95] font-paloseco uppercase tracking-tighter mb-6"
-        >
-          Creamos <br className="hidden md:block" /> Experiencias <br className="hidden md:block" /> que se recuerdan
-        </motion.h1>
+      {/* Contenido — Sin Framer Motion para asegurar aparición instantánea */}
+      <div className="relative z-10 h-full flex flex-col items-center md:items-start justify-end pb-20 md:pb-0 md:justify-center text-center md:text-left px-6 md:px-24 max-w-7xl mx-auto">
+        <div className="hero-content">
+          <h1 className="text-4xl md:text-[5.5rem] font-black text-white leading-[0.95] font-paloseco uppercase tracking-tighter mb-6">
+            Creamos <br className="hidden md:block" /> Experiencias <br className="hidden md:block" /> que se recuerdan
+          </h1>
 
-        <motion.p
-          initial={{ opacity: window.innerWidth < 768 ? 1 : 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="text-base md:text-xl text-white/90 max-w-2xl mb-10 font-medium leading-relaxed"
-        >
-          Bodas, conciertos, presentaciones de marca y eventos corporativos. Cada detalle, perfectamente producido.
-        </motion.p>
+          <p className="text-base md:text-xl text-white/90 max-w-2xl mb-10 font-medium leading-relaxed">
+            Bodas, conciertos, presentaciones de marca y eventos corporativos. Cada detalle, perfectamente producido.
+          </p>
 
-        <motion.div
-          initial={{ opacity: window.innerWidth < 768 ? 1 : 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 w-full sm:w-auto"
-        >
-          <button
-            onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))}
-            className="w-full sm:w-auto px-8 py-4 bg-[#63D72A] text-[#21201E] font-bold tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all text-sm md:text-base border border-[#63D72A] hover:bg-transparent hover:text-[#63D72A]"
-          >
-            Cotiza tu evento
-          </button>
-          <button
-            onClick={scrollToServices}
-            className="w-full sm:w-auto px-8 py-4 bg-[#1f1f1f]/80 backdrop-blur-md text-white font-semibold tracking-wide rounded-2xl hover:bg-[#2a2a2a] active:scale-95 transition-all text-[13px] md:text-[15px] border border-white/40 shadow-[0_0_0_1px_rgba(0,0,0,0.35)]"
-          >
-            Ver nuestro trabajo
-          </button>
-        </motion.div>
+          <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 w-full sm:w-auto">
+            <button 
+              onClick={() => {
+                const el = document.getElementById('servicios');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-8 py-4 bg-[#63D72A] text-black font-black uppercase tracking-widest rounded-[var(--btn-radius)] hover:scale-105 transition-transform w-full sm:w-auto"
+            >
+              Nuestros Servicios
+            </button>
+            <button 
+              onClick={() => {
+                const el = document.getElementById('contact');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white font-black uppercase tracking-widest rounded-[var(--btn-radius)] hover:bg-white/20 transition-all w-full sm:w-auto"
+            >
+              Contacto
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
