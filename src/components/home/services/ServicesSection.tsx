@@ -1,6 +1,5 @@
 import { type FC } from 'react';
 import { motion } from 'framer-motion';
-import { openContactModal } from '../../../utils/modal';
 import './ServicesSection.css';
 
 interface Service {
@@ -81,6 +80,8 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
                   <img
                     src={svc.image}
                     alt={svc.title}
+                    loading="lazy"
+                    decoding="async"
                     className="absolute inset-0 w-full h-full object-cover"
                   />
 

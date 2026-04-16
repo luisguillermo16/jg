@@ -6,7 +6,7 @@ import {
   StarIcon,
   RocketLaunchIcon,
 } from '@heroicons/react/24/outline';
-import nosotrosImg from '../../../assets/home/img/nosotros.jpg';
+import nosotrosImg from '../../../assets/home/img/nosotros.webp';
 
 const BENEFITS = [
   {
@@ -72,6 +72,10 @@ const AboutSection: FC = () => (
             <img
               src={nosotrosImg}
               alt="Nosotros JG Producciones"
+              width={1100}
+              height={733}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover"
             />
           </motion.div>

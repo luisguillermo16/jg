@@ -1,10 +1,7 @@
-import serviceAudio from '../assets/home/icons/service_audio.webp';
-import serviceLighting from '../assets/home/icons/service_lighting.webp';
-import serviceLed from '../assets/home/icons/service_led.webp';
-import bgBoda from '../assets/home/img/boda sevicios.jfif';
-import bgConcierto from '../assets/home/img/concierto servicios.jpg';
-import bgCorp from '../assets/home/img/corporativos servicios.jpg';
-import bgMarca from '../assets/home/img/marca servicios.jfif';
+import bgBoda from '../assets/home/img/boda-servicios.webp';
+import bgConcierto from '../assets/home/img/concierto-servicios.webp';
+import bgCorp from '../assets/home/img/corporativos-servicios.webp';
+import bgMarca from '../assets/home/img/marca-servicios.webp';
 import gal1 from '../assets/gallery/MRW01846.webp';
 import gal2 from '../assets/gallery/MRW03505.webp';
 import gal3 from '../assets/gallery/MRW03575.webp';

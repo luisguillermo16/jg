@@ -2,8 +2,8 @@ import { type FC } from 'react';
 import { motion } from 'framer-motion';
 import { isMobileDevice } from '../../../utils/deviceUtils';
 import './HeroSection.css';
-import heroImg from '../../../assets/home/img/hero.4.jpg';
-import heroMobileImg from '../../../assets/home/img/heroTelefonos.jpeg';
+import heroImg from '../../../assets/home/img/hero-desktop.webp';
+import heroMobileImg from '../../../assets/home/img/hero-mobile.webp';
 
 const HeroSection: FC = () => {
   const scrollToServices = () => {
@@ -20,6 +20,10 @@ const HeroSection: FC = () => {
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           src={isMobileDevice ? heroMobileImg : heroImg}
           alt="Hero Background"
+          width={isMobileDevice ? 960 : 1920}
+          height={isMobileDevice ? 1706 : 1280}
+          fetchPriority="high"
+          decoding="async"
           className="w-full h-full object-cover"
         />
         {/* Filtro oscuro responsivo */}
