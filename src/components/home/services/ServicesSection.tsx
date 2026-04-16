@@ -80,31 +80,31 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
                     className="absolute inset-0 w-full h-full object-cover"
                   />
 
-                  {/* Overlay (solo hasta la mitad) */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 via-50% to-transparent z-10" />
+                  {/* Overlay (más suave para evitar bloque negro total) */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 via-60% to-transparent z-10" />
                 </>
               )}
 
               {/* Content */}
-              <div className="relative z-20 h-full flex flex-col justify-end p-8">
+              <div className="relative z-30 h-full flex flex-col justify-end p-8">
                 {svc.tag && (
                   <span className={`${svc.image ? 'text-[#63D72A]' : 'text-[#4DA820]'} text-[10px] uppercase font-bold tracking-widest mb-4 block`}>
                     {svc.tag}
                   </span>
                 )}
-                <h3 className={`text-2xl font-bold mb-3 font-paloseco tracking-tight ${svc.image ? 'text-white' : 'text-[#21201E]'}`}>
+                <h3 className={`text-2xl font-bold mb-3 font-paloseco tracking-tight ${svc.image ? 'text-white' : 'text-[#21201E]'} relative z-30`}>
                   {svc.title}
                 </h3>
-                <p className={`text-sm leading-relaxed mb-6 ${svc.image ? 'text-white/70' : 'text-[#21201E]/60'}`}>
+                <p className={`text-sm leading-relaxed mb-6 ${svc.image ? 'text-white/80' : 'text-[#21201E]/60'} relative z-30`}>
                   {svc.desc}
                 </p>
                 {svc.features && (
-                  <div className="flex flex-wrap gap-1.5 mb-2">
+                  <div className="flex flex-wrap gap-1.5 mb-2 relative z-30">
                     {svc.features.map((feature, fIdx) => (
                       <span
                         key={fIdx}
                         className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-lg border ${svc.image
-                          ? 'bg-white/10 backdrop-blur-md text-white/80 border-white/10'
+                          ? 'bg-white/10 backdrop-blur-md text-white/90 border-white/10'
                           : 'bg-[#F9F8F6] text-[#21201E]/60 border-[#21201E]/[0.03]'
                           }`}
                       >
