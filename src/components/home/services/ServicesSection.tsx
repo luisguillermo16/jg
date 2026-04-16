@@ -1,5 +1,4 @@
 import { type FC } from 'react';
-import { motion } from 'framer-motion';
 import './ServicesSection.css';
 
 interface Service {
@@ -14,36 +13,12 @@ interface ServicesSectionProps {
   services: Service[];
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-};
-
 const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
   return (
     <section id="servicios" className="bg-[#F9F8F6] pt-20 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
 
-        {/* Header con animación */}
-        {/* Header con animación ultra-segura para evitar huecos negros en móvil */}
+        {/* Header con animación ultra-segura */}
         <div className="mb-12 text-center reveal-on-scroll">
           <span className="text-[#63D72A] text-[16px] uppercase font-bold tracking-widest mb-3 block">
             Lo que hacemos
@@ -51,23 +26,15 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
           <h2 className="text-4xl md:text-5xl lg:text-5xl font-black text-[#21201E] uppercase font-paloseco mb-4">
             Nuestros Servicios
           </h2>
-
         </div>
 
-        {/* Grid de servicios con Stagger Effect */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-5% 0px", amount: 0 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-        >
+        {/* Grid de servicios — Ahora con Reveal Seguro en lugar de Framer Motion asíncrono */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {services.map((svc, idx) => (
-            <motion.div
+            <div
               key={idx}
-              variants={itemVariants}
-              className={`group relative h-[420px] rounded-[24px] overflow-hidden shadow-xl ${svc.image ? 'bg-black' : 'bg-white border border-[#21201E]/[0.05]'
-                }`}
+              className={`reveal-on-scroll group relative h-[420px] rounded-[24px] overflow-hidden shadow-xl ${svc.image ? 'bg-[#1a1a1a]' : 'bg-white border border-[#21201E]/[0.05]'}`}
+              style={{ transitionDelay: `${idx * 0.1}s` }} // Mantenemos el efecto escalonado pero vía CSS
             >
               {svc.image && (
                 <>
@@ -77,15 +44,15 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
                     alt={svc.title}
                     loading="lazy"
                     decoding="async"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
 
-                  {/* Overlay (más suave para evitar bloque negro total) */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 via-60% to-transparent z-10" />
+                  {/* Overlay — Más suave para legibilidad */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 via-60% to-transparent z-10" />
                 </>
               )}
 
-              {/* Content */}
+              {/* Content Container — Z-index alto para asegurar visibilidad */}
               <div className="relative z-30 h-full flex flex-col justify-end p-8">
                 {svc.tag && (
                   <span className={`${svc.image ? 'text-[#63D72A]' : 'text-[#4DA820]'} text-[10px] uppercase font-bold tracking-widest mb-4 block`}>
@@ -114,9 +81,9 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
                   </div>
                 )}
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
