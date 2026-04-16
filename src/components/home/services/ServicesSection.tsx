@@ -49,7 +49,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10% 0px" }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-12"
+          className="mb-12 text-center"
         >
           <span className="text-[#63D72A] text-[16px] uppercase font-bold tracking-widest mb-3 block">
             Lo que hacemos
