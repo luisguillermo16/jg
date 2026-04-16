@@ -12,7 +12,7 @@ const CTASection: FC = () => (
       <motion.span
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-10%" }}
+        viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6 }}
         className="text-[#63D72A] text-[10px] font-black uppercase tracking-[0.5em] mb-6 block leading-none"
       >
@@ -22,7 +22,7 @@ const CTASection: FC = () => (
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-10%" }}
+        viewport={{ once: true, amount: 0.2 }}
         transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight font-paloseco leading-[1.1] mb-8 text-white"
       >
@@ -34,7 +34,7 @@ const CTASection: FC = () => (
       <motion.p
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-10%" }}
+        viewport={{ once: true, amount: 0.2 }}
         transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="text-[#F9F8F6]/45 text-base md:text-lg leading-relaxed max-w-xl mx-auto mb-14"
       >
@@ -45,7 +45,7 @@ const CTASection: FC = () => (
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, margin: "-10%" }}
+        viewport={{ once: true, amount: 0.2 }}
         transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className="flex flex-col sm:flex-row gap-4 items-center justify-center"
       >

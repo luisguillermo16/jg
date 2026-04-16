@@ -41,8 +41,10 @@
 :root {
   --text: #F9F8F6;
   --text-h: #F8FAFC;
-  --bg: #21201E;        /* Dark Charcoal */
-  --accent: #63D72A;    /* JG Neon Green */
+  --bg: #21201E;
+  /* Dark Charcoal */
+  --accent: #63D72A;
+  /* JG Neon Green */
   --accent-soft: rgba(99, 215, 42, 0.15);
   --text-off-white: #F9F8F6;
   --border: rgba(255, 255, 255, 0.05);
@@ -57,7 +59,15 @@ body {
   color: var(--text);
   font-family: var(--sans);
   overflow-x: hidden;
-  overflow-y: auto; /* Forzamos scroll nativo */
+  overflow-y: auto;
+  /* Forzamos scroll nativo */
+}
+
+/* Desactivar smooth scroll en móvil para evitar lag de renderizado en Chrome/Android */
+@media (max-width: 768px) {
+  html {
+    scroll-behavior: auto !important;
+  }
 }
 
 

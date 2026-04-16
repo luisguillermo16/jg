@@ -34,8 +34,8 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
             <div
               key={idx}
               className="reveal-on-scroll"
-              style={{ 
-                transitionDelay: `${idx * (typeof window !== 'undefined' && window.innerWidth < 768 ? 0.05 : 0.1)}s` 
+              style={{
+                transitionDelay: `${idx * (typeof window !== 'undefined' && window.innerWidth < 768 ? 0.05 : 0.1)}s`
               }}
             >
               {/* Contenedor Visual — Separado de la animación para evitar clipping de overflow */}

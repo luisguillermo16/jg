@@ -30,7 +30,7 @@ const HeroSection: FC = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 w-full sm:w-auto">
-            <button 
+            <button
               onClick={() => {
                 const el = document.getElementById('servicios');
                 el?.scrollIntoView({ behavior: 'smooth' });
@@ -39,7 +39,7 @@ const HeroSection: FC = () => {
             >
               Nuestros Servicios
             </button>
-            <button 
+            <button
               onClick={() => {
                 const el = document.getElementById('contact');
                 el?.scrollIntoView({ behavior: 'smooth' });

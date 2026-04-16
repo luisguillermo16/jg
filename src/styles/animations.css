@@ -3,10 +3,13 @@
    Usado en: Home.tsx (reveal-on-scroll), HeroSection.tsx (scroll-prompt)
    ============================================================ */
 
-/* Scroll Reveal */
+/* Scroll Reveal — Optimizada para GPU */
 .reveal-on-scroll {
   opacity: 0;
   transform: translateY(40px);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
     transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -23,7 +26,7 @@
 
 /* Solo mientras está pendiente de aparecer */
 .reveal-on-scroll:not(.active) {
-  /* Eliminado will-change para evitar bugs de capas en móvil */
+  /* will-change aplicado arriba para que el navegador prepare la capa */
 }
 
 .reveal-on-scroll.active {

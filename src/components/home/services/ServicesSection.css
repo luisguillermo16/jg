@@ -6,6 +6,7 @@
   background-color: #F9F8F6;
   position: relative;
   overflow: visible;
+  min-height: 100vh;
 }
 
 /* Asegurar que las tarjetas no se corten en móviles antiguos */

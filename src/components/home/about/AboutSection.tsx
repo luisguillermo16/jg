@@ -5,7 +5,7 @@ import nosotrosImg from '../../../assets/home/img/nosotros.webp';
 const AboutSection: FC = () => (
   <section
     id="nosotros"
-    className="relative bg-[#F9F8F6] pt-24 pb-24 md:pb-32 px-6 md:px-12 lg:px-24 flex flex-col items-center z-0"
+    className="relative bg-[#F9F8F6] min-h-screen pt-24 pb-24 md:pb-32 px-6 md:px-12 lg:px-24 flex flex-col items-center z-0"
   >
     {/* Radial glow sutil para fondo claro verdoso */}
     <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#63D72A]/5 rounded-full blur-[150px] pointer-events-none z-0" />
@@ -32,9 +32,9 @@ const AboutSection: FC = () => (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-10%" }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-lg aspect-video rounded-[32px] overflow-hidden shadow-xl border border-white/20"
+            className="relative w-full max-w-lg aspect-video rounded-[32px] overflow-hidden shadow-xl border border-white/20 bg-[#1a1a1a]"
           >
             <img
               src={nosotrosImg}
