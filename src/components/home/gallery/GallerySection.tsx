@@ -9,7 +9,7 @@ const GallerySection: FC<GallerySectionProps> = ({ galleryImages }) => {
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
 
   return (
-    <section id="galeria" className="bg-[#F9F8F6] py-24 md:py-32 overflow-hidden border-t border-black/5">
+    <section id="galeria" className="bg-[#F9F8F6] py-24 md:py-32 overflow-hidden">
       <div className="w-full">
         {/* ── Header ── */}
         <motion.div
@@ -27,26 +27,31 @@ const GallerySection: FC<GallerySectionProps> = ({ galleryImages }) => {
           </p>
         </motion.div>
 
-        {/* ── Grid Estilo Instagram (Gap 0 Forzado) ── */}
-        <div 
-          className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 leading-none"
-          style={{ gap: '0', padding: '0' }}
-        >
+        {/* ── Grid Estilo Instagram (Gap 0) ── */}
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-0 border-t border-black/5">
           {galleryImages.map((src, i) => (
-            <div
+            <motion.div
               key={i}
-              className="relative aspect-square overflow-hidden bg-black cursor-pointer group m-0 p-0"
+              initial={{ opacity: 0, scale: 0.98 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-5%" }}
+              transition={{
+                delay: (i % 3) * 0.1,
+                duration: 0.5,
+                ease: "easeOut"
+              }}
+              className="relative aspect-square overflow-hidden cursor-pointer group bg-[#111]"
               onClick={() => setSelectedImg(src)}
             >
               <img
                 src={src}
                 alt={`Galería ${i}`}
-                className="w-full h-full object-cover block m-0 p-0 transition-all duration-700 group-hover:scale-110"
+                className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-90"
                 loading={i < 4 ? "eager" : "lazy"}
               />
-              {/* Overlay sutil */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
-            </div>
+              {/* Overlay sutil al hacer hover */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+            </motion.div>
           ))}
         </div>
       </div>
@@ -56,6 +61,7 @@ const GallerySection: FC<GallerySectionProps> = ({ galleryImages }) => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           className="fixed inset-0 z-[2000] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md"
           onClick={() => setSelectedImg(null)}
         >
@@ -64,10 +70,10 @@ const GallerySection: FC<GallerySectionProps> = ({ galleryImages }) => {
             animate={{ scale: 1, opacity: 1 }}
             src={selectedImg}
             alt="Preview"
-            className="max-h-[85vh] max-w-full object-contain shadow-2xl rounded-sm"
+            className="max-h-[90vh] max-w-full object-contain shadow-2xl rounded-sm"
           />
-          <button 
-            className="absolute top-6 right-6 text-white text-4xl font-light hover:text-[#63D72A] transition-colors"
+          <button
+            className="absolute top-6 right-6 text-white text-5xl font-light hover:text-[#63D72A] transition-colors"
             onClick={() => setSelectedImg(null)}
           >
             &times;
