@@ -7,6 +7,9 @@
   position: relative;
   overflow: visible;
   min-height: 100vh;
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
+  will-change: transform;
 }
 
 /* Asegurar que las tarjetas no se corten en móviles antiguos */
