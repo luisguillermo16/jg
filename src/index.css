@@ -55,7 +55,7 @@
 /* ── Reset base ── */
 body {
   margin: 0;
-  background-color: var(--bg);
+  background-color: #F9F8F6; /* Fallback claro para camuflar fallos de renderizado */
   color: var(--text);
   font-family: var(--sans);
   overflow-x: hidden;
@@ -90,11 +90,17 @@ input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* ── Performance Optimization (Layer Isolation) ── */
+/* ── Performance Optimization (Atomic Layer Strategy) ── */
 #servicios, #nosotros {
   contain: paint;
   content-visibility: auto;
   contain-intrinsic-size: 1000px;
-  transform: translateZ(0);
+  background-color: #F9F8F6; /* Asegura un fondo sólido durante el renderizado */
+}
+
+/* La GPU solo trabaja en los elementos que se están moviendo realmente */
+.reveal-on-scroll.active {
   will-change: transform, opacity;
+  transform: translateZ(0); 
+  backface-visibility: hidden;
 }

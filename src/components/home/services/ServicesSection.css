@@ -5,7 +5,7 @@
 #servicios {
   background-color: #F9F8F6;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   min-height: 100vh;
 }
 
