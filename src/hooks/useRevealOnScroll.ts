@@ -7,12 +7,10 @@ import { useEffect } from 'react';
  */
 export const useRevealOnScroll = () => {
   useEffect(() => {
-    // 0. En móviles las animaciones se desactivan vía CSS, no necesitamos procesarlas en JS
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    if (isMobile) return;
-
     const elements = document.querySelectorAll('.reveal-on-scroll');
     if (elements.length === 0) return;
+
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
     let ticking = false;
 

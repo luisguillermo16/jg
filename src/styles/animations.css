@@ -36,13 +36,19 @@
   transform: translateY(0) !important;
 }
 
-/* En móvil, las animaciones son instantáneas para evitar bugs de renderizado (puntos negros) */
+/* En móvil, las animaciones son más cortas (20px) para evitar saturar la memoria GPU y prevenir bloques negros */
 @media (max-width: 768px) {
   .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    will-change: opacity, transform;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .reveal-on-scroll.active {
     opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-    animation: none !important;
+    transform: translateY(0) !important;
   }
 }
 
