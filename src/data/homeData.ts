@@ -1,7 +1,3 @@
-import bgBoda from '../assets/home/img/boda-servicios.webp';
-import bgConcierto from '../assets/home/img/concierto-servicios.webp';
-import bgCorp from '../assets/home/img/corporativos-servicios.webp';
-import bgMarca from '../assets/home/img/marca-servicios.webp';
 import gal1 from '../assets/gallery/MRW01846.webp';
 import gal2 from '../assets/gallery/MRW03505.webp';
 import gal3 from '../assets/gallery/MRW03575.webp';
@@ -20,25 +16,25 @@ export const SERVICES = [
     title: "Bodas & Eventos Sociales",
     desc: "Tu día más especial merece una producción impecable.",
     features: ["Iluminación", "Sonido", "Montaje", "Coordinación"],
-    image: bgBoda
+    image: "https://luispineda.b-cdn.net/boda-servicios.webp"
   },
   {
     title: "Conciertos & Shows",
     desc: "Producción técnica de alto nivel para shows en vivo. Escenarios y gestión completa del evento.",
     features: ["Escenarios", "Rider técnico", "Visuales LED", "PA System"],
-    image: bgConcierto
+    image: "https://luispineda.b-cdn.net/concierto-servicios.webp"
   },
   {
     title: "Eventos Corporativos",
     desc: "Conferencias y lanzamientos que transmiten el profesionalismo de tu empresa en cada evento.",
     features: ["Conferencias", "A/V Profesional", "Streaming", "Ambientación"],
-    image: bgCorp
+    image: "https://luispineda.b-cdn.net/corporativos-servicios.webp"
   },
   {
     title: "Lanzamientos de Marca",
     desc: "Experiencias de marca que generan impacto y recordación en el centro del escenario.",
     features: ["BTL", "Branding", "Experiencias"],
-    image: bgMarca
+    image: "https://luispineda.b-cdn.net/marca-servicios.webp"
   }
 ];
 
