@@ -45,8 +45,9 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
                     <img
                       src={svc.image}
                       alt={svc.title}
-                      loading="lazy"
-                      decoding="async"
+                      loading={idx < 2 ? "eager" : "lazy"}
+                      fetchPriority={idx < 2 ? "high" : "auto"}
+                      decoding={idx < 2 ? "sync" : "async"}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 via-60% to-transparent z-10" />

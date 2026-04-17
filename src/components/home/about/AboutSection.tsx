@@ -24,7 +24,7 @@ const AboutSection: FC = () => (
         {/* ── Left: Headline ── */}
         {/* Headline con animación ultra-segura para móvil */}
         <div className="reveal-on-scroll">
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter font-paloseco leading-[0.85] mb-8 text-[#21201E]">
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter font-paloseco leading-[0.85] mb-8 pb-[5px] text-[#21201E]">
             En JG PRODUCCIONES<br />
             No<br />
             Organizamos<br />

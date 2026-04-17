@@ -89,3 +89,12 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: white !important;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+/* ── Performance Optimization (Layer Isolation) ── */
+#servicios, #nosotros {
+  contain: paint;
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}

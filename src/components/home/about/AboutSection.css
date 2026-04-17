@@ -3,8 +3,7 @@
    ============================================================ */
 
 #nosotros {
-  content-visibility: auto;
-  contain-intrinsic-size: 1000px;
+  position: relative;
 }
 
 .about-glow {
