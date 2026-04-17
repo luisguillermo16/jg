@@ -7,6 +7,10 @@ import { useEffect } from 'react';
  */
 export const useRevealOnScroll = () => {
   useEffect(() => {
+    // 0. En móviles las animaciones se desactivan vía CSS, no necesitamos procesarlas en JS
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    if (isMobile) return;
+
     const elements = document.querySelectorAll('.reveal-on-scroll');
     if (elements.length === 0) return;
 
@@ -16,15 +20,13 @@ export const useRevealOnScroll = () => {
       if (ticking) return;
       
       requestAnimationFrame(() => {
+        // En lugar de leer rect en cada loop, usamos IntersectionObserver para la mayoría de casos.
+        // Solo mantenemos esto como fallback manual ultra-optimizado.
         elements.forEach(el => {
           if (el.classList.contains('active')) return;
           
           const rect = el.getBoundingClientRect();
-          
-          // ✅ Lógica agresiva: activar si ya pasó el viewport O si está al 90% de entrar
-          const isPassedOrVisible = rect.bottom < window.innerHeight || rect.top < window.innerHeight * 0.95;
-          
-          if (isPassedOrVisible) {
+          if (rect.top < window.innerHeight * 0.95) {
             el.classList.add('active');
           }
         });
@@ -47,7 +49,7 @@ export const useRevealOnScroll = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1, rootMargin: '0px 0px 50px 0px' } // Cargamos un poco antes
     );
 
     elements.forEach((el) => {
@@ -56,13 +58,11 @@ export const useRevealOnScroll = () => {
       }
     });
 
-    // 3. Listener síncrono para scroll rápido y resize
-    window.addEventListener('scroll', activateVisible, { passive: true });
+    // 3. Ya no necesitamos el listener de scroll constante en PC si el observer es sólido
     window.addEventListener('resize', activateVisible, { passive: true });
 
     return () => {
       observer.disconnect();
-      window.removeEventListener('scroll', activateVisible);
       window.removeEventListener('resize', activateVisible);
     };
   }, []);

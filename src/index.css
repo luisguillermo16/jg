@@ -55,12 +55,13 @@
 /* ── Reset base ── */
 body {
   margin: 0;
-  background-color: #F9F8F6; /* Fallback claro para camuflar fallos de renderizado */
+  background-color: var(--bg); /* Corregido: usa el color oscuro por defecto para evitar flashes blancos */
   color: var(--text);
   font-family: var(--sans);
   overflow-x: hidden;
   overflow-y: auto;
-  /* Forzamos scroll nativo */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Desactivar smooth scroll en móvil para evitar lag de renderizado en Chrome/Android */
@@ -91,17 +92,17 @@ input:-webkit-autofill:active {
 }
 
 /* ── Performance Optimization (Atomic Layer Strategy) ── */
-#servicios, #nosotros {
-  contain: paint;
+#servicios, #nosotros, #testimonials, #contact {
+  contain: content; /* Cambio: 'content' es más seguro que 'paint' para layouts complejos */
   content-visibility: auto;
-  contain-intrinsic-size: 1000px;
-  will-change: transform;
-  background-color: #F9F8F6; /* Asegura un fondo sólido durante el renderizado */
+  contain-intrinsic-size: auto 800px; /* Mejor estimación para evitar saltos */
+  /* ELIMINADO: will-change de transform en contenedores grandes. 
+     Esto causaba el agotamiento de memoria GPU (bloques negros) en móviles. */
 }
 
-/* La GPU solo trabaja en los elementos que se están moviendo realmente */
+/* Solo los elementos individuales obtienen su propia capa cuando es necesario */
 .reveal-on-scroll.active {
-  will-change: transform, opacity;
   transform: translateZ(0); 
   backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
 }

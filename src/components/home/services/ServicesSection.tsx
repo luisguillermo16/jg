@@ -73,7 +73,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({ services }) => {
                         <span
                           key={fIdx}
                           className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-lg border ${svc.image
-                            ? 'bg-white/10 backdrop-blur-md text-white/90 border-white/10'
+                            ? 'bg-white/20 md:backdrop-blur-md text-white/90 border-white/10'
                             : 'bg-[#F9F8F6] text-[#21201E]/60 border-[#21201E]/[0.03]'
                             }`}
                         >
