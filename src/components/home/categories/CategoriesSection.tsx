@@ -1,10 +1,12 @@
 import { type FC, useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/solid';
 import { CATEGORIES } from '../../../data/homeData';
 import './CategoriesSection.css';
 
 const CategoriesSection: FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMuted, setIsMuted] = useState(true);
   const triggerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -48,6 +50,19 @@ const CategoriesSection: FC = () => {
 
       <div className="cats-sticky">
 
+        {/* ── Control de Sonido ── */}
+        <button 
+          onClick={() => setIsMuted(!isMuted)}
+          className="absolute bottom-24 right-6 md:bottom-12 md:right-32 z-[100] p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-[#63D72A] hover:text-black transition-all duration-300"
+          title={isMuted ? "Activar sonido" : "Desactivar sonido"}
+        >
+          {isMuted ? (
+            <SpeakerXMarkIcon className="w-5 h-5 md:w-6 md:h-6" />
+          ) : (
+            <SpeakerWaveIcon className="w-5 h-5 md:w-6 md:h-6" />
+          )}
+        </button>
+
         {/* ── Video Layers ── */}
         {CATEGORIES.map((cat, idx) => (
           <div 
@@ -59,15 +74,19 @@ const CategoriesSection: FC = () => {
             }}
           >
             <div className="cats-video-wrapper">
-              <video
-                src={isMobile && cat.videoMobile ? cat.videoMobile : cat.video}
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="auto"
-                className="cats-video"
-              />
+              {/* ✅ OPTIMIZACIÓN: Solo renderizamos el video si es el activo. 
+                  Esto evita tener múltiples decodificadores de video saturando la GPU. */}
+              {idx === activeIndex && (
+                <video
+                  src={isMobile && cat.videoMobile ? cat.videoMobile : cat.video}
+                  autoPlay
+                  loop
+                  muted={isMuted}
+                  playsInline
+                  preload="auto"
+                  className="cats-video"
+                />
+              )}
             </div>
 
             {/* ── Content ── */}

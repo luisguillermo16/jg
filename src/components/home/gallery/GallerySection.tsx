@@ -1,6 +1,5 @@
 import { type FC, useState } from 'react';
 import { motion } from 'framer-motion';
-import './GallerySection.css';
 
 interface GallerySectionProps {
   galleryImages: string[];
@@ -10,67 +9,69 @@ const GallerySection: FC<GallerySectionProps> = ({ galleryImages }) => {
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
 
   return (
-    <section id="galeria" className="bg-[#F9F8F6] py-32 px-6">
+    <section id="galeria" className="bg-[#F9F8F6] py-24 md:py-32 overflow-hidden border-t border-black/5">
       <div className="w-full">
-        {/* Header - Animado */}
-        <motion.div 
+        {/* ── Header ── */}
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-4xl mx-auto px-6 text-center mb-16"
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-4xl mx-auto text-center mb-16 px-6"
         >
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#21201E] uppercase font-paloseco mb-4">
             Galería
           </h2>
           <p className="text-[#21201E]/60 max-w-xl mx-auto text-sm md:text-base">
-            Producciones recientes y momentos JG en nuestro feed.
+            Producciones recientes y momentos destacados de nuestro feed oficial.
           </p>
         </motion.div>
 
-        {/* IG Grid - Animación progresiva por imagen */}
-        <div className="max-w-4xl mx-auto grid grid-cols-3 gap-1 sm:gap-1">
+        {/* ── Grid Estilo Instagram (Gap 0 Forzado) ── */}
+        <div 
+          className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 leading-none"
+          style={{ gap: '0', padding: '0' }}
+        >
           {galleryImages.map((src, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-5%" }}
-              transition={{ 
-                delay: (i % 3) * 0.1, // Stagger por columna para efecto de carga fluida
-                duration: 0.6, 
-                ease: "easeOut" 
-              }}
-              className="relative aspect-square bg-transparent overflow-hidden cursor-zoom-in group"
+              className="relative aspect-square overflow-hidden bg-black cursor-pointer group m-0 p-0"
               onClick={() => setSelectedImg(src)}
             >
               <img
                 src={src}
                 alt={`Galería ${i}`}
-                className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-90"
-                loading="lazy"
+                className="w-full h-full object-cover block m-0 p-0 transition-all duration-700 group-hover:scale-110"
+                loading={i < 4 ? "eager" : "lazy"}
               />
-            </motion.div>
+              {/* Overlay sutil */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Modal - Animado también */}
+      {/* ── Modal de Visualización ── */}
       {selectedImg && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 z-[2000] bg-[#21201E]/95 flex items-center justify-center p-4 backdrop-blur-xl"
+          className="fixed inset-0 z-[2000] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md"
           onClick={() => setSelectedImg(null)}
         >
-          <motion.img 
+          <motion.img
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            src={selectedImg} 
-            alt="Enlarged" 
-            className="max-h-full max-w-full object-contain shadow-2xl rounded-sm" 
+            src={selectedImg}
+            alt="Preview"
+            className="max-h-[85vh] max-w-full object-contain shadow-2xl rounded-sm"
           />
-          <button className="absolute top-10 right-10 text-white text-4xl">&times;</button>
+          <button 
+            className="absolute top-6 right-6 text-white text-4xl font-light hover:text-[#63D72A] transition-colors"
+            onClick={() => setSelectedImg(null)}
+          >
+            &times;
+          </button>
         </motion.div>
       )}
     </section>
